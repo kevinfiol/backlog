@@ -1,1 +1,0 @@
-<p>hello <%= it.foo %></p>

@@ -1,2 +1,4 @@
+const config = require('./config.js');
 const app = require('./src/app.js');
-app.listen(8090, () => console.log(`Listening on port 8090...`));
+
+app.listen(config.port, () => console.log(`Listening on port ${config.port}...`));

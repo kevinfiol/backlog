@@ -2,18 +2,22 @@
   "license": "MIT",
   "scripts": {
     "run": "node run.js",
-    "dev": "node-dev run.js"
+    "dev": "node-dev run.js",
+    "debug": "node inspect run.js"
   },
   "dependencies": {
     "@polka/parse": "1.0.0-next.8",
     "@polka/send": "1.0.0-next.7",
-    "better-sqlite3": "^7.1.1",
-    "eta": "^1.11.0",
+    "compression": "^1.7.4",
     "helmet": "^4.1.1",
     "ley": "^0.5.0",
     "node-fetch": "^2.6.1",
     "polka": "1.0.0-next.11",
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.1",
+    "sirv": "^1.0.6",
+    "sqlite": "^4.0.14",
+    "sqlite3": "^5.0.0",
+    "yeahjs": "^0.2.0"
   },
   "devDependencies": {
     "node-dev": "^5.2.0"

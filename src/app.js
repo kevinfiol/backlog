@@ -1,42 +1,32 @@
 const polka = require('polka');
-const send = require('@polka/send');
-const parse = require('@polka/parse');
+const { join } = require('path');
+
+// middleware
+const sirv = require('sirv');
+const compress = require('compression');
 const helmet = require('helmet');
-const eta = require('eta');
-const path = require('path');
+const { json } = require('@polka/parse');
+const send = require('./middleware/send.js');
+const yeahjs = require('./middleware/yeahjs.js');
 
-// configure template engine
-eta.configure({ views: path.join(__dirname, 'views') })
+const STATIC_ASSETS_MAX_AGE = 31536000;
 
-// create app & add middleware
+// static assets
+const assets = sirv(join(__dirname, 'static'), {
+    maxAge: STATIC_ASSETS_MAX_AGE,
+    immutable: true
+});
+
+// app + middleware
 const app = polka();
+app.use(compress(), assets);
 app.use(helmet());
-app.use(parse.json());
-
-// custom middleware
-// attach @polka/send to response objects
-app.use((_, res, next) => {
-    res.send = send.bind(null, res);
-    next();
-});
-
-// attach eta template engine
-app.use((_, res, next) => {
-    res.render = async (file, data) => {
-        try {
-            const html = await eta.renderFile(file, data);
-            res.send(200, html, { 'Content-Type': 'text/html' });
-        } catch (e) {
-            res.send(500, e.message || e);
-        }
-    };
-
-    next();
-});
+app.use(json());
+app.use(send());
+app.use(yeahjs());
 
 // routes
 const IndexRoutes = require('./routes/IndexRoutes.js');
-
 app.use('/', IndexRoutes);
 
 module.exports = app;
