@@ -23,6 +23,7 @@
     "yeahjs": "^0.2.0"
   },
   "devDependencies": {
+    "minify": "^6.0.0",
     "node-dev": "^5.2.0"
   }
 }
