@@ -1,0 +1,12 @@
+fieldset { border: 0; }
+
+button {
+    padding: 0.5rem 0.8rem;
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    /*font-weight: 700;*/
+    border-radius: 3px;
+}
+
+button:hover { background-color: rgba(0, 0, 0, 0.1); }
+button:focus { background-color: rgba(0, 0, 0, 0.2); }

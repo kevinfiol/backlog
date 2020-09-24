@@ -6,6 +6,7 @@ const sirv = require('sirv');
 const compress = require('compression');
 const helmet = require('helmet');
 const { json } = require('@polka/parse');
+const session = require('./middleware/session.js');
 const send = require('./middleware/send.js');
 const yeahjs = require('./middleware/yeahjs.js');
 
@@ -19,6 +20,7 @@ const assets = sirv(join(__dirname, 'static'), {
 
 // app + middleware
 const app = polka();
+app.use(session());
 app.use(compress(), assets);
 app.use(helmet());
 app.use(json());
