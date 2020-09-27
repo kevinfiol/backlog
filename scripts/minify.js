@@ -1,7 +1,1 @@
-const minify = require('minify');
-
-const options = {
-    
-}
-
-minify('./foo.js', {})
+// rudimentary minify using node apis

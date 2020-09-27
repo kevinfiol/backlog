@@ -1,4 +1,4 @@
-<h1>login</h1>
+<h1>sign up</h1>
 
 <form action="#" method="post">
     <fieldset>
@@ -6,7 +6,10 @@
         <input id="username-input" type="text" maxlength="30" required>
 
         <label for="password-input">password:</label>
-        <input id="password-input" type="password" required>
+        <input id="password-input" type="password" minlength="8" required>
+
+        <label for="confirm-password-input">confirm password:</label>
+        <input id="confirm-password-input" type="password" minlength="8" required>
     </fieldset>
     <button type="submit">submit</button>
 </form>

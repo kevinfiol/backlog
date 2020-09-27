@@ -13,6 +13,9 @@ if (process.env.PROD == 1)
 else
     config = {
         port: 8080,
+        database: {
+            filename: './backlog.db'
+        },
         sessionConfig: {
             secret: 'not-so-secret-secret',
             resave: false,

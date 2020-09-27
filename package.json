@@ -3,7 +3,8 @@
   "scripts": {
     "run": "node run.js",
     "dev": "node-dev run.js",
-    "debug": "node inspect run.js"
+    "debug": "node inspect run.js",
+    "migrate": "node scripts/migrate.js"
   },
   "dependencies": {
     "@polka/parse": "1.0.0-next.8",
@@ -11,7 +12,7 @@
     "compression": "^1.7.4",
     "express-session": "^1.17.1",
     "helmet": "^4.1.1",
-    "ley": "^0.5.0",
+    "nanoid": "^3.1.12",
     "node-fetch": "^2.6.1",
     "polka": "1.0.0-next.11",
     "ramda": "^0.27.1",
@@ -19,11 +20,9 @@
     "sirv": "^1.0.6",
     "sqlite": "^4.0.14",
     "sqlite3": "^5.0.0",
-    "uuid": "^8.3.0",
     "yeahjs": "^0.2.0"
   },
   "devDependencies": {
-    "minify": "^6.0.0",
     "node-dev": "^5.2.0"
   }
 }
