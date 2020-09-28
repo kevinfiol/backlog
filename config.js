@@ -9,7 +9,7 @@ if (process.env.PROD == 1)
             saveUninitialized: false,
             cookie: { secure: true, httpOnly: true, sameSite: true }
         }
-    }
+    };
 else
     config = {
         port: 8080,
@@ -22,6 +22,6 @@ else
             saveUninitialized: false,
             cookie: { secure: false, httpOnly: true, sameSite: true }
         }
-    }
+    };
 
 module.exports = config;
