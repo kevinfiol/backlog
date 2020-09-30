@@ -1,0 +1,23 @@
+<%- include('_includes/header.ejs') %>
+
+<h1>sign up</h1>
+
+<form action="/signup" method="post">
+    <fieldset>
+        <label for="username">username:</label>
+        <input id="username" name="username" type="text" maxlength="30" required>
+
+        <label for="password">password:</label>
+        <input id="password" name="password" type="password" minlength="8" required>
+
+        <label for="confirm_password">confirm password:</label>
+        <input id="confirm_password" name="confirm_password" type="password" minlength="8" required>
+    </fieldset>
+    <button type="submit">submit</button>
+</form>
+
+<% if (it.error) { -%>
+    <p>error: <%= it.error %></p>
+<% } -%>
+
+<%- include('_includes/footer.ejs') %>
