@@ -41,24 +41,26 @@ exports.signup = async function(req, res) {
 
 async function validateLogin({ username, password }) {
     // validate fields are filled
-    if (anyEmpty([username, password])) {
+    if (anyEmpty([username, password]))
         return 'must provide username & password';
-    }
 
     // validate username & password
-    const user = await AuthService.validateAndGetUser({ username: username, password: password });
+    const user = await AuthService.validateAndGetUser({
+        username: username,
+        password: password
+    });
 
     if (!user)
         return 'invalid username & password combination';
 
+    // no errors
     return null;
 }
 
 async function validateSignup({ username, password, confirm_password }) {
     // validate fields are filled
-    if (anyEmpty([username, password, confirm_password])) {
+    if (anyEmpty([username, password, confirm_password]))
         return 'must provide username, password, & confirmation';
-    }
 
     // validate lengths
     if (username.trim().length > 30)
@@ -70,10 +72,10 @@ async function validateSignup({ username, password, confirm_password }) {
 
     // check if user does not already exist
     const user = await AuthService.getUser({ username: username.trim() });
-
     if (user)
         return 'user with given username already exists.';
 
+    // no errors
     return null;
 }
 
