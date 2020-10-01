@@ -1,7 +1,18 @@
 const { AuthService } = require('../container.js');
 
-exports.index = async function(_, res) {
-    res.render('index.ejs');
+exports.index = async function(req, res) {
+    let foo = req.session.views;
+    console.log(foo);
+
+    if (foo !== undefined) {
+        foo += 1;
+    } else {
+        foo = 0;
+    }
+
+    req.session.views = foo;
+
+    res.render('index.ejs', { foo });
 };
 
 exports.login = async function(req, res) {
@@ -17,6 +28,7 @@ exports.login = async function(req, res) {
             res.redirect('/');
         }
     } else {
+        console.log(req.session);
         res.render('login.ejs');
     }
 };
@@ -35,6 +47,7 @@ exports.signup = async function(req, res) {
             res.redirect('/');
         }
     } else {
+        console.log(req.session);
         res.render('signup.ejs');
     }
 };

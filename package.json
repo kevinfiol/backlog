@@ -7,12 +7,12 @@
     "migrate": "node scripts/migrate.js"
   },
   "dependencies": {
+    "@lukeed/uuid": "^1.0.1",
     "@polka/parse": "1.0.0-next.8",
     "@polka/send": "1.0.0-next.7",
     "compression": "^1.7.4",
     "express-session": "^1.17.1",
     "helmet": "^4.1.1",
-    "nanoid": "^3.1.12",
     "node-fetch": "^2.6.1",
     "polka": "1.0.0-next.11",
     "ramda": "^0.27.1",
