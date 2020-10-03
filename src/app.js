@@ -20,14 +20,15 @@ const assets = sirv(join(__dirname, 'static'), {
 });
 
 // app + middleware
-const app = polka();
-app.use(urlencoded());
-app.use(redirect());
-app.use(session());
-app.use(compress(), assets);
-app.use(helmet());
-app.use(send());
-app.use(yeahjs());
+const app = polka()
+    .use(urlencoded())
+    .use(redirect())
+    .use(session())
+    .use(compress(), assets)
+    .use(helmet())
+    .use(send())
+    .use(yeahjs())
+;
 
 // routes
 const IndexRoutes = require('./routes/IndexRoutes.js');
