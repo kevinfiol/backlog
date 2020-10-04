@@ -1,7 +1,10 @@
 const { AuthService } = require('../container.js');
 
-exports.index = async function(_, res) {
-    res.render('index.ejs');
+
+exports.index = async function(req, res) {
+    console.log(req.sessionID);
+    const user = { username: req.session.username };
+    res.render('index.ejs', { user });
 };
 
 exports.login = async function(req, res) {
@@ -14,13 +17,28 @@ exports.login = async function(req, res) {
         if (msg) {
             res.render('login.ejs', { error: msg });
         } else {
+            req.session.username = username;
             res.redirect('/');
         }
     } else {
-        console.log(req.session);
-        res.render('login.ejs');
+        // check if user is already logged in
+        if (req.session.username !== undefined)
+            res.redirect('/');
+        else
+            res.render('login.ejs');
     }
 };
+
+exports.logout = async function(req, res) {
+    if (req.session.username !== undefined) {
+        // destroy session & clear session id cookie
+        req.session.destroy();
+        res.setCookie('connect.sid', '', { expires: 0 });
+        res.render('logout.ejs');
+    } else {
+        res.redirect('/');
+    }
+}
 
 exports.signup = async function(req, res) {
     if (req.method === 'POST') {
@@ -36,8 +54,11 @@ exports.signup = async function(req, res) {
             res.redirect('/');
         }
     } else {
-        console.log(req.session);
-        res.render('signup.ejs');
+        // check if user is already logged in
+        if (req.session.username !== undefined)
+            res.redirect('/');
+        else
+            res.render('signup.ejs');
     }
 };
 

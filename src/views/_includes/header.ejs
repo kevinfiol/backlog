@@ -17,6 +17,11 @@
     <main>
         <nav>
             <a href="/">home</a>
-            <a href="/login">login</a>
-            <a href="/signup">signup</a>
+
+            <% if (it.user && it.user.username !== undefined) { -%>
+                <a href="/logout">logout</a>
+            <% } else { -%>
+                <a href="/login">login</a>
+                <a href="/signup">signup</a>
+            <% } -%>
         </nav>

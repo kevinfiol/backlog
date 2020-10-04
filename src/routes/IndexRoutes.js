@@ -4,6 +4,7 @@ const IndexController = require('../controllers/IndexController.js');
 const router = polka();
 router.get('/', IndexController.index);
 router.get('/login', IndexController.login);
+router.get('/logout', IndexController.logout);
 router.get('/signup', IndexController.signup);
 
 router.post('/login', IndexController.login);

@@ -1,4 +1,4 @@
-<%- include('_includes/header.ejs') %>
+<%- include('_includes/header.ejs', { user: it.user }) %>
 
 <h1>backlog cleaner</h1>
 <span><b>A tiny tool to help cleanup your backlog</b></span>
@@ -8,9 +8,5 @@
 <p>We all have less time than we used to. And as the years fly by, so do all those new releases. It's a blessing -- you've never had so much great content to consume! And yet, a curse... how could you ever complete all of that? Never has there been a more apt use of the phrase, "first world problems."</p>
 
 <p>My efforts let me to keep a simple list (written and updated publicly using Markdown). While it mostly worked, I knew I desired something more dynamic and domain-specific.</p>
-
-<a href="#">This is a hyperlink</a>
-
-<p>foo: <%= it.foo %></p>
 
 <%- include('_includes/footer.ejs') %>
