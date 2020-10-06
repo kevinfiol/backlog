@@ -8,7 +8,7 @@ const getView = filename => join(__dirname, VIEWS_DIR, filename);
 // yeahjs template engine
 // depends on middleware/send
 module.exports = () => (_, res, next) => {
-    res.render = (view, data = {}, status) => {
+    res.render = (view, data = {}, status = 200) => {
         try {
             const fileString = readFileSync(getView(view), 'utf8');
 
@@ -20,7 +20,7 @@ module.exports = () => (_, res, next) => {
             });
 
             const html = template(data);
-            res.send(200, html, { 'Content-Type': 'text/html' });
+            res.send(status, html, { 'Content-Type': 'text/html' });
         } catch (e) {
             res.send(500, e.message || e);
         }
