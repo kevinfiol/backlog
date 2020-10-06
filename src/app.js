@@ -33,7 +33,7 @@ const app = polka()
 ;
 
 // routes
-const IndexRoutes = require('./routes/IndexRoutes.js');
-app.use('/', IndexRoutes);
+const routes = require('./routes.js');
+app.use('/', routes);
 
 module.exports = app;

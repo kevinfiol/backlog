@@ -8,7 +8,7 @@ const getView = filename => join(__dirname, VIEWS_DIR, filename);
 // yeahjs template engine
 // depends on middleware/send
 module.exports = () => (_, res, next) => {
-    res.render = (view, data = {}) => {
+    res.render = (view, data = {}, status) => {
         try {
             const fileString = readFileSync(getView(view), 'utf8');
 

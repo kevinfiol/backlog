@@ -1,6 +1,5 @@
 const { AuthService } = require('../container.js');
 
-
 exports.index = async function(req, res) {
     console.log(req.sessionID);
     const user = { username: req.session.username };
@@ -12,12 +11,12 @@ exports.login = async function(req, res) {
         const { username, password } = req.body;
 
         // validate
-        let msg = await validateLogin({ username, password });
+        let error = await validateLogin({ username, password });
 
-        if (msg) {
-            res.render('login.ejs', { error: msg });
+        if (error) {
+            res.render('login.ejs', { error });
         } else {
-            req.session.username = username;
+            req.session.username = username.trim();
             res.redirect('/');
         }
     } else {
@@ -45,12 +44,13 @@ exports.signup = async function(req, res) {
         const { username, password, confirm_password } = req.body;
 
         // validate
-        let msg = await validateSignup({ username, password, confirm_password });
+        let error = await validateSignup({ username, password, confirm_password });
 
-        if (msg) {
-            res.render('signup.ejs', { error: msg });
+        if (error) {
+            res.render('signup.ejs', { error });
         } else {
             await AuthService.createUser({ username, password });
+            req.session.username = username.trim();
             res.redirect('/');
         }
     } else {
@@ -84,6 +84,21 @@ async function validateSignup({ username, password, confirm_password }) {
     // validate fields are filled
     if (anyEmpty([username, password, confirm_password]))
         return 'must provide username, password, & confirmation';
+
+    // reserved words
+    const reservedWords = [
+        'login',
+        'signup',
+        'logout',
+        'settings',
+        'config',
+        'home',
+        'dashboard',
+        'about'
+    ];
+
+    if (reservedWords.includes(username.trim()))
+        return 'that username is reserved.';
 
     // validate lengths
     if (username.trim().length > 30)
