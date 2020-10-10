@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="/css/typesafe.min.css">
     <link rel="stylesheet" href="/css/basscss.min.css">
     <link rel="stylesheet" href="/css/dark-mode.min.css">
@@ -18,7 +19,8 @@
         <nav>
             <a href="/">home</a>
 
-            <% if (it.user && it.user.username !== undefined) { -%>
+            <% if (it.sessionUser && it.sessionUser.username !== undefined) { -%>
+                <a href="<%= it.sessionUser.username.trim() -%>">dashboard</a>
                 <a href="/logout">logout</a>
             <% } else { -%>
                 <a href="/login">login</a>
