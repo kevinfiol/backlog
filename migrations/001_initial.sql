@@ -15,6 +15,16 @@ CREATE TABLE List (
     FOREIGN KEY(userid) REFERENCES User(userid)
 );
 
+CREATE TABLE Item (
+    itemid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    itemname TEXT NOT NULL,
+    orderInList INTEGER NOT NULL,
+    url TEXT,
+    listid INTEGER NOT NULL,
+    FOREIGN KEY(listid) REFERENCES List(listid)
+);
+
 -- Down
 DROP TABLE User;
 DROP TABLE List;
+DROP TABLE Item;
