@@ -11,13 +11,16 @@ const SQLite = require('./services/SQLite.js');
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
 
-(async () => {
-    const conn = await open({ driver: sqlite3.cached.Database, ...config.database });
+open({
+    driver: sqlite3.cached.Database,
+    ...config.database
+}).then(conn => {
+    // init SQLite service
     SQLite.init(conn);
 
-    // init services
+    // services that depend on SQLite service
     AuthService.init(SQLite);
-})();
+});
 
 module.exports = {
     // configs

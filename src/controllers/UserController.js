@@ -1,6 +1,8 @@
 const { AuthService } = require('../container.js');
 
 exports.user = async function(req, res) {
+    console.log('user route: ', req.params);
+
     // route params
     const username = req.params.username || '';
 
