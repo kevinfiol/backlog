@@ -114,7 +114,7 @@ async function validateSignup({ username, password, confirm_password }) {
         '<', '>', '!', ':', '(', ')'
     ];
 
-    if (username.includes(...disallowedChars));
+    if (username.includes(...disallowedChars))
         return `username cannot contain special characters: ${ disallowedChars.join(' ') }`;
 
     // validate lengths

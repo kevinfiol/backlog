@@ -1,8 +1,6 @@
 const { AuthService } = require('../container.js');
 
 exports.user = async function(req, res) {
-    console.log('user route: ', req.params);
-
     // route params
     const username = req.params.username || '';
 
@@ -10,11 +8,14 @@ exports.user = async function(req, res) {
     const sessionUser = { username: req.session.username };
 
     // view data
-    const viewData = { sessionUser };
+    let viewData = { sessionUser };
 
     let user;
     try {
+        // get user
         user = await AuthService.getUser({ username: username.trim() });
+        console.log(user);
+        // get lists
     } catch(e) {
         res.render('error.ejs', { ...viewData, code: 500, error: 'an error occured' }, 500);
     }
