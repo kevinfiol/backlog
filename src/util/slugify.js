@@ -1,5 +1,4 @@
 // adapted from schollz/rwtxt
-
 function slugify(text) {
     let lines = text.split('\n');
 

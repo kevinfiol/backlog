@@ -5,7 +5,8 @@
     "dev": "node-dev run.js",
     "debug": "node inspect run.js",
     "migrate": "node scripts/migrate.js",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "build:client": "esbuild  --bundle src/client/list.js --outfile=src/static/app/list.min.js --minify"
   },
   "dependencies": {
     "@lukeed/uuid": "^1.0.1",
@@ -15,6 +16,8 @@
     "cookie": "^0.4.1",
     "express-session": "^1.17.1",
     "helmet": "^4.1.1",
+    "hyperapp": "^2.0.8",
+    "microh": "^0.1.0",
     "node-fetch": "^2.6.1",
     "polka": "1.0.0-next.11",
     "session-file-store": "^1.4.0",
