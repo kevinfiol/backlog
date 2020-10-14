@@ -82,7 +82,6 @@ async function validateLogin({ username, password }) {
 }
 
 async function validateSignup({ username, password, confirm_password }) {
-
     // validate fields are filled
     if (anyEmpty([username, password, confirm_password]))
         return 'must provide username, password, & confirmation';

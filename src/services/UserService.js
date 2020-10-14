@@ -9,11 +9,11 @@ const UserService = {
         try {
             // validate user exists
             let user = await this.db.get('User', { username });
-            if (!user) return false;
+            if (!user) return null;
 
             // validate password
             const { hashed } = hasher.hash(password, user.salt);
-            if (hashed !== user.password) return false;
+            if (hashed !== user.password) return null;
 
             return user;
         } catch(e) {
