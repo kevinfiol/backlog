@@ -1,6 +1,6 @@
 const hasher = require('../util/hasher.js');
 
-const AuthService = {
+const UserService = {
     init(db) {
         this.db = db;
     },
@@ -8,7 +8,7 @@ const AuthService = {
     async validateAndGetUser({ username, password }) {
         try {
             // validate user exists
-            let user = await this.db.get('User', { username: username.trim() });
+            let user = await this.db.get('User', { username });
             if (!user) return false;
 
             // validate password
@@ -22,11 +22,11 @@ const AuthService = {
     },
 
     async createUser({ username, password }) {
-        const { hashed, salt } = hasher.hash(password.trim());
+        const { hashed, salt } = hasher.hash(password);
 
         try {
             const res = await this.db.insert('User', {
-                username: username.trim(),
+                username: username,
                 password: hashed,
                 salt: salt
             });
@@ -47,4 +47,4 @@ const AuthService = {
     }
 };
 
-module.exports = AuthService;
+module.exports = UserService;

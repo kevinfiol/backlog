@@ -1,4 +1,5 @@
-const { AuthService } = require('../container.js');
+const { UserService } = require('../container.js');
+const { ListService } = require('../container.js');
 
 exports.user = async function(req, res) {
     // route params
@@ -11,11 +12,13 @@ exports.user = async function(req, res) {
     let viewData = { sessionUser };
 
     let user;
+    let lists;
+
     try {
         // get user
-        user = await AuthService.getUser({ username: username.trim() });
-        console.log(user);
+        user = await UserService.getUser({ username: username.trim() });
         // get lists
+        lists = await ListService.getListsForUser({ userid: user.userid });
     } catch(e) {
         res.render('error.ejs', { ...viewData, code: 500, error: 'an error occured' }, 500);
     }
@@ -24,6 +27,6 @@ exports.user = async function(req, res) {
         res.render('error.ejs', { ...viewData, code: 404, error: 'page does not exist' }, 404);
     } else {
         user = { username: user.username };
-        res.render('dashboard.ejs', { ...viewData, user });
+        res.render('dashboard.ejs', { ...viewData, user, lists });
     }
 };

@@ -18,9 +18,10 @@ const SQLite = {
     },
 
     insert(tbl, params = {}) {
+        const keys = Object.keys(params);
         const stmt = `INSERT INTO ${tbl}`
-            + ` (${Object.keys(params).join(',')})`
-            + ` VALUES (${Object.values(params).fill('?').join(',')})`
+            + ` (${keys.join(',')})`
+            + ` VALUES (${keys.map(k => ':' + k).join(',')})`
         ;
         console.log(stmt);
         return this.conn.run(stmt, ...Object.values(params));
@@ -44,7 +45,7 @@ function wheres(params = {}) {
 
     for (let i = 0; i < keys.length; i++) {
         let str = i === 0 ? 'WHERE' : 'AND';
-        clause += ` ${str} ${keys[i]} = ?`;
+        clause += ` ${str} ${keys[i]} = :${keys[i]}`;
     }
 
     return clause;

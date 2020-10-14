@@ -1,10 +1,11 @@
 const config = require('../config.js');
 
-// session data
+// session configuration
 const sessionConfig = config.sessionConfig;
 
 // services
-const AuthService = require('./services/AuthService.js');
+const UserService = require('./services/UserService.js');
+const ListService = require('./services/ListService.js');
 
 // sqlite
 const SQLite = require('./services/SQLite.js');
@@ -19,7 +20,8 @@ open({
     SQLite.init(conn);
 
     // services that depend on SQLite service
-    AuthService.init(SQLite);
+    UserService.init(SQLite);
+    ListService.init(SQLite);
 });
 
 module.exports = {
@@ -27,5 +29,6 @@ module.exports = {
     sessionConfig,
 
     // services
-    AuthService
+    UserService,
+    ListService
 };

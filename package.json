@@ -4,7 +4,8 @@
     "run": "node run.js",
     "dev": "node-dev run.js",
     "debug": "node inspect run.js",
-    "migrate": "node scripts/migrate.js"
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js"
   },
   "dependencies": {
     "@lukeed/uuid": "^1.0.1",
@@ -23,6 +24,7 @@
     "yeahjs": "^0.2.0"
   },
   "devDependencies": {
+    "esbuild": "^0.7.15",
     "node-dev": "^5.2.0"
   }
 }
