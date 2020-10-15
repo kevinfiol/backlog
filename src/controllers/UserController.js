@@ -11,22 +11,20 @@ exports.user = async function(req, res) {
     // view data
     let viewData = { sessionUser };
 
-    let user;
-    let lists;
-
     try {
         // get user
-        user = await UserService.getUser({ username: username.trim() });
-        // get lists
-        lists = await ListService.getListsForUser({ userid: user.userid });
-    } catch(e) {
-        res.render('error.ejs', { ...viewData, code: 500, error: 'an error occured' }, 500);
-    }
+        let user = await UserService.getUser({ username: username.trim() });
+        if (!user) throw Error(404);
 
-    if (!user) {
-        res.render('error.ejs', { ...viewData, code: 404, error: 'page does not exist' }, 404);
-    } else {
+        // get lists
+        let lists = await ListService.getListsForUser({ userid: user.userid });
+
         user = { username: user.username };
         res.render('dashboard.ejs', { ...viewData, user, lists });
+    } catch(e) {
+        if (e.message == 404)
+            res.render('error.ejs', { ...viewData, code: 404, error: 'page does not exist' }, 404);
+        else
+            res.render('error.ejs', { ...viewData, code: 500, error: 'an error occured' }, 500);
     }
 };
