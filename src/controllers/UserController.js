@@ -15,16 +15,19 @@ exports.user = async function(req, res) {
         // get user
         let user = await UserService.getUser({ username: username.trim() });
         if (!user) throw Error(404);
+        user = { username: user.username };
 
         // get lists
         let lists = await ListService.getListsForUser({ userid: user.userid });
 
-        user = { username: user.username };
-        res.render('dashboard.ejs', { ...viewData, user, lists });
+        viewData = { ...viewData, user, lists };
+        res.render('dashboard.ejs', viewData);
     } catch(e) {
-        if (e.message == 404)
-            res.render('error.ejs', { ...viewData, code: 404, error: 'page does not exist' }, 404);
-        else
-            res.render('error.ejs', { ...viewData, code: 500, error: 'an error occured' }, 500);
+        viewData = e.message == 404
+            ? { ...viewData, code: 404, error: 'page does not exist' }
+            : { ...viewData, code: 500, error: 'an error occured' }
+        ;
+
+        res.render('error.ejs', viewData, viewData.code);
     }
 };

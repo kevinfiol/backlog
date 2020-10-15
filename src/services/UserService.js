@@ -17,7 +17,7 @@ const UserService = {
 
             return user;
         } catch(e) {
-            throw new Error('Could not retrieve user. Check parameters.');
+            throw Error('Could not retrieve user. Check parameters.');
         }
     },
 
@@ -33,7 +33,7 @@ const UserService = {
 
             return res;
         } catch(e) {
-            throw new Error('Could not create new User.');
+            throw Error('Could not create new User.');
         }
     },
 
@@ -42,7 +42,7 @@ const UserService = {
             const user = await this.db.get('User', params);
             return user;
         } catch(e) {
-            throw new Error('Could not retrieve User. Check parameters.');
+            throw Error('Could not retrieve User. Check parameters.');
         }
     }
 };

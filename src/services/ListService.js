@@ -8,7 +8,7 @@ const ListService = {
             const lists = await this.db.all('List', { userid });
             return lists;
         } catch(e) {
-            throw new Error('Could not retrieve lists for user.');
+            throw Error('Could not retrieve lists for user.');
         }
     }
 };
