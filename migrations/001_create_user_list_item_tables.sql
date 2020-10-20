@@ -7,25 +7,37 @@ CREATE TABLE User (
 );
 
 CREATE TABLE List (
-    listid  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
-    listname TEXT NOT NULL,
-    slug TEXT NOT NULL,
-    userid INTEGER NOT NULL,
-    itemidOrder TEXT,
-    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    listid         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+    listname       TEXT NOT NULL,
+    slug           TEXT NOT NULL,
+    userid         INTEGER NOT NULL,
+    sectionidOrder TEXT,
+    date_created   TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    date_updated   TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY(userid) REFERENCES User(userid)
 );
 
-CREATE TABLE Item (
-    itemid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
-    itemname TEXT NOT NULL,
-    url TEXT,
-    listid INTEGER NOT NULL,
+CREATE TABLE Section (
+    sectionid   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+    sectionname TEXT NOT NULL,
+    slug        TEXT NOT NULL,
+    listid      INTEGER NOT NULL,
+    itemidOrder TEXT,
     FOREIGN KEY(listid) REFERENCES List(listid)
+);
+
+CREATE TABLE Item (
+    itemid    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+    itemname  TEXT NOT NULL,
+    slug      TEXT NOT NULL,
+    review    TEXT,
+    url       TEXT,
+    sectionid INTEGER NOT NULL,
+    FOREIGN KEY(sectionid) REFERENCES Section(sectionid)
 );
 
 -- Down
 DROP TABLE User;
 DROP TABLE List;
+DROP TABLE Section;
 DROP TABLE Item;
