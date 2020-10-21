@@ -15,7 +15,7 @@ exports.user = async function(req, res) {
         // get user
         let user = await UserService.getUser({ username: username.trim() });
         if (!user) throw Error(404);
-        user = { username: user.username };
+        user = { userid: user.userid, username: user.username };
 
         // get lists
         let lists = await ListService.getListsForUser({ userid: user.userid });
