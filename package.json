@@ -4,6 +4,7 @@
     "run": "node run.js",
     "dev": "node-dev run.js",
     "debug": "node inspect run.js",
+    "drop": "node scripts/drop.js",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
     "build:client": "esbuild  --bundle src/client/list.js --outfile=src/static/app/list.min.js --minify"

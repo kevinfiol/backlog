@@ -1,6 +1,4 @@
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
-const config = require ('../config.js');
+const connectDb = require('./db.js');
 const hasher = require('../src/util/hasher.js');
 const slugify = require('../src/util/slugify.js');
 
@@ -29,10 +27,7 @@ const user = {
     ]
 }
 
-open({
-    driver: sqlite3.cached.Database,
-    ...config.database
-}).then(async db => {
+connectDb.then(async db => {
     const { hashed, salt } = hasher.hash(user.password);
 
     await db.run(`
