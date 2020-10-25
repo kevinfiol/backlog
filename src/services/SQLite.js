@@ -3,6 +3,10 @@ const SQLite = {
         this.conn = conn;
     },
 
+    query(stmt, params = {}) {
+        return this.conn.all(stmt, params);
+    },
+
     // returns single row
     get(tbl, params = {}, cols = '*') {
         const stmt = `SELECT ${cols} FROM ${tbl}` + wheres(params);

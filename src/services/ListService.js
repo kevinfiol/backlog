@@ -10,6 +10,23 @@ const ListService = {
         } catch(e) {
             throw Error('Could not retrieve lists for user.');
         }
+    },
+
+    async getSectionsForList({ listid }) {
+        try {
+            const sections = await this.db.query(`
+                SELECT Item.*, Section.listid, Section.itemidOrder, List.sectionidOrder
+                FROM Item
+                INNER JOIN Section ON Item.sectionid = Section.sectionid
+                INNER JOIN List ON Section.listid = :listid;
+            `, {
+                ':listid': 1
+            });
+
+            const items = await this.db.query(`
+
+            `)
+        }
     }
 };
 

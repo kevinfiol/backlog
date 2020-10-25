@@ -15,5 +15,6 @@ router.post('/signup', IndexController.signup);
 
 // UserController
 router.get('/:username', UserController.user);
+router.get('/:username/:listSlug', UserController.list);
 
 module.exports = router;
