@@ -12,20 +12,24 @@ const ListService = {
         }
     },
 
-    async getSectionsForList({ listid }) {
+    async getItemsForList({ listid }) {
         try {
-            const sections = await this.db.query(`
-                SELECT Item.*, Section.listid, Section.itemidOrder, List.sectionidOrder
+            const items = await this.db.query(`
+                SELECT
+                    List.listid, List.listname, List.sectionidOrder,
+                    Section.sectionid, Section.sectionname, Section.itemidOrder,
+                    Item.*
                 FROM Item
-                INNER JOIN Section ON Item.sectionid = Section.sectionid
-                INNER JOIN List ON Section.listid = :listid;
+                LEFT JOIN Section ON Item.sectionid = Section.sectionid
+                LEFT JOIN List ON Section.listid = List.listid
+                WHERE List.listid = :listid
             `, {
-                ':listid': 1
+                ':listid': listid
             });
 
-            const items = await this.db.query(`
-
-            `)
+            return items;
+        } catch(e) {
+            throw Error('Could not retrieve items for list.');
         }
     }
 };

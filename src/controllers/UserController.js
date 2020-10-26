@@ -3,7 +3,7 @@ const { ListService } = require('../container.js');
 
 exports.user = async function(req, res) {
     // route params
-    const username = req.params.username || '';
+    const username = req.getRouteParam('username');
 
     // session
     const sessionUser = { username: req.session.username };
@@ -12,8 +12,11 @@ exports.user = async function(req, res) {
     let viewData = { sessionUser };
 
     try {
+        // check if route param is valid
+        if (!username) throw Error(404);
+
         // get user
-        let user = await UserService.getUser({ username: username.trim() });
+        let user = await UserService.getUser({ username });
         if (!user) throw Error(404);
         user = { userid: user.userid, username: user.username };
 
@@ -31,3 +34,13 @@ exports.user = async function(req, res) {
         res.render('error.ejs', viewData, viewData.code);
     }
 };
+
+exports.list = async function(req, res) {
+    // route params
+    const username = req.getRouteParam('username');
+    const listSlug = req.getRouteParam('listSlug');
+
+    const items = await ListService.getItemsForList({ listid: 3 });
+
+    res.render('list.ejs');
+}

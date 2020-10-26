@@ -12,6 +12,7 @@ const send = require('./middleware/send.js');
 const yeahjs = require('./middleware/yeahjs.js');
 const cookie = require('./middleware/cookie.js');
 const swDebug = require('./middleware/sw-debug.js');
+const getRouteParam = require('./middleware/getRouteParam.js');
 
 const STATIC_ASSETS_MAX_AGE = 31536000;
 
@@ -29,6 +30,7 @@ const app = polka()
     .use(compress(), assets)
     .use(helmet())
     .use(send())
+    .use(getRouteParam())
     .use(yeahjs())
     .use(cookie())
     .use(swDebug())
