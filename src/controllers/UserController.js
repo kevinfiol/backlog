@@ -40,7 +40,29 @@ exports.list = async function(req, res) {
     const username = req.getRouteParam('username');
     const listSlug = req.getRouteParam('listSlug');
 
-    const items = await ListService.getItemsForList({ listid: 3 });
+    // session
+    const sessionUser = { username: req.session.username };
 
-    res.render('list.ejs');
+    // view data
+    let viewData = { sessionUser };
+
+    try {
+        if (!username || !listSlug) throw Error(404);
+
+        // check if list exists using listSlug
+        let listData = await ListService.getList({ slug: listSlug });
+        if (!listData) throw Error(404);
+
+        // retrieve items
+        const items = await ListService.getItemsForList({ listid: listData.listid });
+        console.log(items);
+        res.render('list.ejs');
+    } catch(e) {
+        viewData = e.message == 404
+            ? { ...viewData, code: 404, error: 'page does not exist' }
+            : { ...viewData, code: 500, error: 'an error occured' }
+        ;
+
+        res.render('error.ejs', viewData, viewData.code);
+    }
 }

@@ -17,6 +17,7 @@
     "express-session": "^1.17.1",
     "helmet": "^4.1.1",
     "hyperapp": "^2.0.8",
+    "list": "^2.0.19",
     "microh": "^0.1.0",
     "node-fetch": "^2.6.1",
     "polka": "1.0.0-next.11",

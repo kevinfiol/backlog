@@ -3,6 +3,15 @@ const ListService = {
         this.db = db;
     },
 
+    async getList(params) {
+        try {
+            const list = await this.db.get('List', params);
+            return list;
+        } catch(e) {
+            throw Error('Could not retrieve List. Check parameters.');
+        }
+    },
+
     async getListsForUser({ userid }) {
         try {
             const lists = await this.db.all('List', { userid });
