@@ -1,3 +1,5 @@
+const L = require('list');
+
 const ListService = {
     init(db) {
         this.db = db;
@@ -23,7 +25,7 @@ const ListService = {
 
     async getItemsForList({ listid }) {
         try {
-            const items = await this.db.query(`
+            let allItems = await this.db.query(`
                 SELECT
                     List.listid, List.listname, List.sectionidOrder,
                     Section.sectionid, Section.sectionname, Section.itemidOrder,
@@ -36,7 +38,13 @@ const ListService = {
                 ':listid': listid
             });
 
-            return items;
+            // create immutable list
+            allItems = L.from(allItems);
+
+            const sections = L.groupWith((a, b) => a.sectionid === b.sectionid, allItems);
+            console.log(sections);
+
+            return [];
         } catch(e) {
             throw Error('Could not retrieve items for list.');
         }

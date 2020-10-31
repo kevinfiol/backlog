@@ -55,7 +55,6 @@ exports.list = async function(req, res) {
 
         // retrieve items
         const items = await ListService.getItemsForList({ listid: listData.listid });
-        console.log(items);
         res.render('list.ejs');
     } catch(e) {
         viewData = e.message == 404
