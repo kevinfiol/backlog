@@ -9,8 +9,8 @@ const { urlencoded } = require('@polka/parse');
 const redirect = require('./middleware/redirect.js');
 const session = require('./middleware/session.js');
 const send = require('./middleware/send.js');
-const yeahjs = require('./middleware/yeahjs.js');
-const cookie = require('./middleware/cookie.js');
+const render = require('./middleware/render.js');
+const setCookie = require('./middleware/setCookie.js');
 const swDebug = require('./middleware/sw-debug.js');
 const getRouteParam = require('./middleware/getRouteParam.js');
 
@@ -23,21 +23,20 @@ const assets = sirv(join(__dirname, 'static'), {
 });
 
 // app + middleware
-const app = polka()
-    .use(urlencoded())
-    .use(redirect())
-    .use(session())
-    .use(compress(), assets)
-    .use(helmet())
-    .use(send())
-    .use(getRouteParam())
-    .use(yeahjs())
-    .use(cookie())
-    .use(swDebug())
-;
+const app = polka().use(
+    urlencoded(),
+    redirect(),
+    session(),
+    compress(), assets,
+    helmet(),
+    send(),
+    getRouteParam(),
+    render(),
+    setCookie(),
+    swDebug(),
+);
 
 // routes
-const routes = require('./routes.js');
-app.use('/', routes);
+app.use('/', require('./routes.js'));
 
 module.exports = app;
