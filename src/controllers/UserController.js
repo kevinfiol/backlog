@@ -57,6 +57,7 @@ exports.list = async function(req, res) {
         const items = await ListService.getItemsForList({ listid: listData.listid });
         res.render('list.ejs');
     } catch(e) {
+        console.log('here', e);
         viewData = e.message == 404
             ? { ...viewData, code: 404, error: 'page does not exist' }
             : { ...viewData, code: 500, error: 'an error occured' }
