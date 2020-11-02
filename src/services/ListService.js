@@ -41,20 +41,19 @@ const ListService = {
             if (rows.length < 1)
                 return [];
 
-            const sectionidOrder = fromCSV(rows[0]['sectionidOrder']);
+            const sectionidOrder = fromCSV(rows[0]['sectionidOrder']); // [1, 2]
+            const sections = groupBy('sectionid', rows); // { 1: [...items], 2: [...items] }
 
-            // create immutable list
-            const fullList = L.from(rows);
-            const sections = L.groupWith((a, b) => a.sectionid === b.sectionid, fullList);
+            const sortedList = sectionidOrder
+                .map(sectionid => sections[sectionid]) // [[...section of id 1], [...section of id 2]]
+                .map(section => {
+                    // order items within individual sections
+                    const itemidOrder = fromCSV(section[0]['itemidOrder']);
+                    return itemidOrder.map(id => section.find(item => item.itemid == id));
+                })
+            ;
 
-            const sortedSections = L.map(section => {
-                const itemidOrder = fromCSV(L.nth(0, section)['itemidOrder']);
-                return L.map(id => L.find(item => item.itemid == id, section), itemidOrder);
-            }, sections);
-
-            const sortedList = L.map(id => L.find(section => section.sectionid == id), sectionidOrder);
-
-            return [];
+            return sortedList;
         } catch(e) {
             console.log(e);
             throw Error('Could not retrieve items for list.');
