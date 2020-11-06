@@ -23,7 +23,7 @@ const ListService = {
         }
     },
 
-    async getItemsForList({ listid }) {
+    async getListContent({ listid }) {
         try {
             const rows = await this.db.query(`
                 SELECT

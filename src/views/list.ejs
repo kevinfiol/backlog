@@ -1,7 +1,14 @@
 <%- include('_includes/header.ejs', { user: it.user }) %>
 
-<h1>list</h1>
+<h1><%= it.listData.listname %></h1>
 
-<p>list placeholder</p>
+<% for (const section of it.listContent) { %>
+    <h2><%= section[0].sectionname %></h2>
+    <ul>
+        <% for (const item of section) { %>
+            <li><%= item.itemname %></li>
+        <% } %>
+    </ul>
+<% } %>
 
 <%- include('_includes/footer.ejs') %>

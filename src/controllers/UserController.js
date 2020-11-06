@@ -54,8 +54,10 @@ exports.list = async function(req, res) {
         if (!listData) throw Error(404);
 
         // retrieve items
-        const items = await ListService.getItemsForList({ listid: listData.listid });
-        res.render('list.ejs');
+        const listContent = await ListService.getListContent({ listid: listData.listid });
+
+        viewData = { ...viewData, listData, listContent };
+        res.render('list.ejs', viewData);
     } catch(e) {
         console.log('here', e);
         viewData = e.message == 404
