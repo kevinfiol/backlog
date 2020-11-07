@@ -12,6 +12,7 @@ const send = require('./middleware/send.js');
 const render = require('./middleware/render.js');
 const setCookie = require('./middleware/setCookie.js');
 const swDebug = require('./middleware/sw-debug.js');
+const error = require('./middleware/error.js');
 const getRouteParam = require('./middleware/getRouteParam.js');
 
 const STATIC_ASSETS_MAX_AGE = 31536000;
@@ -33,6 +34,7 @@ const app = polka().use(
     getRouteParam(),
     render(),
     setCookie(),
+    error(),
     swDebug(),
 );
 

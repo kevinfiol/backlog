@@ -1,5 +1,3 @@
-const L = require('list');
-
 const ListService = {
     init(db) {
         this.db = db;
@@ -45,11 +43,25 @@ const ListService = {
             const sections = groupBy('sectionid', rows); // { 1: [...items], 2: [...items] }
 
             const sortedList = sectionidOrder
-                .map(sectionid => sections[sectionid]) // [[...section of id 1], [...section of id 2]]
+                // order sections first
+                // [{section obj}, {section obj}]
+                .map(sectionid => {
+                    const items = sections[sectionid];
+                    const { sectionname, itemidOrder } = items[0];
+                    return { sectionid, sectionname, itemidOrder, items };
+                })
+                // order individual items within sections
+                // [ section obj 1: { items: [{}, {}, ...] }, section obj 2: { ... }]
                 .map(section => {
-                    // order items within individual sections
-                    const itemidOrder = fromCSV(section[0]['itemidOrder']);
-                    return itemidOrder.map(id => section.find(item => item.itemid == id));
+                    const itemidOrder = fromCSV(section.itemidOrder);
+
+                    section.items = itemidOrder.map(id => {
+                        const item = section.items.find(item => item.itemid == id);
+                        const { itemid, itemname, slug, url } = item;
+                        return { itemid, itemname, slug, url };
+                    });
+
+                    return section;
                 })
             ;
 

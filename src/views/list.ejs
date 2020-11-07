@@ -3,9 +3,9 @@
 <h1><%= it.listData.listname %></h1>
 
 <% for (const section of it.listContent) { %>
-    <h2><%= section[0].sectionname %></h2>
+    <h2><%= section.sectionname %></h2>
     <ul>
-        <% for (const item of section) { %>
+        <% for (const item of section.items) { %>
             <li><%= item.itemname %></li>
         <% } %>
     </ul>

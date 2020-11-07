@@ -26,12 +26,7 @@ exports.user = async function(req, res) {
         viewData = { ...viewData, user, lists };
         res.render('dashboard.ejs', viewData);
     } catch(e) {
-        viewData = e.message == 404
-            ? { ...viewData, code: 404, error: 'page does not exist' }
-            : { ...viewData, code: 500, error: 'an error occured' }
-        ;
-
-        res.render('error.ejs', viewData, viewData.code);
+        res.error(e, viewData);
     }
 };
 
@@ -59,12 +54,6 @@ exports.list = async function(req, res) {
         viewData = { ...viewData, listData, listContent };
         res.render('list.ejs', viewData);
     } catch(e) {
-        console.log('here', e);
-        viewData = e.message == 404
-            ? { ...viewData, code: 404, error: 'page does not exist' }
-            : { ...viewData, code: 500, error: 'an error occured' }
-        ;
-
-        res.render('error.ejs', viewData, viewData.code);
+        res.error(e, viewData);
     }
 }
