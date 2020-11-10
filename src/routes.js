@@ -1,6 +1,7 @@
 const polka = require('polka');
-const IndexController = require('./controllers/IndexController.js');
-const UserController = require('./controllers/UserController.js');
+const IndexController = require('./controllers/web/IndexController.js');
+const UserController = require('./controllers/web/UserController.js');
+const ListController = require('./controllers/api/ListController.js');
 
 const router = polka();
 
@@ -16,5 +17,8 @@ router.post('/signup', IndexController.signup);
 // UserController
 router.get('/:username', UserController.user);
 router.get('/:username/:listSlug', UserController.list);
+
+// ListController
+router.get('/api/list/getFullList/:listid', ListController.getFullList);
 
 module.exports = router;

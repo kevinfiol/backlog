@@ -1,5 +1,5 @@
-const { UserService } = require('../container.js');
-const { ListService } = require('../container.js');
+const { UserService } = require('../../container.js');
+const { ListService } = require('../../container.js');
 
 exports.user = async function(req, res) {
     // route params
@@ -38,7 +38,7 @@ exports.list = async function(req, res) {
         const list = rows[0];
 
         // retrieve sections + items
-        const sections = await ListService.getListContent({ listid: list.listid });
+        const sections = await ListService.getFullList({ listid: list.listid });
         list.sections = sections;
 
         res.setViewData({ list });

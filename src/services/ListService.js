@@ -3,12 +3,12 @@ const ListService = {
         this.db = db;
     },
 
-    async getList(params) {
+    async getListsForUser({ userid }) {
         try {
-            const list = await this.db.get('List', params);
-            return list;
+            const lists = await this.db.all('List', { userid });
+            return lists;
         } catch(e) {
-            throw Error('Could not retrieve List. Check parameters.');
+            throw Error('Could not retrieve lists for user.');
         }
     },
 
@@ -31,16 +31,7 @@ const ListService = {
         }
     },
 
-    async getListsForUser({ userid }) {
-        try {
-            const lists = await this.db.all('List', { userid });
-            return lists;
-        } catch(e) {
-            throw Error('Could not retrieve lists for user.');
-        }
-    },
-
-    async getListContent({ listid }) {
+    async getFullList({ listid }) {
         try {
             const rows = await this.db.query(`
                 SELECT
