@@ -5,12 +5,6 @@ exports.user = async function(req, res) {
     // route params
     const username = req.getRouteParam('username');
 
-    // session
-    const sessionUser = { username: req.session.username };
-
-    // view data
-    let viewData = { sessionUser };
-
     try {
         // check if route param is valid
         if (!username) throw Error(404);
@@ -23,10 +17,10 @@ exports.user = async function(req, res) {
         // get lists
         let lists = await ListService.getListsForUser({ userid: user.userid });
 
-        viewData = { ...viewData, user, lists };
-        res.render('dashboard.ejs', viewData);
+        res.setViewData({ user, lists });
+        res.render('dashboard.ejs', res.viewData);
     } catch(e) {
-        res.error(e, viewData);
+        res.error(e);
     }
 };
 
@@ -35,25 +29,22 @@ exports.list = async function(req, res) {
     const username = req.getRouteParam('username');
     const listSlug = req.getRouteParam('listSlug');
 
-    // session
-    const sessionUser = { username: req.session.username };
-
-    // view data
-    let viewData = { sessionUser };
-
     try {
         if (!username || !listSlug) throw Error(404);
 
-        // check if list exists using listSlug
-        let listData = await ListService.getList({ slug: listSlug });
-        if (!listData) throw Error(404);
+        // get list if it exists
+        const rows = await ListService.getListBySlug({ slug: listSlug, username });
+        if (rows.length < 1) throw Error(404)
+        const list = rows[0];
 
-        // retrieve items
-        const listContent = await ListService.getListContent({ listid: listData.listid });
+        // retrieve sections + items
+        const sections = await ListService.getListContent({ listid: list.listid });
+        list.sections = sections;
 
-        viewData = { ...viewData, listData, listContent };
-        res.render('list.ejs', viewData);
+        res.setViewData({ list });
+        res.render('list.ejs', res.viewData);
     } catch(e) {
-        res.error(e, viewData);
+        console.log(e);
+        res.error(e);
     }
 }

@@ -12,6 +12,25 @@ const ListService = {
         }
     },
 
+    async getListBySlug({ slug, username }) {
+        try {
+            const rows = await this.db.query(`
+                SELECT List.*, User.username
+                FROM List
+                LEFT JOIN User on User.userid = List.userid
+                WHERE List.slug = :slug
+                AND User.username = :username
+            `, {
+                ':slug': slug,
+                ':username': username
+            });
+
+            return rows;
+        } catch(e) {
+            throw Error('Could not retrieve List by slug and username.')
+        }
+    },
+
     async getListsForUser({ userid }) {
         try {
             const lists = await this.db.all('List', { userid });
@@ -67,7 +86,6 @@ const ListService = {
 
             return sortedList;
         } catch(e) {
-            console.log(e);
             throw Error('Could not retrieve items for list.');
         }
     }

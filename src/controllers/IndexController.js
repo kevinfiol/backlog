@@ -1,8 +1,7 @@
 const { UserService } = require('../container.js');
 
 exports.index = async function(req, res) {
-    const sessionUser = { username: req.session.username };
-    res.render('index.ejs', { sessionUser });
+    res.render('index.ejs', res.viewData);
 };
 
 exports.login = async function(req, res) {

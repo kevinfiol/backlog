@@ -1,23 +1,25 @@
 <%- include('_includes/header.ejs', { user: it.sessionUser }) %>
 
-<h1>dashboard</h1>
+<main>
+    <h1>dashboard</h1>
 
-<h2><%= it.user.username %></h2>
+    <h2><%= it.user.username %></h2>
 
-<h2>lists</h2>
+    <h2>lists</h2>
 
-<% if (it.lists && it.lists.length > 0) { %>
-    <% for (let list of it.lists) { %>
-        <div>
-            <h3>
-                <a href="/<%= it.user.username %>/<%= list.slug %>">
-                    <%= list.listname %>
-                </a>
-            </h3>
-        </div>
+    <% if (it.lists && it.lists.length > 0) { %>
+        <% for (let list of it.lists) { %>
+            <div>
+                <h3>
+                    <a href="/<%= it.user.username %>/<%= list.slug %>">
+                        <%= list.listname %>
+                    </a>
+                </h3>
+            </div>
+        <% } %>
+    <% } else { %>
+        <em>this user has not made any lists yet</em>
     <% } %>
-<% } else { %>
-    <em>this user has not made any lists yet</em>
-<% } %>
+</main>
 
 <%- include('_includes/footer.ejs') %>

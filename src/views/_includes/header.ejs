@@ -15,15 +15,14 @@
         <input id="darkSwitch" type="checkbox" />
         <label class="dark-mode-btn" for="darkSwitch">🌒</label>
     </div>
-    <main>
-        <nav>
-            <a href="/">home</a>
+    <nav>
+        <a href="/">home</a>
 
-            <% if (it.sessionUser && it.sessionUser.username !== undefined) { %>
-                <a href="<%= it.sessionUser.username.trim() %>">dashboard</a>
-                <a href="/logout">logout</a>
-            <% } else { %>
-                <a href="/login">login</a>
-                <a href="/signup">signup</a>
-            <% } %>
-        </nav>
+        <% if (it.sessionUser && it.sessionUser.username !== undefined) { %>
+            <a href="/<%= it.sessionUser.username.trim() %>">dashboard</a>
+            <a href="/logout">logout</a>
+        <% } else { %>
+            <a href="/login">login</a>
+            <a href="/signup">signup</a>
+        <% } %>
+    </nav>

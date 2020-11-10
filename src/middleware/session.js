@@ -1,12 +1,12 @@
 const session = require('express-session');
 const FileStore = require('session-file-store')(session);
-const uuid = require('@lukeed/uuid');
+const { v4 } = require('@lukeed/uuid');
 const { sessionConfig } = require('../container.js');
 
 module.exports = () => {
     return session({
         ...sessionConfig,
-        genid: () => uuid(),
+        genid: () => v4(),
         store: new FileStore({ path: './sessions' })
     });
 };

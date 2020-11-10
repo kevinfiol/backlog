@@ -1,14 +1,30 @@
 <%- include('_includes/header.ejs', { user: it.user }) %>
 
-<h1><%= it.listData.listname %></h1>
+<main>
+    <p>
+        <a href="/<%= it.list.username %>"><%= it.list.username %>'s lists</a>
+    </p>
+    <h1><%= it.list.listname %></h1>
 
-<% for (const section of it.listContent) { %>
-    <h2><%= section.sectionname %></h2>
-    <ul>
-        <% for (const item of section.items) { %>
-            <li><%= item.itemname %></li>
-        <% } %>
-    </ul>
-<% } %>
+    <div id="list">
+        <noscript>
+            <% for (const section of it.list.sections) { %>
+                <h2><%= section.sectionname %></h2>
+                <ul>
+                    <% for (const item of section.items) { %>
+                        <li><%= item.itemname %></li>
+                    <% } %>
+                </ul>
+            <% } %>
+        </noscript>
+    </div>
+</main>
+
+<script nonce="<%- it.nonce %>">
+    (() => {
+        window.viewData = { list: <%- JSON.stringify(it.list) %> };
+    })();
+</script>
+<script defer src="/app/list.min.js"></script>
 
 <%- include('_includes/footer.ejs') %>

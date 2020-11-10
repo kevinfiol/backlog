@@ -10,14 +10,12 @@ const SQLite = {
     // returns single row
     get(tbl, params = {}, cols = '*') {
         const stmt = `SELECT ${cols} FROM ${tbl}` + wheres(params);
-        console.log(stmt);
         return this.conn.get(stmt, Object.values(params));
     },
 
     // returns many rows
     all(tbl, params = {}, cols = '*') {
         const stmt = `SELECT ${cols} FROM ${tbl}` + wheres(params);
-        console.log(stmt);
         return this.conn.all(stmt, Object.values(params));
     },
 
@@ -27,7 +25,7 @@ const SQLite = {
             + ` (${keys.join(',')})`
             + ` VALUES (${keys.map(k => ':' + k).join(',')})`
         ;
-        console.log(stmt);
+
         return this.conn.run(stmt, ...Object.values(params));
     },
 
@@ -36,7 +34,7 @@ const SQLite = {
             + Object.keys(params).map(col => ` SET ${col} = ?`)
             + wheres(whereParams)
         ;
-        console.log(stmt);
+
         return this.conn.run(stmt, ...Object.values(params));
     }
 };

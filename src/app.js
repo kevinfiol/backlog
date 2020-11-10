@@ -14,6 +14,8 @@ const setCookie = require('./middleware/setCookie.js');
 const swDebug = require('./middleware/sw-debug.js');
 const error = require('./middleware/error.js');
 const getRouteParam = require('./middleware/getRouteParam.js');
+const viewData = require('./middleware/viewData.js');
+const csp = require('./middleware/csp.js');
 
 const STATIC_ASSETS_MAX_AGE = 31536000;
 
@@ -25,17 +27,24 @@ const assets = sirv(join(__dirname, 'static'), {
 
 // app + middleware
 const app = polka().use(
+    // helpers
     urlencoded(),
-    redirect(),
     session(),
     compress(), assets,
-    helmet(),
+
+    // custom helpers
+    redirect(),
+    render(),
     send(),
     getRouteParam(),
-    render(),
     setCookie(),
+    viewData(),
     error(),
     swDebug(),
+
+    // csp / security
+    helmet(),
+    csp(),
 );
 
 // routes

@@ -1,11 +1,11 @@
 dependencies:
-  '@lukeed/uuid': 1.0.1
+  '@lukeed/uuid': 2.0.0
   '@polka/parse': 1.0.0-next.8
   '@polka/send': 1.0.0-next.7
   compression: 1.7.4
   cookie: 0.4.1
   express-session: 1.17.1
-  helmet: 4.1.1
+  helmet: 4.2.0
   hyperapp: 2.0.8
   list: 2.0.19
   microh: 0.1.0
@@ -21,12 +21,20 @@ devDependencies:
   node-dev: 5.2.0
 lockfileVersion: 5.2
 packages:
-  /@lukeed/uuid/1.0.1:
+  /@lukeed/csprng/1.0.0:
     dev: false
     engines:
       node: '>=8'
     resolution:
-      integrity: sha512-shtopUGL/WuVicOTppRGDb2he9aGp+OF5EB11Xsbe3K4W6qN7HtK3F+ayNxcfbrG/SSL/Z9B+Xrb0Foz9x83gw==
+      integrity: sha512-ruuGHsnabmObBdeMg3vKdGRmh06Oog3eFpf/Tk6X0kDSJDpJTDCj2dqdp1+0VjzIUgHlFF9GBm7uFqfYhhdX9g==
+  /@lukeed/uuid/2.0.0:
+    dependencies:
+      '@lukeed/csprng': 1.0.0
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-dUz8OmYvlY5A9wXaroHIMSPASpSYRLCqbPvxGSyHguhtTQIy24lC+EGxQlwv71AhRCO55WOtgwhzQLpw27JaJQ==
   /@polka/parse/1.0.0-next.8:
     dev: false
     resolution:
@@ -491,12 +499,12 @@ packages:
       node: '>= 0.4.0'
     resolution:
       integrity: sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
-  /helmet/4.1.1:
+  /helmet/4.2.0:
     dev: false
     engines:
       node: '>=10.0.0'
     resolution:
-      integrity: sha512-Avg4XxSBrehD94mkRwEljnO+6RZx7AGfk8Wa6K1nxaU+hbXlFOhlOIMgPfFqOYQB/dBCsTpootTGuiOG+CHiQA==
+      integrity: sha512-aoiSxXMd0ks1ojYpSCFoCRzgv4rY/uB9jKStaw8PkXwsdLYa/Gq+Nc5l0soH0cwBIsLAlujPnx4HLQs+LaXCrQ==
   /http-signature/1.2.0:
     dependencies:
       assert-plus: 1.0.0
@@ -1304,14 +1312,14 @@ packages:
     resolution:
       integrity: sha512-2fFg7D+pjak8836vYaFcdtJtcO7pu/9zAoQLYatf229Sk78c9HPo19gDMdgzCP4LEktpGm8LdKUh/wP/KV/ohw==
 specifiers:
-  '@lukeed/uuid': ^1.0.1
+  '@lukeed/uuid': ^2.0.0
   '@polka/parse': 1.0.0-next.8
   '@polka/send': 1.0.0-next.7
   compression: ^1.7.4
   cookie: ^0.4.1
   esbuild: ^0.7.15
   express-session: ^1.17.1
-  helmet: ^4.1.1
+  helmet: ^4.2.0
   hyperapp: ^2.0.8
   list: ^2.0.19
   microh: ^0.1.0

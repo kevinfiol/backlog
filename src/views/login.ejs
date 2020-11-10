@@ -1,20 +1,22 @@
 <%- include('_includes/header.ejs') %>
 
-<h1>login</h1>
+<main>
+    <h1>login</h1>
 
-<form action="/login" method="post">
-    <fieldset>
-        <label for="username">username:</label>
-        <input id="username" name="username" type="text" maxlength="30" required>
+    <form action="/login" method="post">
+        <fieldset>
+            <label for="username">username:</label>
+            <input id="username" name="username" type="text" maxlength="30" required>
 
-        <label for="password">password:</label>
-        <input id="password" name="password" type="password" required>
-    </fieldset>
-    <button type="submit" value="OK">submit</button>
-</form>
+            <label for="password">password:</label>
+            <input id="password" name="password" type="password" required>
+        </fieldset>
+        <button type="submit" value="OK">submit</button>
+    </form>
 
-<% if (it.error) { %>
-    <p>error: <%= it.error %></p>
-<% } %>
+    <% if (it.error) { %>
+        <p>error: <%= it.error %></p>
+    <% } %>
+</main>
 
 <%- include('_includes/footer.ejs') %>
