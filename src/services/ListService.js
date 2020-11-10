@@ -32,6 +32,7 @@ const ListService = {
     },
 
     async getFullList({ listid }) {
+        // make so this gets all List metadata as well
         try {
             const rows = await this.db.query(`
                 SELECT
