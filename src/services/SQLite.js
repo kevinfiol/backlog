@@ -3,6 +3,10 @@ const SQLite = {
         this.conn = conn;
     },
 
+    run(stmt, params = {}) {
+        return this.conn.run(stmt, params);
+    },
+
     query(stmt, params = {}) {
         return this.conn.all(stmt, params);
     },

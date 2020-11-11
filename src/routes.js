@@ -20,5 +20,6 @@ router.get('/:username/:listSlug', UserController.list);
 
 // ListController
 router.get('/api/list/getFullList/:listid', ListController.getFullList);
+router.post('/api/list/addItem/', ListController.addItem);
 
 module.exports = router;

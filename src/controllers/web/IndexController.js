@@ -1,4 +1,4 @@
-const { UserService } = require('../container.js');
+const { UserService } = require('../../container.js');
 
 exports.index = async function(req, res) {
     res.render('index.ejs', res.viewData);

@@ -1,3 +1,5 @@
+const slugify = require('../util/slugify.js');
+
 const ListService = {
     init(db) {
         this.db = db;
@@ -15,7 +17,7 @@ const ListService = {
     async getListBySlug({ slug, username }) {
         try {
             const rows = await this.db.query(`
-                SELECT List.*, User.username
+                SELECT List.listid
                 FROM List
                 LEFT JOIN User on User.userid = List.userid
                 WHERE List.slug = :slug
@@ -36,12 +38,14 @@ const ListService = {
         try {
             const rows = await this.db.query(`
                 SELECT
-                    List.listid, List.listname, List.sectionidOrder,
+                    User.username,
+                    List.*, List.slug AS listslug,
                     Section.sectionid, Section.sectionname, Section.itemidOrder,
                     Item.*
                 FROM Item
                 LEFT JOIN Section ON Item.sectionid = Section.sectionid
                 LEFT JOIN List ON Section.listid = List.listid
+                LEFT JOIN User ON User.userid = List.userid
                 WHERE List.listid = :listid
             `, {
                 ':listid': listid
@@ -50,10 +54,22 @@ const ListService = {
             if (rows.length < 1)
                 return [];
 
-            const sectionidOrder = fromCSV(rows[0]['sectionidOrder']); // [1, 2]
+            const list = {
+                listid: rows[0].listid,
+                listname: rows[0].listname,
+                userid: rows[0].userid,
+                username: rows[0].username,
+                sectionidOrder: rows[0].sectionidOrder,
+                date_created: rows[0].date_created,
+                date_updated: rows[0].date_updated,
+                slug: rows[0].listslug,
+                sections: undefined
+            };
+
+            const sectionidOrderArr = fromCSV(list.sectionidOrder); // [1, 2]
             const sections = groupBy('sectionid', rows); // { 1: [...items], 2: [...items] }
 
-            const sortedList = sectionidOrder
+            list.sections = sectionidOrderArr
                 // order sections first
                 // [{section obj}, {section obj}]
                 .map(sectionid => {
@@ -76,9 +92,50 @@ const ListService = {
                 })
             ;
 
-            return sortedList;
+            return list;
         } catch(e) {
             throw Error('Could not retrieve items for list.');
+        }
+    },
+
+    async addItem({ sectionid, item }) {
+        try {
+            const result = await this.db.run(`
+                INSERT INTO Item (itemname, slug, url, sectionid)
+                VALUES (:itemname, :slug, :url, :sectionid)
+            `, {
+                ':itemname': item.itemname.trim(),
+                ':slug': slugify(item.itemname),
+                ':url': item.url.trim() || null,
+                ':sectionid': parseInt(sectionid)
+            });
+
+            if (result.changes < 1)
+                throw Error('Was not able to make changes to database.');
+
+            return result;
+        } catch(e) {
+            throw Error(`Unable to add new Item. ${e.message}`);
+        }
+    },
+
+    async updateItemOrder({ sectionid, itemidOrder }) {
+        try {
+            const result = await this.db.run(`
+                UPDATE Section
+                SET itemidOrder = :itemidOrder
+                WHERE sectionid = :sectionid
+            `, {
+                ':itemidOrder': itemidOrder.trim(),
+                ':sectionid': sectionid
+            });
+
+            if (result.changes < 1)
+                throw Error('Was not able to update itemidOrder');
+
+            return result;
+        } catch(e) {
+            throw Error(`Unable to update Section. ${e.message}`);
         }
     }
 };

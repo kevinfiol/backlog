@@ -5,7 +5,7 @@ const { join } = require('path');
 const sirv = require('sirv');
 const compress = require('compression');
 const helmet = require('helmet');
-const { urlencoded } = require('@polka/parse');
+const { urlencoded, json } = require('@polka/parse');
 const redirect = require('./middleware/redirect.js');
 const session = require('./middleware/session.js');
 const send = require('./middleware/send.js');
@@ -29,6 +29,7 @@ const assets = sirv(join(__dirname, 'static'), {
 const app = polka().use(
     // helpers
     urlencoded(),
+    json(),
     session(),
     compress(), assets,
 

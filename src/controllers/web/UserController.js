@@ -35,13 +35,12 @@ exports.list = async function(req, res) {
         // get list if it exists
         const rows = await ListService.getListBySlug({ slug: listSlug, username });
         if (rows.length < 1) throw Error(404)
-        const list = rows[0];
+        const listData = rows[0];
 
         // retrieve sections + items
-        const sections = await ListService.getFullList({ listid: list.listid });
-        list.sections = sections;
+        const list = await ListService.getFullList({ listid: listData.listid });
 
-        res.setViewData({ list });
+        res.setViewData({ list, username });
         res.render('list.ejs', res.viewData);
     } catch(e) {
         console.log(e);
