@@ -6,12 +6,11 @@ exports.user = async function(req, res) {
     const username = req.getRouteParam('username');
 
     try {
-        // check if route param is valid
-        if (!username) throw Error(404);
+        if (!username) throw Error('Invalid route.');
 
         // get user
         let user = await UserService.getUser({ username });
-        if (!user) throw Error(404);
+        if (!user) throw Error('User does not exist.');
         user = { userid: user.userid, username: user.username };
 
         // get lists
@@ -20,6 +19,7 @@ exports.user = async function(req, res) {
         res.setViewData({ user, lists });
         res.render('dashboard.ejs', res.viewData);
     } catch(e) {
+        res.statusCode = 404;
         res.error(e);
     }
 };
@@ -30,11 +30,11 @@ exports.list = async function(req, res) {
     const listSlug = req.getRouteParam('listSlug');
 
     try {
-        if (!username || !listSlug) throw Error(404);
+        if (!username || !listSlug) throw Error('Invalid route.');
 
         // get list if it exists
         const rows = await ListService.getListBySlug({ slug: listSlug, username });
-        if (rows.length < 1) throw Error(404)
+        if (rows.length < 1) throw Error('List does not exist.')
         const listData = rows[0];
 
         // retrieve sections + items
@@ -43,7 +43,7 @@ exports.list = async function(req, res) {
         res.setViewData({ list, username });
         res.render('list.ejs', res.viewData);
     } catch(e) {
-        console.log(e);
+        res.statusCode = 404;
         res.error(e);
     }
 }

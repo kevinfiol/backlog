@@ -6,12 +6,12 @@ exports.getFullList = async function(req, res) {
 
     try {
         // check if route param is valid
-        if (!listid) throw Error(404);
+        if (!listid) throw Error('List does not exist');
         const list = await ListService.getFullList({ listid });
 
         res.send(200, list);
     } catch(e) {
-        res.send(e.message, { message: 'Could not get full list.' });
+        res.send(500, { message: e.message });
     }
 };
 
@@ -20,13 +20,13 @@ exports.addItem = async function(req, res) {
 
     try {
         if (!listid || !item || !sectionid || itemPosition === undefined)
-            throw Error(500);
+            throw Error('Invalid body parameters.');
 
         let list = await ListService.getFullList({ listid });
-        if (!list) throw Error(500);
+        if (!list) throw Error('List does not exist.');
 
         const section = list.sections.find(section => section.sectionid == sectionid);
-        if (!section) throw Error(500);
+        if (!section) throw Error('Section does not exist.');
 
         let items = section.items;
         let itemidOrder = section.itemidOrder.split(',');
@@ -38,13 +38,11 @@ exports.addItem = async function(req, res) {
         let result = await ListService.addItem({ sectionid: section.sectionid, item })
         const newItemID = result.lastID;
 
-        // have to find a better way to error handle
-        // as it stands, errors from ListService will bubble up and the strings will be used as HTTP Error Codes
         itemidOrder.splice(itemPosition, 0, newItemID);
         result = await ListService.updateItemOrder({ sectionid: section.sectionid, itemidOrder: itemidOrder.join(',') });
 
         res.send(200, { item: { itemid: newItemID, ...item } });
     } catch(e) {
-        res.send(e.message, { message: 'Unable to add item.' })
+        res.send(500, { message: e.message })
     }
 };
