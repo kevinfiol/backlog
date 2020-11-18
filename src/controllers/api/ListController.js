@@ -2,7 +2,7 @@ const { ListService } = require('../../container.js');
 
 exports.getFullList = async function(req, res) {
     // route params
-    const listid = req.getRouteParam('listid');
+    const listid = req.query.listid;
 
     try {
         // check if route param is valid

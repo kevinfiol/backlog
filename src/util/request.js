@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = globalThis.fetch || require('node-fetch');
 
 const request = {
     get(url, params = {}) {
@@ -6,7 +6,7 @@ const request = {
         return fetch(query);
     },
 
-    post(url, body = '') {
+    post(url, body = {}) {
         return fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json;charset=utf-8' },
