@@ -18,15 +18,22 @@ export const addToSection = (state, { sectionid, newItem }) => {
     return { ...state };
 };
 
-export const InputSetter = key => (state, e) => {
-    SetValue(state, { key, value: e.target.value })
+export const valueStream = key => (state, e) => {
+    setValue(state, { key, value: e.target.value });
 };
 
-export const getFullList = (state) => [
+export const getFullList = state => [
     state,
     http({
         method: 'GET',
         url: '/api/list/getFullList/',
-        params: { listid: 1 }
+        params: { listid: 1 },
+        action: (state, list) =>
+            ({ ...state, list })
+        ,
+        error: (state, error) => {
+            console.error(error);
+            return state;
+        }
     })
 ];

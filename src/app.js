@@ -16,6 +16,7 @@ const error = require('./middleware/error.js');
 const getRouteParam = require('./middleware/getRouteParam.js');
 const viewData = require('./middleware/viewData.js');
 const csp = require('./middleware/csp.js');
+const logger = require('./middleware/logger.js');
 
 const STATIC_ASSETS_MAX_AGE = 31536000;
 
@@ -28,6 +29,7 @@ const assets = sirv(join(__dirname, 'static'), {
 // app + middleware
 const app = polka().use(
     // helpers
+    logger(),
     urlencoded(),
     json(),
     session(),

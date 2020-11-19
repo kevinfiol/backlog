@@ -2,10 +2,10 @@ import { app } from 'hyperapp';
 import m from './m.js';
 
 import Input from './components/Input.js';
-import { InputSetter, addToSection } from './actions.js';
+import { valueStream, addToSection, getFullList } from './actions.js';
 
 const LIST_CONTAINER = document.getElementById('list');
-const { list } = window.viewData;
+// const { list } = window.viewData;
 
 const List = ({ list }) =>
     list.sections.map(section =>
@@ -22,14 +22,15 @@ const List = ({ list }) =>
 
 app({
     init: {
-        list,
+        list: null,
         newItem: ''
     },
     view: ({ newItem, list }) =>
         m('div',
-            m(List, { list }),
-            m(Input, { value: newItem, update: InputSetter('newItem') }),
-            m('button', { onclick: [addToSection, { sectionid: 2, newItem }] }, 'add')
+            list ? m(List, { list }) : m('p', 'no list yet'),
+            // m(List, { list }),
+            // m(Input, { value: newItem, update: valueStream('newItem') }),
+            m('button', { onclick: getFullList }, 'get list')
         )
     ,
     node: LIST_CONTAINER
