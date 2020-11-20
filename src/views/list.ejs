@@ -22,7 +22,9 @@
 
 <script nonce="<%- it.nonce %>">
     (() => {
-        window.viewData = { list: <%- JSON.stringify(it.list) %> };
+        window.viewData = {
+            list: <%- JSON.stringify(it.list) %>
+        };
     })();
 </script>
 <script defer src="/app/list.min.js"></script>

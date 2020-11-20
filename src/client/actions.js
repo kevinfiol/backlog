@@ -1,7 +1,4 @@
-import { httpFx } from './effects.js';
-
-// helpers
-const http = props => [httpFx, props];
+import { http } from './effects.js';
 
 // actions
 export const setValue = (state, { key, value }) => {

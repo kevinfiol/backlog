@@ -23,7 +23,8 @@ const STATIC_ASSETS_MAX_AGE = 31536000;
 // static assets
 const assets = sirv(join(__dirname, 'static'), {
     maxAge: STATIC_ASSETS_MAX_AGE,
-    immutable: true
+    immutable: true,
+    dev: true
 });
 
 // app + middleware

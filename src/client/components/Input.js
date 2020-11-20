@@ -4,4 +4,4 @@ const Input = ({ value, update }) =>
     m('input', { type: 'text', oninput: update, value })
 ;
 
-module.exports = Input;
+export default Input;

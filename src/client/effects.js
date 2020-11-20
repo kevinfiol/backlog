@@ -1,6 +1,6 @@
 import request from '../util/request.js';
 
-export const httpFx = async (dispatch, props) => {
+const httpFx = async (dispatch, props) => {
     try {
         let res;
 
@@ -15,3 +15,5 @@ export const httpFx = async (dispatch, props) => {
         dispatch(props.error, e);
     }
 };
+
+export const http = props => [httpFx, props];

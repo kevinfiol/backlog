@@ -14,6 +14,7 @@ input[type="text"], input[type="password"] {
 }
 
 button {
+    font-family: monospace;
     padding: 0.5rem 0.8rem;
     background-color: rgba(0, 0, 0, 0);
     border-color: rgba(0, 0, 0, 0.5);
@@ -24,3 +25,34 @@ button {
 
 button:hover { background-color: rgba(0, 0, 0, 0.1); }
 button:focus { background-color: rgba(0, 0, 0, 0.2); }
+
+/*Icons*/
+i {
+    height: 16px;
+    width: 16px;
+    display: inline-block;
+    font-size: inherit;
+    vertical-align: text-bottom;
+    margin-right: 0.15rem;
+}
+
+i.add { background-image: url('/assets/list-add.png'); }
+i.edit { background-image: url('/assets/list-edit.png'); }
+i.remove { background-image: url('/assets/list-remove.png'); }
+i.save { background-image: url('/assets/list-save.png'); }
+
+/*List*/
+.item-controls {
+    opacity: 0;
+    z-index: 9;
+    margin-left: 0.6rem;
+}
+
+.item:hover .item-controls, .item-controls:hover { opacity: 1; }
+
+button.item-control {
+    padding: 0.3rem;
+    margin-right: 0.4rem;
+    font-size: 0.8em;
+    z-index: 9;
+}
