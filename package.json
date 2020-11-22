@@ -6,8 +6,8 @@
     "debug": "node inspect run.js",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
-    "build:client": "esbuild --bundle src/client/list.js --outfile=src/static/app/list.min.js --minify",
-    "watch:client": "watchexec -w src/client/ \"npm run build:client\""
+    "client:build": "esbuild --bundle src/client/list.js --outfile=src/static/app/list.min.js --minify",
+    "client:watch": "watchexec -w src/client/ \"npm run client:build\""
   },
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
@@ -19,6 +19,7 @@
     "express-session": "^1.17.1",
     "helmet": "^4.2.0",
     "hyperapp": "^2.0.8",
+    "mergerino": "^0.4.0",
     "microh": "^0.1.0",
     "node-fetch": "^2.6.1",
     "polka": "1.0.0-next.11",

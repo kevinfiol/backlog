@@ -36,10 +36,11 @@ i {
     margin-right: 0.15rem;
 }
 
-i.add { background-image: url('/assets/list-add.png'); }
-i.edit { background-image: url('/assets/list-edit.png'); }
-i.remove { background-image: url('/assets/list-remove.png'); }
-i.save { background-image: url('/assets/list-save.png'); }
+i.add { background-image: url('/assets/add.png'); }
+i.edit { background-image: url('/assets/edit.png'); }
+i.remove { background-image: url('/assets/remove.png'); }
+i.save { background-image: url('/assets/save.png'); }
+i.cancel { background-image: url('/assets/cancel.png'); }
 
 /*List*/
 .item-controls {

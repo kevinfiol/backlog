@@ -8,6 +8,7 @@ dependencies:
   express-session: 1.17.1
   helmet: 4.2.0
   hyperapp: 2.0.8
+  mergerino: 0.4.0
   microh: 0.1.0
   node-fetch: 2.6.1
   polka: 1.0.0-next.11
@@ -642,6 +643,10 @@ packages:
       node: '>6'
     resolution:
       integrity: sha512-eT168L5ZN3Qu6VvFQSNuImysxriKj+u0OAOw7b8+a99xayPxUKwGfZF2hjIdgWuBt9/n7SSmLs5mGwJa76rNtA==
+  /mergerino/0.4.0:
+    dev: false
+    resolution:
+      integrity: sha512-dvyWWLp9GN7OZoAoqn1u2ewCDV06oggVi6AwFsgHxUV8jNnaTOMEyux3fZ7Njm7Hg/ypK2+M0p6liCIEWcJnbg==
   /microh/0.1.0:
     dev: false
     resolution:
@@ -1322,6 +1327,7 @@ specifiers:
   express-session: ^1.17.1
   helmet: ^4.2.0
   hyperapp: ^2.0.8
+  mergerino: ^0.4.0
   microh: ^0.1.0
   node-dev: ^5.2.0
   node-fetch: ^2.6.1

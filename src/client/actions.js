@@ -1,36 +1,42 @@
-import { http } from './effects.js';
+import merge from 'mergerino';
+import { http } from './effects/http.js';
 
 // actions
-export const setValue = (state, { key, value }) => {
-    let newState = { ...state, [key]: value };
+export const setState = (state, props) => {
+    let newState = merge(state, props);
     console.log(newState);
     return newState;
 };
 
-export const addToSection = (state, { sectionid, newItem }) => {
-    const sections = state.list.sections;
-    const idx = sections.findIndex(section => section.sectionid == sectionid);
-    sections[idx].items = [...sections[idx].items, { itemid: 5, itemname: newItem, slug: 'nah', url: 'huh' }];
-    state.list.sections = sections;
-    return { ...state };
-};
-
-export const valueStream = key => (state, e) => {
-    setValue(state, { key, value: e.target.value });
-};
-
-export const getFullList = state => [
+export const getFullList = (state, { listid }) => [
     state,
     http({
         method: 'GET',
         url: '/api/list/getFullList/',
-        params: { listid: 1 },
+        params: { listid },
         action: (state, list) =>
             ({ ...state, list })
         ,
         error: (state, error) => {
             console.error(error);
-            return state;
+            return { ...state, error };
+        }
+    })
+];
+
+export const addItem = (state, { listid, sectionid, itemPosition, item }) => [
+    state,
+    http({
+        method: 'POST',
+        url: '/api/list/addItem/',
+        params: { listid, sectionid, itemPosition, item },
+        action: (state, item) => {
+            console.log('new item created', item);
+            return [getFullList];
+        },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
         }
     })
 ];
