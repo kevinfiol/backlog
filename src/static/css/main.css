@@ -43,7 +43,12 @@ i.save { background-image: url('/assets/save.png'); }
 i.cancel { background-image: url('/assets/cancel.png'); }
 
 /*List*/
+.item { height: 28px; }
+
 .item-controls {
+    display: inline;
+    margin-top: -2px;
+    position: absolute;
     opacity: 0;
     z-index: 9;
     margin-left: 0.6rem;
