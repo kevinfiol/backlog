@@ -1,7 +1,9 @@
 import { app } from 'hyperapp';
 import m from './m.js';
+
 import Item from './components/Item.js';
 import AddItemForm from './components/AddItemForm.js';
+import EditItemForm from './components/EditItemForm.js';
 
 const LIST_CONTAINER = document.getElementById('list');
 const { list } = window.viewData;
@@ -14,9 +16,9 @@ const initialState = {
     isRemovingItem: false,
     isEditingItem: false,
 
+    itemToEdit: { itemname: '', url: '' },
     itemToAdd: { itemname: '', url: '', itemPosition: null },
     itemToRemove: null,
-    itemToEdit: null
 };
 
 const List = state => 
@@ -41,6 +43,12 @@ const List = state =>
             m(AddItemForm, {
                 itemToAdd: state.itemToAdd,
                 initialItem: initialState.itemToAdd
+            })
+        ,
+
+        state.isEditingItem &&
+            m(EditItemForm, {
+                itemToEdit: state.itemToEdit
             })
         ,
     )

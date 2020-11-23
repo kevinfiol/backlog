@@ -8,6 +8,7 @@ const Item = ({ item, isAddingItem, isRemovingItem, isEditingItem }) =>
         !(isAddingItem || isRemovingItem || isEditingItem) &&
             m('div.item-controls',
                 m('button.item-control',
+                    { onclick: [setState, { isEditingItem: true, itemToEdit: { itemname: item.itemname, url: item.url } }] },
                     m('i.edit'), 'edit'
                 ),
                 m('button.item-control',
