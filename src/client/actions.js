@@ -1,7 +1,7 @@
 import merge from 'mergerino';
 import { http } from './effects/http.js';
+import { action } from './effects/action.js';
 
-// actions
 export const setState = (state, props) => {
     let newState = merge(state, props);
     console.log(newState);
@@ -15,7 +15,7 @@ export const getFullList = (state, { listid }) => [
         url: '/api/list/getFullList/',
         params: { listid },
         action: (state, { list }) => {
-            console.log('new list has been retrieved...', list);
+            console.log('new list...', list);
             return { ...state, list };
         },
         error: (state, error) => {
@@ -25,19 +25,25 @@ export const getFullList = (state, { listid }) => [
     })
 ];
 
-export const addItem = (state, { listid, sectionid, itemPosition, item }) => [
+export const addItem = (state, { sectionid, itemPosition, item, initialItem }) => [
     state,
     http({
         method: 'POST',
         url: '/api/list/addItem/',
-        params: { listid, sectionid, itemPosition, item },
-        action: (state, props) => {
-            console.log('new item created', props.item);
+        params: { listid: state.list.listid, sectionid, itemPosition, item },
+        action: () => {
             return [getFullList, { listid: state.list.listid }];
         },
         error: (state, error) => {
             console.error(error);
             return { ...state, error };
+        }
+    }),
+    action({
+        action: setState,
+        payload: {
+            isAddingItem: false,
+            itemToAdd: { item: { ...initialItem } }
         }
     })
 ];
@@ -48,13 +54,16 @@ export const editItem = (state, { item }) => [
         method: 'POST',
         url: '/api/list/editItem/',
         params: { item },
-        action: (state, props) => {
-            console.log(`${props.item.itemid} has been edited`, props.item);
+        action: () => {
             return [getFullList, { listid: state.list.listid }];
         },
         error: (state, error) => {
             console.error(error);
             return { ...state, error };
         }
+    }),
+    action({
+        action: setState,
+        payload: { isEditingItem: false }
     })
 ];

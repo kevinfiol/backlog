@@ -17,8 +17,8 @@ const initialState = {
     isEditingItem: false,
 
     itemToEdit: { itemid: null, itemname: '', url: '' },
-    itemToAdd: { itemname: '', url: '', itemPosition: null },
-    itemToRemove: null,
+    itemToAdd: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null },
+    itemToRemove: null
 };
 
 const List = state => 
@@ -27,9 +27,11 @@ const List = state =>
             m('section',
                 m('h2.section-header', section.sectionname),
                 m('ul.item-list',
-                    section.items.map(item =>
+                    section.items.map((item, index) =>
                         m(Item, {
                             item,
+                            sectionid: section.sectionid,
+                            itemPosition: index,
                             isAddingItem: state.isAddingItem,
                             isRemovingItem: state.isRemovingItem,
                             isEditingItem: state.isEditingItem
@@ -42,7 +44,7 @@ const List = state =>
         state.isAddingItem &&
             m(AddItemForm, {
                 itemToAdd: state.itemToAdd,
-                initialItem: initialState.itemToAdd
+                initialItem: initialState.itemToAdd.item
             })
         ,
 

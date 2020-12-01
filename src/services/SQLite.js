@@ -30,8 +30,6 @@ const SQLite = {
             + ` VALUES (${keys.map(k => ':' + k).join(',')})`
         ;
 
-        console.log(stmt);
-        console.log(bindify(params));
         return this.conn.run(stmt, bindify(params));
     },
 
@@ -41,10 +39,8 @@ const SQLite = {
             + Object.keys(params).map(col => ` ${col} = :${col}`)
             + wheres(whereParams)
         ;
-        console.log(stmt);
-        const binds = bindify({ ...params, ...whereParams });
-        console.log(binds);
-        return this.conn.run(stmt, binds);
+
+        return this.conn.run(stmt, bindify({ ...params, ...whereParams }));
     }
 };
 

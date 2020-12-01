@@ -7,29 +7,31 @@ const EditItemForm = ({ itemToEdit }) =>
         m(Input, {
             placeholder: 'name...',
             value: itemToEdit.itemname,
-            oninput: (state, e) => [
-                setState,
-                { itemToEdit: { itemname: e.target.value } }
-            ]
+            oninput: (state, e) => [setState, {
+                itemToEdit: { itemname: e.target.value }
+            }]
         }),
 
         m(Input, {
             placeholder: 'url...',
             value: itemToEdit.url,
-            oninput: (state, e) => [
-                setState,
-                { itemToEdit: { url: e.target.value } }
-            ]
+            oninput: (state, e) => [setState, {
+                itemToEdit: { url: e.target.value }
+            }]
         }),
 
-        m('button.item-control',
-            { onclick: [editItem, { item: itemToEdit }] }, // maybe do this [[editItem, {item:itemToEdit}], [setState, { isEditingItem: false }]]
-            m('i.save'), 'save'
+        m('button.item-control', {
+            onclick: [editItem, { item: itemToEdit }]
+        },
+            m('i.save'),
+            'save'
         ),
 
-        m('button.item-control',
-            { onclick: [setState, { isEditingItem: false }] },
-            m('i.cancel'), 'cancel'
+        m('button.item-control', {
+            onclick: [setState, { isEditingItem: false }]
+        },
+            m('i.cancel'),
+            'cancel'
         )
     )
 ;
