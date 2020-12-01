@@ -15,6 +15,8 @@ input[type="text"], input[type="password"] {
 
 button {
     font-family: monospace;
+    display: inline-flex;
+    align-items: center;
     padding: 0.5rem 0.8rem;
     background-color: rgba(0, 0, 0, 0);
     border-color: rgba(0, 0, 0, 0.5);

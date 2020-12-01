@@ -1,6 +1,6 @@
 import m from '../m.js';
 import Input from './Input.js';
-import { setState } from '../actions.js';
+import { setState, editItem } from '../actions.js';
 
 const EditItemForm = ({ itemToEdit }) => 
     m('div.flex',
@@ -23,7 +23,7 @@ const EditItemForm = ({ itemToEdit }) =>
         }),
 
         m('button.item-control',
-            {},
+            { onclick: [editItem, { item: itemToEdit }] }, // maybe do this [[editItem, {item:itemToEdit}], [setState, { isEditingItem: false }]]
             m('i.save'), 'save'
         ),
 

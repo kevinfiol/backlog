@@ -16,7 +16,7 @@ const initialState = {
     isRemovingItem: false,
     isEditingItem: false,
 
-    itemToEdit: { itemname: '', url: '' },
+    itemToEdit: { itemid: null, itemname: '', url: '' },
     itemToAdd: { itemname: '', url: '', itemPosition: null },
     itemToRemove: null,
 };

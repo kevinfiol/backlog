@@ -119,6 +119,24 @@ const ListService = {
         }
     },
 
+    async editItem({ item }) {
+        // todo: have to modify this to account for editing review
+        try {
+            const result = await this.db.update('Item', {
+                itemname: item.itemname,
+                url: item.url,
+                slug: slugify(item.itemname)
+            }, { itemid: item.itemid });
+
+            if (result.changes < 1)
+                throw Error('Was not able to make changes to database.');
+
+            return result;
+        } catch(e) {
+            throw Error(`Unable to edit Item. ${e.message}`);
+        }
+    },
+
     async updateItemOrder({ sectionid, itemidOrder }) {
         try {
             const result = await this.db.run(`

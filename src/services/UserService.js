@@ -17,7 +17,7 @@ const UserService = {
 
             return user;
         } catch(e) {
-            throw Error('Could not validate & retrieve user.');
+            throw Error('Could not validate & retrieve user.', e);
         }
     },
 
@@ -33,7 +33,7 @@ const UserService = {
 
             return res;
         } catch(e) {
-            throw Error('Could not create new User.');
+            throw Error('Could not create new User.', e);
         }
     },
 
@@ -42,7 +42,7 @@ const UserService = {
             const user = await this.db.get('User', params);
             return user;
         } catch(e) {
-            throw Error('Could not retrieve User.');
+            throw Error('Could not retrieve User.', e);
         }
     }
 };

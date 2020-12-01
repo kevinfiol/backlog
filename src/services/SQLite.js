@@ -30,16 +30,21 @@ const SQLite = {
             + ` VALUES (${keys.map(k => ':' + k).join(',')})`
         ;
 
-        return this.conn.run(stmt, ...Object.values(params));
+        console.log(stmt);
+        console.log(bindify(params));
+        return this.conn.run(stmt, bindify(params));
     },
 
     update(tbl, params = {}, whereParams = {}) {
         let stmt = `UPDATE ${tbl}`
-            + Object.keys(params).map(col => ` SET ${col} = ?`)
+            + ' SET'
+            + Object.keys(params).map(col => ` ${col} = :${col}`)
             + wheres(whereParams)
         ;
-
-        return this.conn.run(stmt, ...Object.values(params));
+        console.log(stmt);
+        const binds = bindify({ ...params, ...whereParams });
+        console.log(binds);
+        return this.conn.run(stmt, binds);
     }
 };
 
@@ -55,4 +60,12 @@ function wheres(params = {}) {
     }
 
     return clause;
+}
+
+function bindify(params = {}) {
+    // turns {a: 2, b: 3} into {':a': 2, ':b': 3}
+    return Object.keys(params).reduce((a, c) => {
+        a[':' + c] = params[c];
+        return a;
+    }, {});
 }

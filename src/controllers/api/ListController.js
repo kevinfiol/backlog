@@ -9,7 +9,7 @@ exports.getFullList = async function(req, res) {
         if (!listid) throw Error('List does not exist');
         const list = await ListService.getFullList({ listid });
 
-        res.send(200, list);
+        res.send(200, { list });
     } catch(e) {
         res.send(500, { message: e.message });
     }
@@ -41,8 +41,23 @@ exports.addItem = async function(req, res) {
         itemidOrder.splice(itemPosition, 0, newItemID);
         result = await ListService.updateItemOrder({ sectionid: section.sectionid, itemidOrder: itemidOrder.join(',') });
 
-        res.send(200, { item: { itemid: newItemID, ...item } });
+        res.send(200, { item: { ...item, itemid: newItemID } });
     } catch(e) {
         res.send(500, { message: e.message })
+    }
+};
+
+exports.editItem = async function(req, res) {
+    let { item } = req.body;
+
+    try {
+        if (!item) throw Error('Invalid body parameters.');
+
+        const editedItem = { itemid: item.itemid, itemname: item.itemname, url: item.url };
+        let result = await ListService.editItem({ item: editedItem });
+
+        res.send(200, { item: { ...editedItem } })
+    } catch(e) {
+        res.send(500, { message: e.message });
     }
 };
