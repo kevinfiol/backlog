@@ -6,8 +6,8 @@
     "debug": "node inspect run.js",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
-    "client:build": "esbuild --bundle src/client/list.js --outfile=src/static/app/list.min.js --minify",
-    "client:watch": "watchexec -w src/client/ \"npm run client:build\""
+    "client:build": "esbuild --bundle src/client/list.js --outfile=src/static/app/list.js --minify",
+    "client:watch": "watchexec -w src/client/ \"esbuild --bundle --sourcemap src/client/list.js --outfile=src/static/app/list.js\""
   },
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
@@ -30,7 +30,7 @@
     "yeahjs": "^0.2.0"
   },
   "devDependencies": {
-    "esbuild": "^0.7.15",
+    "esbuild": "^0.8.17",
     "node-dev": "^5.2.0"
   }
 }

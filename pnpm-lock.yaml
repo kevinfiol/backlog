@@ -18,7 +18,7 @@ dependencies:
   sqlite3: 5.0.0
   yeahjs: 0.2.0
 devDependencies:
-  esbuild: 0.7.19
+  esbuild: 0.8.17
   node-dev: 5.2.0
 lockfileVersion: 5.2
 packages:
@@ -330,12 +330,12 @@ packages:
     optional: true
     resolution:
       integrity: sha1-OoOpBOVDUyh4dMVkt1SThoSamMk=
-  /esbuild/0.7.19:
+  /esbuild/0.8.17:
     dev: true
     hasBin: true
     requiresBuild: true
     resolution:
-      integrity: sha512-0Ur8ZtuRPwJMj4+VjRLqn5z88WXf+2etZhe4dBA6eYFcdviQefb+Vrd59cTk0VXg08NU/BnAMkalCMHI8lig/A==
+      integrity: sha512-ReHap+Iyn5BQF0B8F3xrLwu+j57ri5uDUw2ej9XTPAuFDebYiWwRzBY4jhF610bklveXLbCGim/8/2wQKQlu1w==
   /etto/1.0.0:
     dev: false
     resolution:
@@ -1322,7 +1322,7 @@ specifiers:
   '@polka/send': 1.0.0-next.7
   compression: ^1.7.4
   cookie: ^0.4.1
-  esbuild: ^0.7.15
+  esbuild: ^0.8.17
   etto: ^1.0.0
   express-session: ^1.17.1
   helmet: ^4.2.0
