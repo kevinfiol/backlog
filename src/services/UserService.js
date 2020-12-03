@@ -8,7 +8,7 @@ const UserService = {
     async validateAndGetUser({ username, password }) {
         try {
             // validate user exists
-            let user = await this.db.get('User', { username });
+            const user = await this.db.get('User', { username });
             if (!user) return null;
 
             // validate password

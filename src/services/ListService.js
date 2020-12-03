@@ -33,17 +33,22 @@ const ListService = {
         }
     },
 
-    async getFullList({ listid }) {
-        // make so this gets all List metadata as well
+    async getSection({ sectionid }) {
         try {
-            const rows = await this.db.query(`
+            const section = await this.db.get('Section', { sectionid });
+            return section;
+        } catch(e) {
+            throw Error('Could not retrieve Section by sectionid.');
+        }
+    },
+
+    async getFullList({ listid }) {
+        try {
+            const sections = await this.db.query(`
                 SELECT
-                    User.username,
-                    List.*, List.slug AS listslug,
-                    Section.sectionid, Section.sectionname, Section.itemidOrder,
-                    Item.*
-                FROM Item
-                LEFT JOIN Section ON Item.sectionid = Section.sectionid
+                    User.username, List.*,
+                    Section.sectionid, Section.sectionname, Section.itemidOrder
+                FROM Section
                 LEFT JOIN List ON Section.listid = List.listid
                 LEFT JOIN User ON User.userid = List.userid
                 WHERE List.listid = :listid
@@ -51,47 +56,45 @@ const ListService = {
                 ':listid': listid
             });
 
-            if (rows.length < 1)
-                return [];
+            const sectionidOrder = fromCSV(sections[0].sectionidOrder);
 
-            const list = {
-                listid: rows[0].listid,
-                listname: rows[0].listname,
-                userid: rows[0].userid,
-                username: rows[0].username,
-                sectionidOrder: rows[0].sectionidOrder,
-                date_created: rows[0].date_created,
-                date_updated: rows[0].date_updated,
-                slug: rows[0].listslug,
-                sections: undefined
-            };
+            // do this weird string manipulation to avoid risk of sql injection
+            const items = await this.db.query(`
+                SELECT itemid, itemname, slug, url, sectionid
+                FROM Item
+                WHERE sectionid in (${sectionidOrder.map(x => '?').join(',')})
+            `, sectionidOrder);
 
-            const sectionidOrderArr = fromCSV(list.sectionidOrder); // [1, 2]
-            const sections = groupBy('sectionid', rows); // { 1: [...items], 2: [...items] }
+            // group items by sectionid
+            const groupedItems = groupBy('sectionid', items);
 
-            list.sections = sectionidOrderArr
-                // order sections first
-                // [{section obj}, {section obj}]
-                .map(sectionid => {
-                    const items = sections[sectionid];
-                    const { sectionname, itemidOrder } = items[0];
-                    return { sectionid, sectionname, itemidOrder, items };
-                })
-                // order individual items within sections
-                // [ section obj 1: { items: [{}, {}, ...] }, section obj 2: { ... }]
-                .map(section => {
-                    const itemidOrder = fromCSV(section.itemidOrder);
+            // create list
+            const list = sections.reduce((a, c) => {
+                if (!a.listid) {
+                    a = {
+                        username: c.username,
+                        userid: c.userid,
+                        listid: c.listid,
+                        listname: c.listname,
+                        slug: c.slug,
+                        sectionidOrder: c.sectionidOrder,
+                        date_created: c.date_created,
+                        date_updated: c.date_updated,
+                        sections: []
+                    };
+                }
 
-                    section.items = itemidOrder.map(id => {
-                        const item = section.items.find(item => item.itemid == id);
-                        const { itemid, itemname, slug, url } = item;
-                        return { itemid, itemname, slug, url };
-                    });
+                a.sections = [...a.sections, {
+                    listid: a.listid,
+                    sectionid: c.sectionid,
+                    sectionname: c.sectionname,
+                    itemidOrder: c.itemidOrder,
+                    items: groupedItems[c.sectionid] || []
+                }];
 
-                    return section;
-                })
-            ;
-
+                return a;
+            }, {});
+            console.log(list);
             return list;
         } catch(e) {
             throw Error('Could not retrieve items for list.');
@@ -137,6 +140,24 @@ const ListService = {
         }
     },
 
+    async removeItem({ itemid }) {
+        try {
+            const result = await this.db.run(`
+                DELETE FROM Item
+                WHERE itemid = :itemid
+            `, {
+                ':itemid': itemid
+            });
+
+            if (result.changes < 1)
+                throw Error('Was not able to make changes to database.');
+
+            return result;
+        } catch(e) {
+            throw Error(`Unable to remove Item. ${e.message}`);
+        }
+    },
+
     async updateItemOrder({ sectionid, itemidOrder }) {
         try {
             const result = await this.db.run(`
@@ -167,7 +188,7 @@ function groupBy(key, arr) {
 }
 
 function fromCSV(csv) {
-    return csv.split(',').map(n => parseInt(n));
+    return csv.trim().length ? csv.split(',').map(n => parseInt(n)) : '';
 }
 
 module.exports = ListService;

@@ -10,6 +10,7 @@ const httpFx = async (dispatch, props) => {
         else
             res = await request.get(props.url, params);
 
+        if (!res.ok) throw res;
         const data = await res.json();
 
         if (props.action)

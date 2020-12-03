@@ -64,3 +64,6 @@ button.item-control {
     font-size: 0.8em;
     z-index: 9;
 }
+
+/*Utils*/
+.opacity-1 { opacity: 1; }

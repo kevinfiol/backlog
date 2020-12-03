@@ -28,6 +28,10 @@ exports.addItem = async function(req, res) {
         const section = list.sections.find(section => section.sectionid == sectionid);
         if (!section) throw Error('Section does not exist.');
 
+        // might be able to get away with not needing the listid here,
+        // and skipping having to getFullList and searching the sections
+        // but then will need to find way to get section data
+
         let items = section.items;
         let itemidOrder = section.itemidOrder.split(',');
 
@@ -58,6 +62,30 @@ exports.editItem = async function(req, res) {
 
         res.send(200, { item: { ...editedItem } })
     } catch(e) {
+        res.send(500, { message: e.message });
+    }
+};
+
+exports.removeItem = async function(req, res) {
+    let { itemid, sectionid } = req.body;
+
+    try {
+        if (!itemid) throw Error('Invalid body parameters');
+        const section = await ListService.getSection({ sectionid });
+
+        itemid = itemid.toString(); // have to use itemid as string
+        let itemidOrder = section.itemidOrder.split(',');
+        if (!itemidOrder.includes(itemid)) throw Error('Item not in given section');
+
+        const itemPosition = itemidOrder.indexOf(itemid);
+        itemidOrder.splice(itemPosition, 1);
+
+        let result = await ListService.updateItemOrder({ sectionid, itemidOrder: itemidOrder.join(',') });
+        result = await ListService.removeItem({ itemid });
+
+        res.send(200, { itemid });
+    } catch(e) {
+        console.error(e);
         res.send(500, { message: e.message });
     }
 };

@@ -36,13 +36,18 @@ const Item = ({ item, sectionid, itemPosition, isAddingItem, isRemovingItem, isE
 
                 m('button.item-control', {
                     onclick: [setState, {
-                        isRemovingItem: true
+                        isRemovingItem: true,
+                        itemToRemove: {
+                            itemid: item.itemid,
+                            sectionid
+                        }
                     }]
                 },
                     m('i.remove'),
                     'remove'
                 )
             )
+        ,
     )
 ;
 

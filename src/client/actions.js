@@ -67,3 +67,23 @@ export const editItem = (state, { item }) => [
         payload: { isEditingItem: false }
     })
 ];
+
+export const removeItem = (state, { itemid, sectionid }) => [
+    state,
+    http({
+        method: 'POST',
+        url: '/api/list/removeItem',
+        params: { itemid, sectionid },
+        action: () => {
+            return [getFullList, { listid: state.list.listid }];
+        },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
+        }
+    }),
+    action({
+        action: setState,
+        payload: { isRemovingItem: false }
+    })
+];

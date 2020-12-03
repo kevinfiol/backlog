@@ -22,5 +22,6 @@ router.get('/:username/:listSlug', UserController.list);
 router.get('/api/list/getFullList/', ListController.getFullList);
 router.post('/api/list/addItem/', ListController.addItem);
 router.post('/api/list/editItem/', ListController.editItem);
+router.post('/api/list/removeItem/', ListController.removeItem);
 
 module.exports = router;
