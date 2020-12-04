@@ -1,4 +1,6 @@
 import slugify from '../util/slugify.js';
+import groupBy from '../util/groupBy.js';
+import { fromIntCSV } from '../util/fromCSV.js';
 
 const ListService = {
     init(db) {
@@ -56,7 +58,7 @@ const ListService = {
                 ':listid': listid
             });
 
-            const sectionidOrder = fromCSV(sections[0].sectionidOrder);
+            const sectionidOrder = fromIntCSV(sections[0].sectionidOrder);
 
             // do this weird string manipulation to avoid risk of sql injection
             const items = await this.db.query(`
@@ -85,7 +87,7 @@ const ListService = {
                     };
                 }
 
-                const itemidOrder = fromCSV(section.itemidOrder);
+                const itemidOrder = fromIntCSV(section.itemidOrder);
                 const items = itemidOrder.map(id =>
                     groupedItems[section.sectionid].find(item => item.itemid === id)
                 );
@@ -184,17 +186,5 @@ const ListService = {
         }
     }
 };
-
-function groupBy(key, arr) {
-    return arr.reduce((acc, cur) => {
-        if (!acc[cur[key]]) acc[cur[key]] = [];
-        acc[cur[key]].push(cur);
-        return acc;
-    }, {});
-}
-
-function fromCSV(csv) {
-    return csv.trim().length ? csv.split(',').map(n => parseInt(n)) : [];
-}
 
 export default ListService;

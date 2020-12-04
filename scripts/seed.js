@@ -1,5 +1,5 @@
 const connectDb = require('./db.js');
-const hasher = require('../src/util/hasher.js');
+const hash = require('../src/util/hash.js');
 const slugify = require('../src/util/slugify.js');
 
 const user = {
@@ -28,7 +28,7 @@ const user = {
 }
 
 connectDb.then(async db => {
-    const { hashed, salt } = hasher.hash(user.password);
+    const { hashed, salt } = hash(user.password);
 
     await db.run(`
         INSERT INTO User (username, password, salt)

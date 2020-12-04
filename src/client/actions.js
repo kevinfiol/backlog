@@ -30,7 +30,7 @@ export const addItem = (state, { sectionid, itemPosition, item, initialItem }) =
     http({
         method: 'POST',
         url: '/api/list/addItem/',
-        params: { listid: state.list.listid, sectionid, itemPosition, item },
+        params: { sectionid, itemPosition, item },
         action: () => {
             return [getFullList, { listid: state.list.listid }];
         },

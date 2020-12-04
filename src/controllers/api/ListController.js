@@ -1,4 +1,5 @@
 import { ListService } from '../../container.js';
+import { fromIntCSV } from '../../util/fromCSV.js';
 
 export const getFullList = async function(req, res) {
     // route params
@@ -16,27 +17,18 @@ export const getFullList = async function(req, res) {
 };
 
 export const addItem = async function(req, res) {
-    let { listid, sectionid, itemPosition, item } = req.body;
+    let { item, sectionid, itemPosition } = req.body;
 
     try {
-        if (!listid || !item || !sectionid || itemPosition === undefined)
+        if (!item || !sectionid || itemPosition === undefined)
             throw Error('Invalid body parameters.');
 
-        let list = await ListService.getFullList({ listid });
-        if (!list) throw Error('List does not exist.');
-
-        const section = list.sections.find(section => section.sectionid == sectionid);
+        const section = await ListService.getSection({ sectionid });
         if (!section) throw Error('Section does not exist.');
 
-        // might be able to get away with not needing the listid here,
-        // and skipping having to getFullList and searching the sections
-        // but then will need to find way to get section data
-
-        let items = section.items;
-        let itemidOrder = section.itemidOrder.split(',');
-
-        if (itemPosition > items.length || itemPosition < 0)
-            itemPosition = items.length;
+        const itemidOrder = fromIntCSV(section.itemidOrder);
+        if (itemPosition > itemidOrder.length || itemPosition < 0)
+            itemPosition = itemidOrder.length;
 
         // add the item to DB
         let result = await ListService.addItem({ sectionid: section.sectionid, item })
@@ -73,8 +65,7 @@ export const removeItem = async function(req, res) {
         if (!itemid) throw Error('Invalid body parameters');
         const section = await ListService.getSection({ sectionid });
 
-        itemid = itemid.toString(); // have to use itemid as string
-        let itemidOrder = section.itemidOrder.split(',');
+        let itemidOrder = fromIntCSV(section.itemidOrder);
         if (!itemidOrder.includes(itemid)) throw Error('Item not in given section');
 
         const itemPosition = itemidOrder.indexOf(itemid);

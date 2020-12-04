@@ -1,4 +1,4 @@
-import hasher from '../util/hasher.js';
+import hash from '../util/hash.js';
 
 const UserService = {
     init(db) {
@@ -12,7 +12,7 @@ const UserService = {
             if (!user) return null;
 
             // validate password
-            const { hashed } = hasher.hash(password, user.salt);
+            const { hashed } = hash(password, user.salt);
             if (hashed !== user.password) return null;
 
             return user;
@@ -22,7 +22,7 @@ const UserService = {
     },
 
     async createUser({ username, password }) {
-        const { hashed, salt } = hasher.hash(password);
+        const { hashed, salt } = hash(password);
 
         try {
             const res = await this.db.insert('User', {
