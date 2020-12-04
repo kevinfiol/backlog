@@ -1,44 +1,22 @@
-const fetch = globalThis.fetch || require('node-fetch');
+import { send } from 'httpie/fetch';
 
 const request = {
     get(url, params = {}) {
-        let query = url + '?' + buildQueryString(params);
-        return fetch(query);
+        return send('GET', url + buildQueryString(params));
     },
 
     post(url, body = {}) {
-        return fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json;charset=utf-8' },
-            body: JSON.stringify(body)
-        });
+        return send('POST', url, { body })
     }
 };
 
-module.exports = request;
+export default request;
 
-// https://github.com/MithrilJS/mithril.js/blob/next/querystring/build.js
-function buildQueryString(object) {
-    if (Object.prototype.toString.call(object) !== "[object Object]") return ""
-
-    var args = []
-    for (var key in object) {
-        destructure(key, object[key])
-    }
-
-    return args.join("&")
-
-    function destructure(key, value) {
-        if (Array.isArray(value)) {
-            for (var i = 0; i < value.length; i++) {
-                destructure(key + "[" + i + "]", value[i])
-            }
-        }
-        else if (Object.prototype.toString.call(value) === "[object Object]") {
-            for (var i in value) {
-                destructure(key + "[" + i + "]", value[i])
-            }
-        }
-        else args.push(encodeURIComponent(key) + (value != null && value !== "" ? "=" + encodeURIComponent(value) : ""))
-    }
+function buildQueryString(params) {
+    return Object.entries(params).reduce((str, [key, value]) => {
+        if (!str) str += '?';
+        if (str.length > 1) str += '&';
+        str += `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        return str;
+    }, '');
 }
