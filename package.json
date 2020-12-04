@@ -2,9 +2,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "run": "node run.js",
-    "dev": "node watch.js",
-    "debug": "node inspect run.js",
+    "run": "node scripts/run.js",
+    "dev": "node scripts/watch.js",
+    "debug": "node inspect scripts/run.js",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
     "client:build": "esbuild --bundle src/client/list.js --outfile=src/static/app/list.js --minify",

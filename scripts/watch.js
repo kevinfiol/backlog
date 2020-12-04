@@ -18,7 +18,7 @@ const runApp = () => {
 runApp();
 
 // only watch src folder
-watch(join(__dirname, './src'), {
+watch(join(__dirname, '../src'), {
     recursive: true,
     filter(f, skip) {
         // skip client folder
