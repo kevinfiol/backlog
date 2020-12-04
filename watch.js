@@ -8,15 +8,10 @@ let app;
 let initialRun = true;
 
 const runApp = () => {
+    console.log(`=> ${initialRun ? 'Starting' : 'Restarting'} application process...`);
     if (initialRun) initialRun = false;
     if (app !== undefined) app.kill()
-
-    console.log(`=> ${initialRun ? 'Starting' : 'Restarting'} application process...`);
     app = fork(join(__dirname, './run.js'));
-
-    app.on('close', () => {
-      console.log(`=> Exiting application process...`);
-    });
 };
 
 // initial run
