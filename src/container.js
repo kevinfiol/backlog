@@ -1,16 +1,16 @@
-const config = require('../config.js');
+import config from '../config.js';
 
 // session configuration
 const sessionConfig = config.sessionConfig;
 
 // services
-const UserService = require('./services/UserService.js');
-const ListService = require('./services/ListService.js');
+import UserService from './services/UserService.js';
+import ListService from './services/ListService.js';
 
 // sqlite
-const SQLite = require('./services/SQLite.js');
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
+import SQLite from './services/SQLite.js';
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite';
 
 open({
     driver: sqlite3.cached.Database,
@@ -24,7 +24,7 @@ open({
     ListService.init(SQLite);
 });
 
-module.exports = {
+export {
     // configs
     sessionConfig,
 

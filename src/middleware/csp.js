@@ -1,8 +1,8 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 // Content-Security Policy helper
 // depends on middleware/viewData
-module.exports = () => (req, res, next) => {
+export default () => (req, res, next) => {
     // create noonce per request for inline scripts
     // see: https://content-security-policy.com/nonce/
     const nonce = crypto.randomBytes(16).toString('base64');

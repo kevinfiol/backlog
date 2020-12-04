@@ -1,7 +1,7 @@
-const polka = require('polka');
-const IndexController = require('./controllers/web/IndexController.js');
-const UserController = require('./controllers/web/UserController.js');
-const ListController = require('./controllers/api/ListController.js');
+import polka from 'polka';
+import * as IndexController from './controllers/web/IndexController.js';
+import * as UserController from './controllers/web/UserController.js';
+import * as ListController from './controllers/api/ListController.js';
 
 const router = polka();
 
@@ -24,4 +24,4 @@ router.post('/api/list/addItem/', ListController.addItem);
 router.post('/api/list/editItem/', ListController.editItem);
 router.post('/api/list/removeItem/', ListController.removeItem);
 
-module.exports = router;
+export default router;

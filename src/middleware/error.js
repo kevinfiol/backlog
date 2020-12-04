@@ -1,7 +1,7 @@
 // error middleware
 // depends on middleware/render
 // depends on middleware/viewData
-module.exports = () => (_, res, next) => {
+export default () => (_, res, next) => {
     res.error = error => {
         console.error(error);
         const code = res.statusCode || 500;

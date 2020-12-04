@@ -44,7 +44,7 @@ const SQLite = {
     }
 };
 
-module.exports = SQLite;
+export default SQLite;
 
 function wheres(params = {}) {
     let clause = '';

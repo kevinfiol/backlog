@@ -1,7 +1,6 @@
-const { UserService } = require('../../container.js');
-const { ListService } = require('../../container.js');
+import { UserService, ListService } from '../../container.js';
 
-exports.user = async function(req, res) {
+export const user = async function(req, res) {
     // route params
     const username = req.getRouteParam('username');
 
@@ -24,7 +23,7 @@ exports.user = async function(req, res) {
     }
 };
 
-exports.list = async function(req, res) {
+export const list = async function(req, res) {
     // route params
     const username = req.getRouteParam('username');
     const listSlug = req.getRouteParam('listSlug');

@@ -1,9 +1,11 @@
-const session = require('express-session');
-const FileStore = require('session-file-store')(session);
-const { v4 } = require('@lukeed/uuid');
-const { sessionConfig } = require('../container.js');
+import session from 'express-session';
+import FileStoreFactory from 'session-file-store';
+import { v4 } from '@lukeed/uuid';
+import { sessionConfig } from '../container.js';
 
-module.exports = () => {
+const FileStore = FileStoreFactory(session);
+
+export default () => {
     return session({
         ...sessionConfig,
         genid: () => v4(),

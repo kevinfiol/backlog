@@ -1,7 +1,7 @@
-const send = require('@polka/send');
+import send from '@polka/send';
 
 // @polka/send HTTP Response Helper
-module.exports = () => (_, res, next) => {
+export default () => (_, res, next) => {
     res.send = send.bind(null, res);
     next();
 };

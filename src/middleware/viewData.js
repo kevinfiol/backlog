@@ -1,6 +1,6 @@
 // viewData helper
 // depends on middleware/session
-module.exports = () => (req, res, next) => {
+export default () => (req, res, next) => {
     res.viewData = {};
 
     res.setViewData = viewData => {

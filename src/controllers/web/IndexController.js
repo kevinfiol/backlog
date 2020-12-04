@@ -1,10 +1,10 @@
-const { UserService } = require('../../container.js');
+import { UserService } from '../../container.js';
 
-exports.index = async function(req, res) {
+export const index = async function(req, res) {
     res.render('index.ejs', res.viewData);
 };
 
-exports.login = async function(req, res) {
+export const login = async function(req, res) {
     if (req.method === 'POST') {
         let { username, password } = req.body;
         username = username.trim();
@@ -28,7 +28,7 @@ exports.login = async function(req, res) {
     }
 };
 
-exports.logout = async function(req, res) {
+export const logout = async function(req, res) {
     if (req.session.username !== undefined) {
         // destroy session & clear session id cookie
         req.session.destroy();
@@ -39,7 +39,7 @@ exports.logout = async function(req, res) {
     }
 }
 
-exports.signup = async function(req, res) {
+export const signup = async function(req, res) {
     if (req.method === 'POST') {
         let { username, password, confirm_password } = req.body;
         username = username.trim();

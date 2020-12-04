@@ -1,4 +1,4 @@
-const hasher = require('../util/hasher.js');
+import hasher from '../util/hasher.js';
 
 const UserService = {
     init(db) {
@@ -47,4 +47,4 @@ const UserService = {
     }
 };
 
-module.exports = UserService;
+export default UserService;

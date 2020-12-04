@@ -1,7 +1,7 @@
-const cookie = require('cookie');
+import cookie from 'cookie';
 
 // adds cookie setter
-module.exports = () => (_, res, next) => {
+export default () => (_, res, next) => {
     res.setCookie = (name, value, options) => {
         res.setHeader('Set-Cookie', cookie.serialize(name, value, options));
     };

@@ -1,6 +1,6 @@
-const { ListService } = require('../../container.js');
+import { ListService } from '../../container.js';
 
-exports.getFullList = async function(req, res) {
+export const getFullList = async function(req, res) {
     // route params
     const listid = req.query.listid;
 
@@ -15,7 +15,7 @@ exports.getFullList = async function(req, res) {
     }
 };
 
-exports.addItem = async function(req, res) {
+export const addItem = async function(req, res) {
     let { listid, sectionid, itemPosition, item } = req.body;
 
     try {
@@ -51,7 +51,7 @@ exports.addItem = async function(req, res) {
     }
 };
 
-exports.editItem = async function(req, res) {
+export const editItem = async function(req, res) {
     let { item } = req.body;
 
     try {
@@ -66,7 +66,7 @@ exports.editItem = async function(req, res) {
     }
 };
 
-exports.removeItem = async function(req, res) {
+export const removeItem = async function(req, res) {
     let { itemid, sectionid } = req.body;
 
     try {

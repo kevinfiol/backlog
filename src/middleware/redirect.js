@@ -1,5 +1,5 @@
 // redirect helper
-module.exports = () => (_, res, next) => {
+export default () => (_, res, next) => {
     res.redirect = location => {
         const str = `Redirecting to ${location}`;
         res.writeHead(302, {

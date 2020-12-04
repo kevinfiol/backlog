@@ -1,5 +1,6 @@
 {
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "run": "node run.js",
     "dev": "node-dev run.js",

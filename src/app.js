@@ -1,23 +1,25 @@
-const polka = require('polka');
-const { join } = require('path');
+import polka from 'polka';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 // middleware
-const sirv = require('sirv');
-const compress = require('compression');
-const helmet = require('helmet');
-const { urlencoded, json } = require('@polka/parse');
-const redirect = require('./middleware/redirect.js');
-const session = require('./middleware/session.js');
-const send = require('./middleware/send.js');
-const render = require('./middleware/render.js');
-const setCookie = require('./middleware/setCookie.js');
-const swDebug = require('./middleware/sw-debug.js');
-const error = require('./middleware/error.js');
-const getRouteParam = require('./middleware/getRouteParam.js');
-const viewData = require('./middleware/viewData.js');
-const csp = require('./middleware/csp.js');
-const logger = require('./middleware/logger.js');
+import sirv from 'sirv';
+import compress from 'compression';
+import helmet from 'helmet';
+import { urlencoded, json } from '@polka/parse';
+import redirect from './middleware/redirect.js';
+import session from './middleware/session.js';
+import send from './middleware/send.js';
+import render from './middleware/render.js';
+import setCookie from './middleware/setCookie.js';
+import swDebug from './middleware/sw-debug.js';
+import error from './middleware/error.js';
+import getRouteParam from './middleware/getRouteParam.js';
+import viewData from './middleware/viewData.js';
+import csp from './middleware/csp.js';
+import logger from './middleware/logger.js';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_ASSETS_MAX_AGE = 31536000;
 
 // static assets
@@ -51,7 +53,8 @@ const app = polka().use(
     csp(),
 );
 
-// routes
-app.use('/', require('./routes.js'));
+// router
+import router from './router.js';
+app.use('/', router);
 
-module.exports = app;
+export default app;

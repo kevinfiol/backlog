@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 const hasher = {
     hash(password, salt = undefined, cost = 100000, digest = 'sha512') {
@@ -9,4 +9,4 @@ const hasher = {
     }
 };
 
-module.exports = hasher;
+export default hasher;

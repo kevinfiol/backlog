@@ -1,4 +1,4 @@
-const slugify = require('../util/slugify.js');
+import slugify from '../util/slugify.js';
 
 const ListService = {
     init(db) {
@@ -197,4 +197,4 @@ function fromCSV(csv) {
     return csv.trim().length ? csv.split(',').map(n => parseInt(n)) : [];
 }
 
-module.exports = ListService;
+export default ListService;

@@ -18,4 +18,4 @@ function slugify(text) {
     return '';
 }
 
-module.exports = slugify;
+export default slugify;
