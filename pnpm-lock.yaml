@@ -7,7 +7,9 @@ dependencies:
   etto: 1.0.0
   express-session: 1.17.1
   helmet: 4.2.0
+  httpie: 2.0.0-next.12
   hyperapp: 2.0.8
+  jty: 3.0.1
   mergerino: 0.4.0
   microh: 0.1.0
   node-fetch: 2.6.1
@@ -522,6 +524,12 @@ packages:
     optional: true
     resolution:
       integrity: sha1-muzZJRFHcvPZW2WmCruPfBj7rOE=
+  /httpie/2.0.0-next.12:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-+VGqve3xizP048bl4d/bc5pWqJw6bUqZF2MRincdjLCdMcpKZZ2v7kEq+x+gEvd1mUdv+zxRPnlShgq8BXJVJw==
   /hyperapp/2.0.8:
     dev: false
     resolution:
@@ -635,6 +643,10 @@ packages:
     optional: true
     resolution:
       integrity: sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=
+  /jty/3.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-v/AHWFRjv6JMGGdAldLH7/lxPXK4+4OGOZhIQZ1OarZsFCSTKUR6MWyMVew7CaQ9ktKUdrJSvT4BX5Bc8qaVyQ==
   /kruptein/2.2.1:
     dependencies:
       asn1.js-rfc2560: 5.0.1
@@ -1326,7 +1338,9 @@ specifiers:
   etto: ^1.0.0
   express-session: ^1.17.1
   helmet: ^4.2.0
+  httpie: ^2.0.0-next.12
   hyperapp: ^2.0.8
+  jty: ^3.0.1
   mergerino: ^0.4.0
   microh: ^0.1.0
   node-dev: ^5.2.0

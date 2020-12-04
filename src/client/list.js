@@ -17,6 +17,18 @@ const initialState = {
     isRemovingItem: false,
     isEditingItem: false,
 
+    // item: {
+    //     itemid: null,
+
+    //     isAdding: false,
+    //     isRemoving: false,
+    //     isEditing: false,
+
+    //     toEdit: { itemid: null, itemname: '', url: '' },
+    //     toAdd: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null },
+    //     toRemove: { itemid: null, sectionid: null }
+    // },
+
     itemToEdit: { itemid: null, itemname: '', url: '' },
     itemToAdd: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null },
     itemToRemove: { itemid: null, sectionid: null }

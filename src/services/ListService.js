@@ -69,32 +69,38 @@ const ListService = {
             const groupedItems = groupBy('sectionid', items);
 
             // create list
-            const list = sections.reduce((a, c) => {
-                if (!a.listid) {
-                    a = {
-                        username: c.username,
-                        userid: c.userid,
-                        listid: c.listid,
-                        listname: c.listname,
-                        slug: c.slug,
-                        sectionidOrder: c.sectionidOrder,
-                        date_created: c.date_created,
-                        date_updated: c.date_updated,
+            const list = sections.reduce((listObj, section) => {
+                if (!listObj.listid) {
+                    listObj = {
+                        // this are List properties *not* Section properties
+                        username: section.username,
+                        userid: section.userid,
+                        listid: section.listid,
+                        listname: section.listname,
+                        slug: section.slug,
+                        sectionidOrder: section.sectionidOrder,
+                        date_created: section.date_created,
+                        date_updated: section.date_updated,
                         sections: []
                     };
                 }
 
-                a.sections = [...a.sections, {
-                    listid: a.listid,
-                    sectionid: c.sectionid,
-                    sectionname: c.sectionname,
-                    itemidOrder: c.itemidOrder,
-                    items: groupedItems[c.sectionid] || []
+                const itemidOrder = fromCSV(section.itemidOrder);
+                const items = itemidOrder.map(id =>
+                    groupedItems[section.sectionid].find(item => item.itemid === id)
+                );
+
+                listObj.sections = [...listObj.sections, {
+                    listid: listObj.listid,
+                    sectionid: section.sectionid,
+                    sectionname: section.sectionname,
+                    itemidOrder: section.itemidOrder,
+                    items
                 }];
 
-                return a;
+                return listObj;
             }, {});
-            console.log(list);
+
             return list;
         } catch(e) {
             throw Error('Could not retrieve items for list.');
@@ -188,7 +194,7 @@ function groupBy(key, arr) {
 }
 
 function fromCSV(csv) {
-    return csv.trim().length ? csv.split(',').map(n => parseInt(n)) : '';
+    return csv.trim().length ? csv.split(',').map(n => parseInt(n)) : [];
 }
 
 module.exports = ListService;
