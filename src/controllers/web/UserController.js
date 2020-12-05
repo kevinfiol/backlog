@@ -1,11 +1,12 @@
 import { UserService, ListService } from '../../container.js';
+import validate from '../../util/validate.js';
 
 export const user = async function(req, res) {
-    // route params
     const username = req.getRouteParam('username');
 
     try {
-        if (!username) throw Error('Invalid route.');
+        const typecheck = validate({ username: 'tString' }, { username });
+        if (!typecheck.ok) throw typecheck.errors;
 
         // get user
         let user = await UserService.getUser({ username });
@@ -29,7 +30,12 @@ export const list = async function(req, res) {
     const listSlug = req.getRouteParam('listSlug');
 
     try {
-        if (!username || !listSlug) throw Error('Invalid route.');
+        const typecheck = validate(
+            { username: 'tString', listSlug: 'tString' },
+            { username, listSlug }
+        );
+
+        if (!typecheck.ok) throw typecheck.errors;
 
         // get list if it exists
         const rows = await ListService.getListBySlug({ slug: listSlug, username });

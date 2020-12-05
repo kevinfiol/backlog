@@ -8,16 +8,14 @@ export const login = async function(req, res) {
     if (req.method === 'POST') {
         let { username, password } = req.body;
         username = username.trim();
-        password = password.trim();
+        password = password.trim()
 
-        // validate
         let error = await validateLogin({ username, password });
-
-        if (error) {
-            res.render('login.ejs', { error });
-        } else {
+        if (!error) {
             req.session.username = username;
             res.redirect(`/${username}`);
+        } else {
+            res.render('login.ejs', { error });
         }
     } else {
         // check if user is already logged in
@@ -46,15 +44,13 @@ export const signup = async function(req, res) {
         password = password.trim();
         confirm_password = confirm_password.trim();
 
-        // validate
         let error = await validateSignup({ username, password, confirm_password });
-
-        if (error) {
-            res.render('signup.ejs', { error });
-        } else {
+        if (!error) {
             await UserService.createUser({ username, password });
             req.session.username = username;
             res.redirect(`/${username}`);
+        } else {
+            res.render('signup.ejs', { error });
         }
     } else {
         // check if user is already logged in
@@ -77,7 +73,7 @@ async function validateLogin({ username, password }) {
         return 'invalid username & password combination';
 
     // no errors
-    return null;
+    return '';
 }
 
 async function validateSignup({ username, password, confirm_password }) {
@@ -127,7 +123,7 @@ async function validateSignup({ username, password, confirm_password }) {
         return 'user with given username already exists.';
 
     // no errors
-    return null;
+    return '';
 }
 
 function anyEmpty(strs) {
