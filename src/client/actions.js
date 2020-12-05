@@ -3,10 +3,31 @@ import { http } from './effects/http.js';
 import { action } from './effects/action.js';
 
 export const setState = (state, props) => {
-    let newState = merge(state, props);
+    const newState = merge(state, props);
     console.log(newState);
     return newState;
 };
+
+export const resetEditItemForm = state => [setState, {
+    item: {
+        isEditing: false,
+        editForm: { itemid: null, itemname: '', url: '' }
+    }
+}];
+
+export const resetAddItemForm = state => [setState, {
+    item: {
+        isAdding: false,
+        addForm: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null }
+    }
+}];
+
+export const resetRemoveItemForm = state => [setState, {
+    item: {
+        isRemoving: false,
+        removeForm: { itemid: null, sectionid: null }
+    }
+}];
 
 export const getFullList = (state, { listid }) => [
     state,
@@ -25,7 +46,7 @@ export const getFullList = (state, { listid }) => [
     })
 ];
 
-export const addItem = (state, { sectionid, itemPosition, item, initialItem }) => [
+export const addItem = (state, { item, sectionid, itemPosition }) => [
     state,
     http({
         method: 'POST',
@@ -40,11 +61,7 @@ export const addItem = (state, { sectionid, itemPosition, item, initialItem }) =
         }
     }),
     action({
-        action: setState,
-        payload: {
-            isAddingItem: false,
-            itemToAdd: { item: { ...initialItem } }
-        }
+        action: resetAddItemForm
     })
 ];
 
@@ -63,8 +80,7 @@ export const editItem = (state, { item }) => [
         }
     }),
     action({
-        action: setState,
-        payload: { isEditingItem: false }
+        action: resetEditItemForm
     })
 ];
 
@@ -83,7 +99,6 @@ export const removeItem = (state, { itemid, sectionid }) => [
         }
     }),
     action({
-        action: setState,
-        payload: { isRemovingItem: false }
+        action: resetRemoveItemForm
     })
 ];

@@ -1,31 +1,30 @@
 import m from '../m.js';
 import Input from './Input.js';
-import { setState, addItem } from '../actions.js';
+import { setState, addItem, resetAddItemForm } from '../actions.js';
 
-const AddItemForm = ({ itemToAdd, initialItem }) => 
+const AddItemForm = ({ addForm }) => 
     m('div.flex',
         m(Input, {
             placeholder: 'name...',
-            value: itemToAdd.item.itemname,
+            value: addForm.item.itemname,
             oninput: (state, e) => [setState, {
-                itemToAdd: { item: { itemname: e.target.value } }
+                item: { addForm: { item: { itemname: e.target.value } } }
             }]
         }),
 
         m(Input, {
             placeholder: 'url...',
-            value: itemToAdd.item.url,
+            value: addForm.item.url,
             oninput: (state, e) => [setState, {
-                itemToAdd: { item: { url: e.target.value } }
+                item: { addForm: { item: { url: e.target.value } } }
             }]
         }),
 
         m('button.item-control', {
             onclick: [addItem, {
-                item: itemToAdd.item,
-                sectionid: itemToAdd.sectionid,
-                itemPosition: itemToAdd.itemPosition,
-                initialItem
+                item: addForm.item,
+                sectionid: addForm.sectionid,
+                itemPosition: addForm.itemPosition
             }]
         },
             m('i.save'),
@@ -33,10 +32,7 @@ const AddItemForm = ({ itemToAdd, initialItem }) =>
         ),
 
         m('button.item-control', {
-            onclick: [setState, {
-                isAddingItem: false,
-                itemToAdd: { item: { ...initialItem } }
-            }]
+            onclick: resetAddItemForm
         },
             m('i.cancel'),
             'cancel'

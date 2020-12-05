@@ -9,29 +9,23 @@ import RemoveItemForm from './components/RemoveItemForm.js';
 const LIST_CONTAINER = document.getElementById('list');
 const { list } = window.viewData;
 
+console.log(list);
+
 const initialState = {
     list,
     error: null,
 
-    isAddingItem: false,
-    isRemovingItem: false,
-    isEditingItem: false,
+    item: {
+        itemid: null,
 
-    // item: {
-    //     itemid: null,
+        isAdding: false,
+        isRemoving: false,
+        isEditing: false,
 
-    //     isAdding: false,
-    //     isRemoving: false,
-    //     isEditing: false,
-
-    //     toEdit: { itemid: null, itemname: '', url: '' },
-    //     toAdd: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null },
-    //     toRemove: { itemid: null, sectionid: null }
-    // },
-
-    itemToEdit: { itemid: null, itemname: '', url: '' },
-    itemToAdd: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null },
-    itemToRemove: { itemid: null, sectionid: null }
+        editForm: { itemid: null, itemname: '', url: '' },
+        addForm: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null },
+        removeForm: { itemid: null, sectionid: null }
+    }
 };
 
 const List = state => 
@@ -43,33 +37,32 @@ const List = state =>
                     section.items.map((item, index) =>
                         m(Item, {
                             item,
-                            sectionid: section.sectionid,
+                            key: item.itemid,
                             itemPosition: index,
-                            isAddingItem: state.isAddingItem,
-                            isRemovingItem: state.isRemovingItem,
-                            isEditingItem: state.isEditingItem
+                            isAdding: state.item.isAdding,
+                            isRemoving: state.item.isRemoving,
+                            isEditing: state.item.isEditing
                         })
                     )
                 )
             )
         ),
 
-        state.isAddingItem &&
+        state.item.isAdding &&
             m(AddItemForm, {
-                itemToAdd: state.itemToAdd,
-                initialItem: initialState.itemToAdd.item
+                addForm: state.item.addForm,
             })
         ,
 
-        state.isEditingItem &&
+        state.item.isEditing &&
             m(EditItemForm, {
-                itemToEdit: state.itemToEdit
+                editForm: state.item.editForm
             })
         ,
 
-        state.isRemovingItem &&
+        state.item.isRemoving &&
             m(RemoveItemForm, {
-                itemToRemove: state.itemToRemove
+                removeForm: state.item.removeForm
             })
         ,
     )

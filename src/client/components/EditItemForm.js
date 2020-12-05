@@ -1,34 +1,34 @@
 import m from '../m.js';
 import Input from './Input.js';
-import { setState, editItem } from '../actions.js';
+import { setState, editItem, resetEditItemForm } from '../actions.js';
 
-const EditItemForm = ({ itemToEdit }) => 
+const EditItemForm = ({ editForm }) => 
     m('div.flex',
         m(Input, {
             placeholder: 'name...',
-            value: itemToEdit.itemname,
+            value: editForm.itemname,
             oninput: (state, e) => [setState, {
-                itemToEdit: { itemname: e.target.value }
+                item: { editForm: { itemname: e.target.value } }
             }]
         }),
 
         m(Input, {
             placeholder: 'url...',
-            value: itemToEdit.url,
+            value: editForm.url,
             oninput: (state, e) => [setState, {
-                itemToEdit: { url: e.target.value }
+                item: { editForm: { url: e.target.value } }
             }]
         }),
 
         m('button.item-control', {
-            onclick: [editItem, { item: itemToEdit }]
+            onclick: [editItem, { item: editForm }]
         },
             m('i.save'),
             'save'
         ),
 
         m('button.item-control', {
-            onclick: [setState, { isEditingItem: false }]
+            onclick: resetEditItemForm
         },
             m('i.cancel'),
             'cancel'

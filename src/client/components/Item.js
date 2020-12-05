@@ -1,19 +1,17 @@
 import m from '../m.js';
 import { setState } from '../actions.js';
 
-const Item = ({ item, sectionid, itemPosition, isAddingItem, isRemovingItem, isEditingItem }) => 
+const Item = ({ item, itemPosition, isAdding, isRemoving, isEditing }) => 
     m('li.item',
         m('span', item.itemname),
 
-        !(isAddingItem || isRemovingItem || isEditingItem) &&
+        !(isAdding || isRemoving || isEditing) &&
             m('div.item-controls',
                 m('button.item-control', {
                     onclick: [setState, {
-                        isEditingItem: true,
-                        itemToEdit: {
-                            itemid: item.itemid,
-                            itemname: item.itemname,
-                            url: item.url
+                        item: {
+                            isEditing: true,
+                            editForm: { itemid: item.itemid, itemname: item.itemname, url: item.url }
                         }
                     }]
                 },
@@ -23,10 +21,12 @@ const Item = ({ item, sectionid, itemPosition, isAddingItem, isRemovingItem, isE
 
                 m('button.item-control', {
                     onclick: [setState, {
-                        isAddingItem: true,
-                        itemToAdd: {
-                            sectionid,
-                            itemPosition: itemPosition + 1
+                        item: {
+                            isAdding: true,
+                            addForm: {
+                                sectionid: item.sectionid,
+                                itemPosition: itemPosition + 1
+                            }
                         }
                     }]
                 },
@@ -36,10 +36,12 @@ const Item = ({ item, sectionid, itemPosition, isAddingItem, isRemovingItem, isE
 
                 m('button.item-control', {
                     onclick: [setState, {
-                        isRemovingItem: true,
-                        itemToRemove: {
-                            itemid: item.itemid,
-                            sectionid
+                        item: {
+                            isRemoving: true,
+                            removeForm: {
+                                itemid: item.itemid,
+                                sectionid: item.sectionid
+                            }
                         }
                     }]
                 },
