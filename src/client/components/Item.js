@@ -1,54 +1,30 @@
 import m from '../m.js';
 import { setState } from '../actions.js';
+import ItemControls from './ItemControls.js';
+import AddItemForm from './AddItemForm.js';
+import EditItemForm from './EditItemForm.js';
+import RemoveItemForm from './RemoveItemForm.js';
 
-const Item = ({ item, itemPosition, isAdding, isRemoving, isEditing }) => 
+const Item = ({ item, itemPosition, itemState }) => 
     m('li.item',
-        m('span', item.itemname),
+        (!itemState.isEditing || item.itemid !== itemState.itemid) &&
+            m('span', item.itemname)
+        ,
 
-        !(isAdding || isRemoving || isEditing) &&
-            m('div.item-controls',
-                m('button.item-control', {
-                    onclick: [setState, {
-                        item: {
-                            isEditing: true,
-                            editForm: { itemid: item.itemid, itemname: item.itemname, url: item.url }
-                        }
-                    }]
-                },
-                    m('i.edit'),
-                    'edit'
-                ),
+        (itemState.isAdding && item.itemid === itemState.itemid) &&
+            m(AddItemForm, { addForm: itemState.addForm })
+        ,
 
-                m('button.item-control', {
-                    onclick: [setState, {
-                        item: {
-                            isAdding: true,
-                            addForm: {
-                                sectionid: item.sectionid,
-                                itemPosition: itemPosition + 1
-                            }
-                        }
-                    }]
-                },
-                    m('i.add'),
-                    'add'
-                ),
+        (itemState.isEditing && item.itemid === itemState.itemid) &&
+            m(EditItemForm, { editForm: itemState.editForm })
+        ,
 
-                m('button.item-control', {
-                    onclick: [setState, {
-                        item: {
-                            isRemoving: true,
-                            removeForm: {
-                                itemid: item.itemid,
-                                sectionid: item.sectionid
-                            }
-                        }
-                    }]
-                },
-                    m('i.remove'),
-                    'remove'
-                )
-            )
+        (itemState.isRemoving && item.itemid === itemState.itemid) &&
+            m(RemoveItemForm, { removeForm: itemState.removeForm })
+        ,
+
+        !(itemState.isAdding || itemState.isRemoving || itemState.isEditing) &&
+            m(ItemControls, { item, itemPosition })
         ,
     )
 ;

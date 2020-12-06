@@ -10,6 +10,7 @@ export const setState = (state, props) => {
 
 export const resetEditItemForm = state => [setState, {
     item: {
+        itemid: null,
         isEditing: false,
         editForm: { itemid: null, itemname: '', url: '' }
     }
@@ -17,6 +18,7 @@ export const resetEditItemForm = state => [setState, {
 
 export const resetAddItemForm = state => [setState, {
     item: {
+        itemid: null,
         isAdding: false,
         addForm: { item: { itemname: '', url: '' }, sectionid: null, itemPosition: null }
     }
@@ -24,6 +26,7 @@ export const resetAddItemForm = state => [setState, {
 
 export const resetRemoveItemForm = state => [setState, {
     item: {
+        itemid: null,
         isRemoving: false,
         removeForm: { itemid: null, sectionid: null }
     }
