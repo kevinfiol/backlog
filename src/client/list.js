@@ -2,6 +2,7 @@ import { app } from 'hyperapp';
 import m from './m.js';
 
 import Item from './components/Item.js';
+import Section from './components/Section.js';
 
 const LIST_CONTAINER = document.getElementById('list');
 const { list } = window.viewData;
@@ -38,17 +39,14 @@ const initialState = {
 const List = state => 
     m('div',
         state.list.sections.map(section =>
-            m('section',
-                m('h2.section-header', section.sectionname),
-                m('ul.item-list',
-                    section.items.map((item, index) =>
-                        m(Item, {
-                            item,
-                            itemPosition: index,
-                            itemState: state.item,
-                            key: item.itemid
-                        })
-                    )
+            m(Section, { section },
+                section.items.map((item, index) =>
+                    m(Item, {
+                        item,
+                        itemPosition: index,
+                        itemState: state.item,
+                        key: item.itemid
+                    })
                 )
             )
         )

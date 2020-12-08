@@ -45,7 +45,12 @@ i.save { background-image: url('/assets/save.png'); }
 i.cancel { background-image: url('/assets/cancel.png'); }
 
 /*List*/
-.item { height: 28px; }
+.item { height: 1.6em; }
+.item.adding, .item.editing { height: 2.0em; }
+.item.removing { height: 3.2em; }
+.item.adding, .item.removing, .item.editing {
+    list-style-type: none;
+}
 
 .item-controls {
     display: inline;
@@ -54,9 +59,20 @@ i.cancel { background-image: url('/assets/cancel.png'); }
     opacity: 0;
     z-index: 9;
     margin-left: 0.6rem;
+    transition: opacity 0.05s linear;
 }
 
 .item:hover .item-controls, .item-controls:hover { opacity: 1; }
+
+header.section-header > h2 {
+    display: inline-block;
+}
+
+.section-controls {
+    display: inline-block;
+    z-index: 9;
+    margin-left: 0.6rem;
+}
 
 button.item-control {
     padding: 0.3rem;

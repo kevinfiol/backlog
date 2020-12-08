@@ -5,7 +5,7 @@ import { setState, addItem, resetAddItemForm } from '../actions.js';
 const AddItemForm = ({ addForm }) => 
     m('div.flex',
         m(Input, {
-            placeholder: 'name...',
+            placeholder: 'new item name...',
             value: addForm.item.itemname,
             oninput: (state, e) => [setState, {
                 item: { addForm: { item: { itemname: e.target.value } } }
