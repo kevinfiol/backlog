@@ -15,14 +15,16 @@ function typecheck(...tuples) {
 
     for (let i = 0, n = tuples.length; i < n; i++) {
         if ((tuples[i][0] in typeMap) && !typeMap[tuples[i][0]](tuples[i][1])) {
-            errors.push(TypeError(`${typeof tuples[i][1]} should be ${tuples[i][0]}`));
+            const error = TypeError(`${typeof tuples[i][1]} should be ${tuples[i][0]}`);
+            console.error(error);
+            errors.push(error);
         }
     }
 
-    // should throw an Error object + an array of errors instead. need to make this more sophisticated
     if (errors.length) {
-        console.error(errors);
-        throw errors;
+        const error = TypeError('TypeError(s) occured');
+        error.typeErrors = errors;
+        throw error;
     }
 }
 
