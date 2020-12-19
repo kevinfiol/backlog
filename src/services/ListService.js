@@ -1,6 +1,7 @@
 import slugify from '../util/slugify.js';
 import groupBy from '../util/groupBy.js';
 import { fromIntCSV } from '../util/fromCSV.js';
+import typecheck from '../util/typecheck.js';
 
 const ListService = {
     init(db) {
@@ -9,7 +10,10 @@ const ListService = {
 
     async getListsForUser({ userid }) {
         try {
+            typecheck(['string', userid]);
             const lists = await this.db.all('List', { userid });
+
+            typecheck(['array', lists]);
             return lists;
         } catch(e) {
             throw Error('Could not retrieve lists for user.');
@@ -18,6 +22,8 @@ const ListService = {
 
     async getListBySlug({ slug, username }) {
         try {
+            typecheck(['string', slug], ['string', username]);
+
             const rows = await this.db.query(`
                 SELECT List.listid
                 FROM List
@@ -29,6 +35,7 @@ const ListService = {
                 ':username': username
             });
 
+            typecheck(['array', rows]);
             return rows;
         } catch(e) {
             throw Error('Could not retrieve List by slug and username.')
@@ -37,7 +44,10 @@ const ListService = {
 
     async getSection({ sectionid }) {
         try {
+            typecheck(['number', sectionid]);
             const section = await this.db.get('Section', { sectionid });
+
+            typecheck(['object', section]);
             return section;
         } catch(e) {
             throw Error('Could not retrieve Section by sectionid.');
@@ -46,6 +56,8 @@ const ListService = {
 
     async getFullList({ listid }) {
         try {
+            typecheck(['number', listid]);
+
             const sections = await this.db.query(`
                 SELECT
                     User.username, List.*,
@@ -103,6 +115,7 @@ const ListService = {
                 return listObj;
             }, {});
 
+            typecheck(['object', list]);
             return list;
         } catch(e) {
             throw Error('Could not retrieve items for list.');
@@ -111,6 +124,8 @@ const ListService = {
 
     async addItem({ sectionid, item }) {
         try {
+            typecheck(['number', sectionid], ['object', item]);
+
             const result = await this.db.run(`
                 INSERT INTO Item (itemname, slug, url, sectionid)
                 VALUES (:itemname, :slug, :url, :sectionid)
@@ -124,6 +139,7 @@ const ListService = {
             if (result.changes < 1)
                 throw Error('Was not able to make changes to database.');
 
+            typecheck(['object', result]);
             return result;
         } catch(e) {
             throw Error(`Unable to add new Item. ${e.message}`);
@@ -133,6 +149,8 @@ const ListService = {
     async editItem({ item }) {
         // todo: have to modify this to account for editing review
         try {
+            typecheck(['object', item]);
+
             const result = await this.db.update('Item', {
                 itemname: item.itemname,
                 url: item.url,
@@ -142,6 +160,7 @@ const ListService = {
             if (result.changes < 1)
                 throw Error('Was not able to make changes to database.');
 
+            typecheck(['object', result]);
             return result;
         } catch(e) {
             throw Error(`Unable to edit Item. ${e.message}`);
@@ -150,6 +169,8 @@ const ListService = {
 
     async removeItem({ itemid }) {
         try {
+            typecheck(['number', itemid]);
+
             const result = await this.db.run(`
                 DELETE FROM Item
                 WHERE itemid = :itemid
@@ -160,6 +181,7 @@ const ListService = {
             if (result.changes < 1)
                 throw Error('Was not able to make changes to database.');
 
+            typecheck(['object', result]);
             return result;
         } catch(e) {
             throw Error(`Unable to remove Item. ${e.message}`);
@@ -168,6 +190,8 @@ const ListService = {
 
     async updateItemOrder({ sectionid, itemidOrder }) {
         try {
+            typecheck(['number', sectionid], ['string', itemidOrder]);
+
             const result = await this.db.run(`
                 UPDATE Section
                 SET itemidOrder = :itemidOrder
@@ -180,6 +204,7 @@ const ListService = {
             if (result.changes < 1)
                 throw Error('Was not able to update itemidOrder');
 
+            typecheck(['object', result]);
             return result;
         } catch(e) {
             throw Error(`Unable to update Section. ${e.message}`);

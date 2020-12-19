@@ -1,12 +1,10 @@
 import { UserService, ListService } from '../../container.js';
-import validate from '../../util/validate.js';
+import typecheck from '../../util/typecheck.js';
 
 export const user = async function(req, res) {
-    const username = req.getRouteParam('username');
-
     try {
-        const typecheck = validate({ username: 'tString' }, { username });
-        if (!typecheck.ok) throw typecheck.errors;
+        const username = req.getRouteParam('username');
+        typecheck(['string', username]);
 
         // get user
         let user = await UserService.getUser({ username });
@@ -16,6 +14,7 @@ export const user = async function(req, res) {
         // get lists
         let lists = await ListService.getListsForUser({ userid: user.userid });
 
+        typecheck(['object', user], ['array', lists]);
         res.setViewData({ user, lists });
         res.render('dashboard.ejs', res.viewData);
     } catch(e) {
@@ -25,17 +24,11 @@ export const user = async function(req, res) {
 };
 
 export const list = async function(req, res) {
-    // route params
-    const username = req.getRouteParam('username');
-    const listSlug = req.getRouteParam('listSlug');
-
     try {
-        const typecheck = validate(
-            { username: 'tString', listSlug: 'tString' },
-            { username, listSlug }
-        );
-
-        if (!typecheck.ok) throw typecheck.errors;
+        // route params
+        const username = req.getRouteParam('username');
+        const listSlug = req.getRouteParam('listSlug');
+        typecheck(['string', username], ['string', listSlug]);
 
         // get list if it exists
         const rows = await ListService.getListBySlug({ slug: listSlug, username });
@@ -45,6 +38,7 @@ export const list = async function(req, res) {
         // retrieve sections + items
         const list = await ListService.getFullList({ listid: listData.listid });
 
+        typecheck(['object', list], ['string', username]);
         res.setViewData({ list, username });
         res.render('list.ejs', res.viewData);
     } catch(e) {

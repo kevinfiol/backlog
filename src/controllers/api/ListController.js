@@ -1,20 +1,18 @@
 import { ListService } from '../../container.js';
 import { fromIntCSV } from '../../util/fromCSV.js';
-import validate from '../../util/validate.js';
+import typecheck from '../../util/typecheck.js';
 
 /**
 * todo: implement some kind of rollback for adding/removing items in case error
 */
 
 export const getFullList = async function(req, res) {
-    // query params
-    const listid = req.query.listid;
-
     try {
-        const typecheck = validate({ listid: 'tString' }, { listid });
-        if (!typecheck.ok) throw typecheck.errors;
+        const listid = req.query.listid;
+        typecheck(['string', listid]);
 
         const list = await ListService.getFullList({ listid });
+        typecheck(['object', list]);
         res.send(200, { list });
     } catch(e) {
         console.error(e);
@@ -23,15 +21,9 @@ export const getFullList = async function(req, res) {
 };
 
 export const addItem = async function(req, res) {
-    let { item, sectionid, itemPosition } = req.body;
-
     try {
-        const typecheck = validate(
-            { item: 'object', sectionid: 'number', itemPosition: 'number' },
-            { item, sectionid, itemPosition }
-        );
-
-        if (!typecheck.ok) throw typecheck.errors;
+        let { item, sectionid, itemPosition } = req.body;
+        typecheck(['object', item], ['number', sectionid], ['number', itemPosition]);
 
         const section = await ListService.getSection({ sectionid });
         if (!section) throw Error('Section does not exist.');
@@ -47,6 +39,7 @@ export const addItem = async function(req, res) {
         itemidOrder.splice(itemPosition, 0, newItemID);
         result = await ListService.updateItemOrder({ sectionid: section.sectionid, itemidOrder: itemidOrder.join(',') });
 
+        typecheck(['object', item], ['number', newItemID]);
         res.send(200, { item: { ...item, itemid: newItemID } });
     } catch(e) {
         console.error(e);
@@ -55,15 +48,14 @@ export const addItem = async function(req, res) {
 };
 
 export const editItem = async function(req, res) {
-    let { item } = req.body;
-
     try {
-        const typecheck = validate({ item: 'object' }, { item });
-        if (!typecheck.ok) throw typecheck.errors;
+        let { item } = req.body;
+        typecheck(['object', item]);
 
         const editedItem = { itemid: item.itemid, itemname: item.itemname, url: item.url };
         let result = await ListService.editItem({ item: editedItem });
 
+        typecheck(['object', editedItem]);
         res.send(200, { item: { ...editedItem } })
     } catch(e) {
         console.error(e);
@@ -72,11 +64,9 @@ export const editItem = async function(req, res) {
 };
 
 export const removeItem = async function(req, res) {
-    let { itemid, sectionid } = req.body;
-
     try {
-        const typecheck = validate({ itemid: 'number', sectionid: 'number' }, { itemid, sectionid });
-        if (!typecheck.ok) throw typecheck.errors;
+        let { itemid, sectionid } = req.body;
+        typecheck(['number', itemid], ['number', sectionid]);
 
         const section = await ListService.getSection({ sectionid });
 
@@ -89,6 +79,7 @@ export const removeItem = async function(req, res) {
         let result = await ListService.updateItemOrder({ sectionid, itemidOrder: itemidOrder.join(',') });
         result = await ListService.removeItem({ itemid });
 
+        typecheck(['number', itemid]);
         res.send(200, { itemid });
     } catch(e) {
         console.error(e);
