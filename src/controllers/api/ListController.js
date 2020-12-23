@@ -9,10 +9,10 @@ import typecheck from '../../util/typecheck.js';
 export const getFullList = async function(req, res) {
     try {
         const listid = req.query.listid;
-        typecheck(['string', listid]);
+        typecheck({ string: listid });
 
         const list = await ListService.getFullList({ listid });
-        typecheck(['object', list]);
+        typecheck({ object: list });
         res.send(200, { list });
     } catch(e) {
         console.error(e);
@@ -23,7 +23,7 @@ export const getFullList = async function(req, res) {
 export const addItem = async function(req, res) {
     try {
         let { item, sectionid, itemPosition } = req.body;
-        typecheck(['object', item], ['number', sectionid], ['number', itemPosition]);
+        typecheck({ object: item, number: [sectionid, itemPosition] });
 
         const section = await ListService.getSection({ sectionid });
         if (!section) throw Error('Section does not exist.');
@@ -39,7 +39,7 @@ export const addItem = async function(req, res) {
         itemidOrder.splice(itemPosition, 0, newItemID);
         result = await ListService.updateItemOrder({ sectionid: section.sectionid, itemidOrder: itemidOrder.join(',') });
 
-        typecheck(['object', item], ['number', newItemID]);
+        typecheck({ object: item, number: newItemID });
         res.send(200, { item: { ...item, itemid: newItemID } });
     } catch(e) {
         console.error(e);
@@ -50,12 +50,12 @@ export const addItem = async function(req, res) {
 export const editItem = async function(req, res) {
     try {
         let { item } = req.body;
-        typecheck(['object', item]);
+        typecheck({ object: item });
 
         const editedItem = { itemid: item.itemid, itemname: item.itemname, url: item.url };
         let result = await ListService.editItem({ item: editedItem });
 
-        typecheck(['object', editedItem]);
+        typecheck({ object: editedItem });
         res.send(200, { item: { ...editedItem } })
     } catch(e) {
         console.error(e);
@@ -66,7 +66,7 @@ export const editItem = async function(req, res) {
 export const removeItem = async function(req, res) {
     try {
         let { itemid, sectionid } = req.body;
-        typecheck(['number', itemid], ['number', sectionid]);
+        typecheck({ number: [itemid, sectionid] });
 
         const section = await ListService.getSection({ sectionid });
 
@@ -79,7 +79,7 @@ export const removeItem = async function(req, res) {
         let result = await ListService.updateItemOrder({ sectionid, itemidOrder: itemidOrder.join(',') });
         result = await ListService.removeItem({ itemid });
 
-        typecheck(['number', itemid]);
+        typecheck({ number: itemid });
         res.send(200, { itemid });
     } catch(e) {
         console.error(e);

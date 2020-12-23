@@ -10,21 +10,38 @@ const typeMap = {
     'defined': isDef
 };
 
-function typecheck(...tuples) {
-    const errors = [];
+function typecheck(obj = {}) {
+    const keys = Object.keys(obj);
 
-    for (let i = 0, n = tuples.length; i < n; i++) {
-        if ((tuples[i][0] in typeMap) && !typeMap[tuples[i][0]](tuples[i][1])) {
-            const error = TypeError(`${typeof tuples[i][1]} should be ${tuples[i][0]}`);
+    if (keys.length > 0) {
+        const errors = [];
+
+        function onError(type, x) {
+            const error = TypeError(`${typeof x} should be ${type}`);
             console.error(error);
             errors.push(error);
         }
-    }
 
-    if (errors.length) {
-        const error = TypeError('TypeError(s) occured');
-        error.typeErrors = errors;
-        throw error;
+        for (let i = 0, n = keys.length; i < n; i++) {
+            if (keys[i] in typeMap) {
+                const fn = typeMap[keys[i]];
+                const x = obj[keys[i]];
+
+                if (isArr(x)) {
+                    for (let j = 0, o = x.length; j < o; j++) {
+                        if (!fn(x[j])) onError(keys[i], x[j]);
+                    }
+                } else if (!fn(x)) {
+                    onError(keys[i], x)
+                }
+            }
+        }
+
+        if (errors.length > 0) {
+            const error = TypeError('TypeError(s) occured');
+            error.typeErrors = errors;
+            throw error;
+        }
     }
 }
 

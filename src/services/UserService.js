@@ -8,7 +8,7 @@ const UserService = {
 
     async validateAndGetUser({ username, password }) {
         try {
-            typecheck(['string', username], ['string', password]);
+            typecheck({ string: [username, password] });
 
             // validate user exists
             const user = await this.db.get('User', { username });
@@ -18,7 +18,7 @@ const UserService = {
             const { hashed } = hash(password, user.salt);
             if (hashed !== user.password) return null;
 
-            typecheck(['object', user]);
+            typecheck({ object: user });
             return user;
         } catch(e) {
             throw Error('Could not validate & retrieve user.', e);
@@ -27,7 +27,7 @@ const UserService = {
 
     async createUser({ username, password }) {
         try {
-            typecheck(['string', username], ['string', password]);
+            typecheck({ string: [username, password] });
             const { hashed, salt } = hash(password);
 
             const res = await this.db.insert('User', {
@@ -36,7 +36,7 @@ const UserService = {
                 salt: salt
             });
 
-            typecheck(['object', res]);
+            typecheck({ object: res });
             return res;
         } catch(e) {
             throw Error('Could not create new User.', e);
@@ -45,10 +45,10 @@ const UserService = {
 
     async getUser(params) {
         try {
-            typecheck(['object', params]);
+            typecheck({ object: params });
             const user = await this.db.get('User', params);
 
-            typecheck(['object', user]);
+            typecheck({ object: user });
             return user;
         } catch(e) {
             throw Error('Could not retrieve User.', e);
