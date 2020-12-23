@@ -47,7 +47,6 @@ i.cancel { background-image: url('/assets/cancel.png'); }
 /*List*/
 .item { height: 1.6em; }
 .item.adding, .item.editing { height: 2.0em; }
-.item.removing { height: 3.2em; }
 .item.adding, .item.removing, .item.editing {
     list-style-type: none;
 }

@@ -1,8 +1,17 @@
 import m from '../m.js';
 import { setState, removeItem, resetRemoveItemForm } from '../actions.js';
 
-const RemoveItemForm = ({ removeForm }) => 
+const RemoveItemForm = ({ removeForm }, children) => 
     m('div.flex',
+        children,
+
+        m('button.item-control', {
+            onclick: resetRemoveItemForm
+        },
+            m('i.cancel'),
+            'cancel'
+        ),
+
         m('button.item-control', {
             onclick: [removeItem, {
                 itemid: removeForm.itemid,
@@ -11,13 +20,6 @@ const RemoveItemForm = ({ removeForm }) =>
         },
             m('i.remove'),
             'confirm'
-        ),
-
-        m('button.item-control', {
-            onclick: resetRemoveItemForm
-        },
-            m('i.cancel'),
-            'cancel'
         )
     )
 ;

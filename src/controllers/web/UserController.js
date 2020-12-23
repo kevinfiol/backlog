@@ -28,7 +28,7 @@ export const list = async function(req, res) {
         // route params
         const username = req.getRouteParam('username');
         const listSlug = req.getRouteParam('listSlug');
-        typecheck({ string: [username, listSlug] });
+        typecheck({ strings: [username, listSlug] });
 
         // get list if it exists
         const rows = await ListService.getListBySlug({ slug: listSlug, username });

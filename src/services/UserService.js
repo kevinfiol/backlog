@@ -8,7 +8,7 @@ const UserService = {
 
     async validateAndGetUser({ username, password }) {
         try {
-            typecheck({ string: [username, password] });
+            typecheck({ strings: [username, password] });
 
             // validate user exists
             const user = await this.db.get('User', { username });
@@ -27,7 +27,7 @@ const UserService = {
 
     async createUser({ username, password }) {
         try {
-            typecheck({ string: [username, password] });
+            typecheck({ strings: [username, password] });
             const { hashed, salt } = hash(password);
 
             const res = await this.db.insert('User', {

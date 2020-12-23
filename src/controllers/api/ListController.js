@@ -8,8 +8,9 @@ import typecheck from '../../util/typecheck.js';
 
 export const getFullList = async function(req, res) {
     try {
-        const listid = req.query.listid;
+        let listid = req.query.listid;
         typecheck({ string: listid });
+        listid = parseInt(listid);
 
         const list = await ListService.getFullList({ listid });
         typecheck({ object: list });
@@ -23,7 +24,7 @@ export const getFullList = async function(req, res) {
 export const addItem = async function(req, res) {
     try {
         let { item, sectionid, itemPosition } = req.body;
-        typecheck({ object: item, number: [sectionid, itemPosition] });
+        typecheck({ object: item, numbers: [sectionid, itemPosition] });
 
         const section = await ListService.getSection({ sectionid });
         if (!section) throw Error('Section does not exist.');
@@ -66,7 +67,7 @@ export const editItem = async function(req, res) {
 export const removeItem = async function(req, res) {
     try {
         let { itemid, sectionid } = req.body;
-        typecheck({ number: [itemid, sectionid] });
+        typecheck({ numbers: [itemid, sectionid] });
 
         const section = await ListService.getSection({ sectionid });
 

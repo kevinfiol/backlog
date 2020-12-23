@@ -10,7 +10,7 @@ const ListService = {
 
     async getListsForUser({ userid }) {
         try {
-            typecheck({ string: userid });
+            typecheck({ number: userid });
             const lists = await this.db.all('List', { userid });
 
             typecheck({ array: lists });
@@ -22,7 +22,7 @@ const ListService = {
 
     async getListBySlug({ slug, username }) {
         try {
-            typecheck({ string: [slug, username] });
+            typecheck({ strings: [slug, username] });
 
             const rows = await this.db.query(`
                 SELECT List.listid

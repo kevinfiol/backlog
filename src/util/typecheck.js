@@ -23,16 +23,19 @@ function typecheck(obj = {}) {
         }
 
         for (let i = 0, n = keys.length; i < n; i++) {
-            if (keys[i] in typeMap) {
-                const fn = typeMap[keys[i]];
+            const isMultiple = keys[i].slice(-1) === 's';
+            const key = isMultiple ? keys[i].slice(0, -1) : keys[i];
+
+            if (key in typeMap) {
+                const fn = typeMap[key];
                 const x = obj[keys[i]];
 
-                if (isArr(x)) {
+                if (isMultiple) {
                     for (let j = 0, o = x.length; j < o; j++) {
-                        if (!fn(x[j])) onError(keys[i], x[j]);
+                        if (!fn(x[j])) onError(key, x[j]);
                     }
                 } else if (!fn(x)) {
-                    onError(keys[i], x)
+                    onError(key, x)
                 }
             }
         }
