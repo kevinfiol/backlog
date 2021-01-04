@@ -28,6 +28,10 @@ button {
 button:hover { background-color: rgba(0, 0, 0, 0.1); }
 button:focus { background-color: rgba(0, 0, 0, 0.2); }
 
+table { margin: 1rem 0; }
+tr:nth-of-type(1) { border-top: 1px solid rgba(100, 100, 100, 0.2); }
+tr { border-bottom: 1px solid rgba(100, 100, 100, 0.2); }
+
 /*Icons*/
 i {
     height: 16px;
@@ -45,24 +49,41 @@ i.save { background-image: url('/assets/save.png'); }
 i.cancel { background-image: url('/assets/cancel.png'); }
 
 /*List*/
-.item { height: 1.6em; }
-.item.adding, .item.editing { height: 2.0em; }
-.item.adding, .item.removing, .item.editing {
-    list-style-type: none;
+/*Item*/
+.item {
+    height: 50px;
+    width: 100%;
+}
+
+.item-name, .item-data {
+    width: 30%;
+    text-align: left;
+}
+
+.item-name input, .item-data input {
+    min-width: 0px;
+    width: 100%;
 }
 
 .item-controls {
-    display: inline;
-    margin-top: -2px;
-    position: absolute;
+    width: 40%;
+    text-align: right;
+}
+
+.item-controls:not(.is-user-making-changes) {
     opacity: 0;
+}
+
+button.item-control {
+    padding: 0.3rem;
+    margin-right: 0.4rem;
+    font-size: 0.8em;
     z-index: 9;
-    margin-left: 0.6rem;
-    transition: opacity 0.05s linear;
 }
 
 .item:hover .item-controls, .item-controls:hover { opacity: 1; }
 
+/*Section*/
 header.section-header > h2 {
     display: inline-block;
 }
@@ -71,13 +92,6 @@ header.section-header > h2 {
     display: inline-block;
     z-index: 9;
     margin-left: 0.6rem;
-}
-
-button.item-control {
-    padding: 0.3rem;
-    margin-right: 0.4rem;
-    font-size: 0.8em;
-    z-index: 9;
 }
 
 /*Utils*/

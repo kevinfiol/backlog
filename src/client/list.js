@@ -1,8 +1,8 @@
 import { app } from 'hyperapp';
 import m from './m.js';
 
-import Item from './components/Item.js';
-import Section from './components/Section.js';
+import Item from './components/Item/Item.js';
+import Section from './components/Section/Section.js';
 
 const LIST_CONTAINER = document.getElementById('list');
 const { list } = window.viewData;

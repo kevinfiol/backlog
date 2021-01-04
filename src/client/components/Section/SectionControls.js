@@ -1,4 +1,4 @@
-import m from '../m.js';
+import m from '../../m.js';
 
 const SectionControls = ({ itemAddForm }) => 
     m('div.section-controls',

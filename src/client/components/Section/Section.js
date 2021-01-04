@@ -1,4 +1,4 @@
-import m from '../m.js';
+import m from '../../m.js';
 import SectionControls from './SectionControls.js';
 
 const Section = ({ section }, children) => 
@@ -8,8 +8,10 @@ const Section = ({ section }, children) =>
             m(SectionControls)
         ),
 
-        m('ul.item-list',
-            children
+        m('table.item-list',
+            m('tbody',
+                children
+            )
         )
     )
 ;
