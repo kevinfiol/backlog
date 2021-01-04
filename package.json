@@ -7,8 +7,8 @@
     "debug": "node inspect scripts/run.js",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
-    "client:build": "esbuild --bundle src/client/list.js --outfile=src/static/app/list.js --minify",
-    "client:dev": "watchexec -w src/client/ \"esbuild --bundle --sourcemap src/client/list.js --outfile=src/static/app/list.js\""
+    "client:build": "node scripts/clientBuild.js",
+    "client:dev": "node scripts/clientWatch.js"
   },
   "dependencies": {
     "@lukeed/uuid": "^2.0.0",
