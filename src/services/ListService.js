@@ -118,7 +118,6 @@ const ListService = {
             typecheck({ object: list });
             return list;
         } catch(e) {
-            console.error(e);
             throw Error('Could not retrieve items for list.');
         }
     },
