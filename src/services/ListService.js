@@ -83,10 +83,12 @@ const ListService = {
             const groupedItems = groupBy('sectionid', items);
 
             // create list
-            const list = sections.reduce((listObj, section) => {
-                if (!listObj.listid) {
-                    listObj = {
-                        // this are List properties *not* Section properties
+            let list = undefined;
+            sectionidOrder.map(sectionid => {
+                const section = sections.find(section => section.sectionid === sectionid);
+                if (!list) {
+                    list = {
+                        // these are List properties *not* Section properties
                         username: section.username,
                         userid: section.userid,
                         listid: section.listid,
@@ -104,20 +106,19 @@ const ListService = {
                     groupedItems[section.sectionid].find(item => item.itemid === id)
                 );
 
-                listObj.sections = [...listObj.sections, {
-                    listid: listObj.listid,
+                list.sections = [...list.sections, {
+                    listid: list.listid,
                     sectionid: section.sectionid,
                     sectionname: section.sectionname,
                     itemidOrder: section.itemidOrder,
                     items
                 }];
-
-                return listObj;
-            }, {});
+            });
 
             typecheck({ object: list });
             return list;
         } catch(e) {
+            console.error(e);
             throw Error('Could not retrieve items for list.');
         }
     },
