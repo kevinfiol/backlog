@@ -8,6 +8,40 @@ export const setState = (state, props) => {
     return newState;
 };
 
+export const preventDefault = action => (state, event) => [
+    state,
+    [
+        (dispatch) => {
+          event.preventDefault()
+          if (action) dispatch(action)
+        }
+    ]
+];
+
+export const itemListOnDrop = (state, { sectionid }) => {
+    const sections = state.list.sections;
+    const sectionIdx = sections.findIndex(section => section.sectionid === sectionid);
+    const section = sections[sectionIdx];
+
+    const draggedIdx = section.items.indexOf(state.dnd.drag);
+    const droppedIdx = section.items.indexOf(state.dnd.drop);
+
+    const insertionIdx = draggedIdx < droppedIdx ? droppedIdx + 1 : droppedIdx;
+    const deletionIdx = draggedIdx > droppedIdx ? draggedIdx + 1 : draggedIdx;
+
+    if (insertionIdx !== deletionIdx) {
+        section.items.splice(insertionIdx, 0, state.dnd.drag);
+        section.items.splice(deletionIdx, 1);
+    }
+
+    sections[sectionIdx] = section;
+
+    return [setState, {
+        dnd: { drag: null, drop: null },
+        list: { sections }
+    }];
+};
+
 export const resetEditItemForm = state => [setState, {
     item: {
         itemid: null,

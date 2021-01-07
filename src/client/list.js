@@ -12,6 +12,7 @@ console.log(list);
 const initialState = {
     list,
     error: null,
+    dnd: { drag: null, drop: null },
 
     item: {
         itemid: null,
