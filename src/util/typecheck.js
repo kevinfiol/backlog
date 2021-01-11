@@ -1,13 +1,11 @@
-import { isArr, isBool, isNum, isObj, isStr, isDef, isFn } from 'jty';
-
 const typeMap = {
-    'number': isNum,
-    'array': isArr,
-    'boolean': isBool,
-    'object': isObj,
-    'string': isStr,
-    'function': isFn,
-    'defined': isDef
+    'number': x => Number.isFinite(x),
+    'array': x => Array.isArray(x),
+    'boolean': x => typeof x === 'boolean',
+    'object': x => x !== null && typeof x === 'object',
+    'string': x => typeof x === 'string',
+    'function': x => typeof x === 'function',
+    'defined': x => x !== undefined
 };
 
 function typecheck(obj = {}) {
