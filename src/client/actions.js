@@ -23,22 +23,45 @@ export const itemListOnDrop = (state, { sectionid }) => {
     const sectionIdx = sections.findIndex(section => section.sectionid === sectionid);
     const section = sections[sectionIdx];
 
-    const draggedIdx = section.items.indexOf(state.dnd.drag);
-    const droppedIdx = section.items.indexOf(state.dnd.drop);
+    const draggedIdx = section.items.findIndex(item => item.itemid === state.dnd.drag);
+    const droppedIdx = section.items.findIndex(item => item.itemid === state.dnd.drop);
+    const draggedItem = section.items[draggedIdx];
 
     const insertionIdx = draggedIdx < droppedIdx ? droppedIdx + 1 : droppedIdx;
     const deletionIdx = draggedIdx > droppedIdx ? draggedIdx + 1 : draggedIdx;
 
     if (insertionIdx !== deletionIdx) {
-        section.items.splice(insertionIdx, 0, state.dnd.drag);
+        section.items.splice(insertionIdx, 0, draggedItem);
         section.items.splice(deletionIdx, 1);
     }
 
     sections[sectionIdx] = section;
-
+    console.log(section);
     return [setState, {
         dnd: { drag: null, drop: null },
         list: { sections }
+    }];
+};
+
+export const itemOnDragStart = (state, { itemid }) => {
+    console.log('drag start');
+    return [setState, {
+        dnd: { drag: itemid }
+    }];
+};
+
+export const itemOnDragOver = (state, { itemid }) => {
+    console.log('drag over');
+    if (!state.dnd.drag) return state;
+    return [setState, {
+        dnd: { drop: itemid }
+    }];
+};
+
+export const itemOnDragEnd = state => {
+    console.log('drag end');
+    return [setState, {
+        dnd: { drag: null, drop: null }
     }];
 };
 

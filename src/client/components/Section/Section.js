@@ -9,11 +9,11 @@ const Section = ({ section }, children) =>
             m(SectionControls)
         ),
 
-        m('table.item-list', {
-            ondragover: preventDefault(),
-            ondrop: preventDefault([itemListOnDrop, { sectionid: section.sectionid }])
-        },
-            m('tbody',
+        m('table.item-list',
+            m('tbody', {
+                ondragover: preventDefault(),
+                ondrop: preventDefault([itemListOnDrop, { sectionid: section.sectionid }])
+            },
                 children
             )
         )

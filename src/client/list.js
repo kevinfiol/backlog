@@ -46,7 +46,8 @@ const List = state =>
                         item,
                         itemPosition: index,
                         itemState: state.item,
-                        key: item.itemid
+                        key: item.itemid,
+                        dnd: state.dnd
                     })
                 )
             )

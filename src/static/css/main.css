@@ -1,3 +1,4 @@
+body { max-width: 48rem; }
 h1, h2, h3, h4, h5, h6 { font-family: monospace; }
 fieldset { border: 0; padding: 0; margin: 1rem auto; }
 
@@ -96,3 +97,26 @@ header.section-header > h2 {
 
 /*Utils*/
 .opacity-1 { opacity: 1; }
+
+.drag-item {
+  position: relative;
+    padding: 10px;
+    user-select: none;
+  background: white;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+    
+.drag-item + .drag-item {
+  margin-top: 1px
+}
+    
+.dragging {
+    background: red;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+    
+.dropping {
+  background: greenyellow
+}
