@@ -14,6 +14,7 @@ dependencies:
   polka: 1.0.0-next.11
   session-file-store: 1.5.0
   sirv: 1.0.7
+  sortablejs: 1.13.0
   sqlite: 4.0.15
   sqlite3: 5.0.0
   yeahjs: 0.2.0
@@ -1022,6 +1023,10 @@ packages:
       node: '>= 10'
     resolution:
       integrity: sha512-QMT2OTD3CTr8de9VByPmvSEeyt6k8/Cxg0J2kQJ5HNhIWfhFg9ypcIWWzez9rPWnGj+WtJ7AZD/MdT/vdilV/A==
+  /sortablejs/1.13.0:
+    dev: false
+    resolution:
+      integrity: sha512-RBJirPY0spWCrU5yCmWM1eFs/XgX2J5c6b275/YyxFRgnzPhKl/TDeU2hNR8Dt7ITq66NRPM4UlOt+e5O4CFHg==
   /sqlite/4.0.15:
     dev: false
     resolution:
@@ -1253,6 +1258,7 @@ specifiers:
   polka: 1.0.0-next.11
   session-file-store: ^1.4.0
   sirv: ^1.0.6
+  sortablejs: ^1.13.0
   sqlite: ^4.0.14
   sqlite3: ^5.0.0
   yeahjs: ^0.2.0
