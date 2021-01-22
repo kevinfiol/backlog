@@ -1,4 +1,5 @@
 import merge from 'mergerino';
+import { Sortable, MultiDrag } from 'sortablejs';
 import { http } from './effects/http.js';
 import { action } from './effects/action.js';
 
@@ -6,63 +7,6 @@ export const setState = (state, props) => {
     const newState = merge(state, props);
     console.log(newState);
     return newState;
-};
-
-export const preventDefault = action => (state, event) => [
-    state,
-    [
-        (dispatch) => {
-          event.preventDefault()
-          if (action) dispatch(action)
-        }
-    ]
-];
-
-export const itemListOnDrop = (state, { sectionid }) => {
-    const sections = state.list.sections;
-    const sectionIdx = sections.findIndex(section => section.sectionid === sectionid);
-    const section = sections[sectionIdx];
-
-    const draggedIdx = section.items.findIndex(item => item.itemid === state.dnd.drag);
-    const droppedIdx = section.items.findIndex(item => item.itemid === state.dnd.drop);
-    const draggedItem = section.items[draggedIdx];
-
-    const insertionIdx = draggedIdx < droppedIdx ? droppedIdx + 1 : droppedIdx;
-    const deletionIdx = draggedIdx > droppedIdx ? draggedIdx + 1 : draggedIdx;
-
-    if (insertionIdx !== deletionIdx) {
-        section.items.splice(insertionIdx, 0, draggedItem);
-        section.items.splice(deletionIdx, 1);
-    }
-
-    sections[sectionIdx] = section;
-    console.log(section);
-    return [setState, {
-        dnd: { drag: null, drop: null },
-        list: { sections }
-    }];
-};
-
-export const itemOnDragStart = (state, { itemid }) => {
-    console.log('drag start');
-    return [setState, {
-        dnd: { drag: itemid }
-    }];
-};
-
-export const itemOnDragOver = (state, { itemid }) => {
-    console.log('drag over');
-    if (!state.dnd.drag) return state;
-    return [setState, {
-        dnd: { drop: itemid }
-    }];
-};
-
-export const itemOnDragEnd = state => {
-    console.log('drag end');
-    return [setState, {
-        dnd: { drag: null, drop: null }
-    }];
 };
 
 export const resetEditItemForm = state => [setState, {
@@ -160,5 +104,54 @@ export const removeItem = (state, { itemid, sectionid }) => [
     }),
     action({
         action: resetRemoveItemForm
+    })
+];
+
+export const resortItems = (state, props) => [
+    state,
+    [
+        () => {
+            console.log(state, props);
+        }
+    ]
+];
+
+// DOM-y Effects
+export const preventDefault = action => (state, event) => [
+    state,
+    [
+        (dispatch) => {
+          event.preventDefault()
+          if (action) dispatch(action)
+        }
+    ]
+];
+
+export const mountSortables = (state) => [
+    (dispatch) => requestAnimationFrame(() => {
+        // mount SortableJS elements
+        Sortable.mount(new MultiDrag());
+        for (let itemList of document.getElementsByClassName('item-list')) {
+            Sortable.create(itemList, {
+                animation: 100,
+                multiDrag: true,
+                selectedClass: 'sortablejs__item--selected',
+                handle: '.handle',
+                onEnd: function(event) {
+                    // deselect selected items
+                    for (let i in event.items) {
+                        Sortable.utils.deselect(event.items[i]);
+                    }
+
+                    const movedItems = [];
+
+                    if (oldIndices.length > 0) {
+
+                    } else {
+
+                    }
+                }
+            });
+        }
     })
 ];

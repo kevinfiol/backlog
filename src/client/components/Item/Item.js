@@ -1,5 +1,4 @@
 import m from '../../m.js';
-import { preventDefault, itemOnDragStart, itemOnDragOver, itemOnDragEnd } from '../../actions.js';
 import AddItemForm from './AddItemForm.js';
 import EditItemForm from './EditItemForm.js';
 
@@ -16,17 +15,10 @@ const Item = ({ item, itemPosition, itemState, dnd }) => {
 
     return [
         m('tr.item', {
-            draggable: true,
-            class: {
-                'drag-item': true,
-                dragging: item.itemid === dnd.drag,
-                dropping: item.itemid === dnd.drop
-            },
-            ondragstart: preventDefault([itemOnDragStart, { itemid: item.itemid }]),
-            ondragover: preventDefault([itemOnDragOver, { itemid: item.itemid }]),
-            ondragend: preventDefault(itemOnDragEnd)
+
         },
             (!isEditing && !isRemoving) && [
+                m('td.item-handle', isUserMakingChanges ? null : m('i.handle', 'o')),
                 m('td.item-name', item.itemname),
                 m('td.item-data', 'link & review'),
             ],

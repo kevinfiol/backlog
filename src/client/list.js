@@ -1,6 +1,7 @@
 import { app } from 'hyperapp';
 import m from './m.js';
 
+import { mountSortables } from './actions.js';
 import Item from './components/Item/Item.js';
 import Section from './components/Section/Section.js';
 
@@ -12,7 +13,6 @@ console.log(list);
 const initialState = {
     list,
     error: null,
-    dnd: { drag: null, drop: null },
 
     item: {
         itemid: null,
@@ -46,8 +46,7 @@ const List = state =>
                         item,
                         itemPosition: index,
                         itemState: state.item,
-                        key: item.itemid,
-                        dnd: state.dnd
+                        key: item.itemid
                     })
                 )
             )
@@ -56,7 +55,10 @@ const List = state =>
 ;
 
 app({
-    init: initialState,
+    init: [
+        initialState,
+        mountSortables()
+    ],
     view: List,
     node: LIST_CONTAINER
 });

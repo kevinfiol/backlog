@@ -3,6 +3,7 @@ import Input from '../Input.js';
 import { setState, editItem, resetEditItemForm } from '../../actions.js';
 
 const EditItemForm = ({ editForm }) => [
+    m('td.item-handle'),
     m('td.item-name',
         m(Input, {
             placeholder: 'name...',

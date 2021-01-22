@@ -95,28 +95,7 @@ header.section-header > h2 {
     margin-left: 0.6rem;
 }
 
-/*Utils*/
-.opacity-1 { opacity: 1; }
-
-.drag-item {
-  position: relative;
-    padding: 10px;
-    user-select: none;
-  background: white;
-  cursor: -webkit-grab;
-  cursor: grab;
-}
-    
-.drag-item + .drag-item {
-  margin-top: 1px
-}
-    
-.dragging {
-    background: red;
-  cursor: -webkit-grabbing;
-  cursor: grabbing;
-}
-    
-.dropping {
-  background: greenyellow
+/*SortableJS*/
+.sortablejs__item--selected {
+    border: 1px solid red;
 }
