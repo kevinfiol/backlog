@@ -1,4 +1,4 @@
-import yeahjs from 'yeahjs';
+import { compile } from 'yeahjs';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,7 +15,7 @@ export default () => (_, res, next) => {
         try {
             const fileString = readFileSync(getView(view), 'utf8');
 
-            const template = yeahjs.compile(fileString, {
+            const template = compile(fileString, {
                 filename: view,
                 localsName: 'it',
                 resolve: (_, filename) => getView(filename),

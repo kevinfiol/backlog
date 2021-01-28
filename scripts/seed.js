@@ -1,6 +1,6 @@
-const connectDb = require('./db.js');
-const hash = require('../src/util/hash.js');
-const slugify = require('../src/util/slugify.js');
+import connectDb from './db.js';
+import hash from '../src/util/hash.js';
+import slugify from '../src/util/slugify.js';
 
 const user = {
     name: 'kevin',

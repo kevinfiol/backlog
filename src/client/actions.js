@@ -145,11 +145,15 @@ export const mountSortables = (state) => [
 
                     const movedItems = [];
 
-                    if (oldIndices.length > 0) {
-
+                    if (event.oldIndicies && event.oldIndicies.length > 0) {
+                        for (let i = 0; i < event.oldIndicies.length; i++) {
+                            movedItems.push([event.oldIndicies[i].index, event.newIndicies[i].index]);
+                        }
                     } else {
-
+                        movedItems.push([event.oldIndex, event.newIndex]);
                     }
+
+                    dispatch(resortItems, { movedItems });
                 }
             });
         }

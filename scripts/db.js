@@ -1,8 +1,10 @@
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
-const config = require ('../config.js');
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite';
+import config from '../config.js';
 
-module.exports = open({
+const connectDb = open({
     driver: sqlite3.cached.Database,
     ...config.database
 });
+
+export default connectDb;

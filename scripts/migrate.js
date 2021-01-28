@@ -1,6 +1,9 @@
-const { copyFileSync, existsSync, mkdirSync } = require('fs');
-const { join } = require('path');
-const connectDb = require('./db.js');
+import { copyFileSync, existsSync, mkdirSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import connectDb from './db.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 connectDb.then(async db => {
     const original = join(__dirname, '../backlog.db');
