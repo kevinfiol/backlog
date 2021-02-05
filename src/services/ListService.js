@@ -58,11 +58,14 @@ const ListService = {
         try {
             typecheck({ number: listid });
 
-            const sections = await this.db.query(`
+            const rows = await this.db.query(`
                 SELECT
-                    User.username, List.*,
-                    Section.sectionid, Section.sectionname, Section.itemidOrder
-                FROM Section
+                    User.username,
+                    List.*, List.slug AS listslug,
+                    Section.sectionid, Section.sectionname, Section.itemidOrder, Section.slug AS sectionslug,
+                    Item.*
+                FROM Item
+                LEFT JOIN Section ON Item.sectionid = Section.sectionid
                 LEFT JOIN List ON Section.listid = List.listid
                 LEFT JOIN User ON User.userid = List.userid
                 WHERE List.listid = :listid
@@ -70,54 +73,61 @@ const ListService = {
                 ':listid': listid
             });
 
-            const sectionidOrder = fromIntCSV(sections[0].sectionidOrder);
+            // retrieve list metadata
+            const list = {
+                listid: rows[0].listid,
+                listname: rows[0].listname,
+                slug: rows[0].listslug,
+                date_created: rows[0].date_created,
+                date_updated: rows[0].date_updated,
+                userid: rows[0].userid,
+                username: rows[0].username,
+                sectionidOrder: fromIntCSV(rows[0].sectionidOrder),
+                sections: []
+            };
 
-            // do this weird string manipulation to avoid risk of sql injection
-            const items = await this.db.query(`
-                SELECT itemid, itemname, slug, url, sectionid
-                FROM Item
-                WHERE sectionid in (${sectionidOrder.map(x => '?').join(',')})
-            `, sectionidOrder);
+            const groupedBySectionid = groupBy('sectionid', rows);
 
-            // group items by sectionid
-            const groupedItems = groupBy('sectionid', items);
+            for (let i = 0, len = list.sectionidOrder.length; i < len; i++) {
+                const sectionid = list.sectionidOrder[i];
+                const itemList = groupedBySectionid[`${sectionid}`]; // int to str
+                const sectionname = itemList[0].sectionname;
+                const sectionslug = itemList[0].sectionslug;
+                const itemidOrder = fromIntCSV(itemList[0].itemidOrder); // grab itemidOrder from first item
 
-            // create list
-            let list = undefined;
-            sectionidOrder.map(sectionid => {
-                const section = sections.find(section => section.sectionid === sectionid);
-                if (!list) {
-                    list = {
-                        // these are List properties *not* Section properties
-                        username: section.username,
-                        userid: section.userid,
-                        listid: section.listid,
-                        listname: section.listname,
-                        slug: section.slug,
-                        sectionidOrder: section.sectionidOrder,
-                        date_created: section.date_created,
-                        date_updated: section.date_updated,
-                        sections: []
-                    };
+                // iterate items
+                const items = [];
+                for (let j = 0, len = itemidOrder.length; j < len; j++) {
+                    const itemid = itemidOrder[j];
+                    const idx = itemList.findIndex(i => i.itemid === itemid);
+                    const tempItem = itemList[idx];
+                    itemList.splice(idx, 1); // remove index for next search
+
+                    items.push({
+                        itemid: tempItem.itemid,
+                        itemname: tempItem.itemname,
+                        sectionid: tempItem.sectionid,
+                        slug: tempItem.slug,
+                        url: tempItem.url
+                    });
                 }
 
-                const itemidOrder = fromIntCSV(section.itemidOrder);
-                const items = itemidOrder.map(id =>
-                    groupedItems[section.sectionid].find(item => item.itemid === id)
-                );
-
-                list.sections = [...list.sections, {
+                const section = {
+                    sectionid: sectionid,
+                    sectionname: sectionname,
+                    slug: sectionslug,
                     listid: list.listid,
-                    sectionid: section.sectionid,
-                    sectionname: section.sectionname,
-                    itemidOrder: section.itemidOrder,
-                    items
-                }];
-            });
+                    itemidOrder: itemidOrder,
+                    items: items
+                };
+
+                list.sections.push(section);
+            }
 
             typecheck({ object: list });
             return list;
         } catch(e) {
+            console.error(e);
             throw Error('Could not retrieve items for list.');
         }
     },
