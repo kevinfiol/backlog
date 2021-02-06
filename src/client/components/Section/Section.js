@@ -9,7 +9,7 @@ const Section = ({ section }, children) =>
         ),
 
         m('table',
-            m('tbody.item-list',
+            m('tbody.item-list', { id: section.sectionid },
                 children
             )
         )

@@ -15,7 +15,7 @@ const Item = ({ item, itemPosition, itemState, dnd }) => {
 
     return [
         m('tr.item', {
-
+            id: item.itemid // IMPORTANT; necessary for SortableJS to collect item ids and create new sort order
         },
             (!isEditing && !isRemoving) && [
                 m('td.item-handle', isUserMakingChanges ? null : m('i.handle', 'o')),

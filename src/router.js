@@ -23,5 +23,6 @@ router.get('/api/list/getFullList/', ListController.getFullList);
 router.post('/api/list/addItem/', ListController.addItem);
 router.post('/api/list/editItem/', ListController.editItem);
 router.post('/api/list/removeItem/', ListController.removeItem);
+router.post('/api/list/resortItems/', ListController.resortItems);
 
 export default router;

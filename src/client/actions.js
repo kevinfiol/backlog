@@ -107,13 +107,17 @@ export const removeItem = (state, { itemid, sectionid }) => [
     })
 ];
 
-export const resortItems = (state, props) => [
+export const resortItems = (state, { sectionid, newItemOrder }) => [
     state,
-    [
-        () => {
-            console.log(state, props);
+    http({
+        method: 'POST',
+        url: '/api/list/resortItems',
+        params: { newItemOrder, sectionid },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
         }
-    ]
+    })
 ];
 
 // DOM-y Effects
@@ -132,28 +136,25 @@ export const mountSortables = (state) => [
         // mount SortableJS elements
         Sortable.mount(new MultiDrag());
         for (let itemList of document.getElementsByClassName('item-list')) {
-            Sortable.create(itemList, {
+            let sortable;
+            sortable = Sortable.create(itemList, {
                 animation: 100,
                 multiDrag: true,
                 selectedClass: 'sortablejs__item--selected',
                 handle: '.handle',
                 onEnd: function(event) {
-                    // deselect selected items
-                    for (let i in event.items) {
-                        Sortable.utils.deselect(event.items[i]);
+                    // grab sectionid from dom
+                    const sectionid = parseInt(event.srcElement.id);
+                    const itemEls = event.srcElement.children;
+                    let newItemOrder = [];
+
+                    for (let itemEl of itemEls) {
+                        newItemOrder.push(itemEl.id);
                     }
 
-                    const movedItems = [];
+                    newItemOrder = newItemOrder.join(',');
 
-                    if (event.oldIndicies && event.oldIndicies.length > 0) {
-                        for (let i = 0; i < event.oldIndicies.length; i++) {
-                            movedItems.push([event.oldIndicies[i].index, event.newIndicies[i].index]);
-                        }
-                    } else {
-                        movedItems.push([event.oldIndex, event.newIndex]);
-                    }
-
-                    dispatch(resortItems, { movedItems });
+                    dispatch(resortItems, { sectionid, newItemOrder });
                 }
             });
         }

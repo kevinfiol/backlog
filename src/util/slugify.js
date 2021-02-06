@@ -11,7 +11,7 @@ function slugify(text) {
             .replace(/-+$/, '') // Trim - from end of text
         ;
 
-        if (slug.length > 1)
+        if (slug.length > 0)
             return slug;
     }
 

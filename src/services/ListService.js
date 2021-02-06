@@ -157,7 +157,6 @@ const ListService = {
     },
 
     async editItem({ item }) {
-        // todo: have to modify this to account for editing review
         try {
             typecheck({ object: item });
 

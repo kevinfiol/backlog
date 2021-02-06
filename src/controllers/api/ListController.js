@@ -87,3 +87,16 @@ export const removeItem = async function(req, res) {
         res.send(500, { message: 'Error occured. Unable to remove item.' });
     }
 };
+
+export const resortItems = async function(req, res) {
+    try {
+        let { newItemOrder, sectionid } = req.body;
+        typecheck({ string: newItemOrder, number: sectionid });
+
+        let result = await ListService.updateItemOrder({ sectionid, itemidOrder: newItemOrder });
+        res.send(200);
+    } catch(e) {
+        console.error(e);
+        res.send(500, { message: 'Error occurred. Unabel to resort items.' });
+    }
+};
