@@ -78,7 +78,7 @@ const ListService = {
                     ':listid': listid
                 }),
 
-                // // get Items
+                // get Items
                 this.db.query(`
                     SELECT Item.itemid, Item.itemname, Item.slug, Item.url, Item.sectionid
                     FROM Item
