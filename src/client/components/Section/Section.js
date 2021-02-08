@@ -1,14 +1,14 @@
 import m from '../../m.js';
 import SectionControls from './SectionControls.js';
 
-const Section = ({ section }, children) => 
+const Section = ({ section, isSortingSections }, children) => 
     m('div.section',
         m('header.section-header',
             m('h2', section.sectionname),
-            m(SectionControls)
+            !isSortingSections && m(SectionControls)
         ),
 
-        m('table',
+        m('table.item-table',
             m('tbody.item-list', { id: section.sectionid },
                 children
             )

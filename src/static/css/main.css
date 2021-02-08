@@ -46,15 +46,33 @@ i {
 i.add { background-image: url('/assets/add.png'); }
 i.edit { background-image: url('/assets/edit.png'); }
 i.remove { background-image: url('/assets/remove.png'); }
+i.delete { background-image: url('/assets/delete.png'); }
+i.sort { background-image: url('/assets/sort.png'); }
 i.save { background-image: url('/assets/save.png'); }
 i.cancel { background-image: url('/assets/cancel.png'); }
+i.move { background-image: url('/assets/move.png'); height: 18px; width: 18px; }
+
+/*Buttons*/
+button.item-control, button.section-control, button.list-control {
+    padding: 0.3rem;
+    margin-right: 0.4rem;
+    font-size: 0.8em;
+    z-index: 9;
+}
 
 /*List*/
+.list-controls {
+    display: inline-block;
+    z-index: 9;
+}
+
 /*Item*/
 .item {
     height: 50px;
     width: 100%;
 }
+
+.item-table { margin: 0 0; }
 
 .item-name, .item-data {
     width: 30%;
@@ -75,13 +93,6 @@ i.cancel { background-image: url('/assets/cancel.png'); }
     opacity: 0;
 }
 
-button.item-control {
-    padding: 0.3rem;
-    margin-right: 0.4rem;
-    font-size: 0.8em;
-    z-index: 9;
-}
-
 .item:hover .item-controls, .item-controls:hover { opacity: 1; }
 
 /*Section*/
@@ -89,13 +100,19 @@ header.section-header > h2 {
     display: inline-block;
 }
 
+.section-header:hover .section-controls, .section-controls:hover { opacity: 1; }
+
 .section-controls {
     display: inline-block;
     z-index: 9;
-    margin-left: 0.6rem;
+    margin-left: 1rem;
+}
+
+.section-controls:not(.is-user-making-changes) {
+    opacity: 0;
 }
 
 /*SortableJS*/
 .sortablejs__item--selected {
-    border: 1px solid red;
+    box-shadow: inset 0px 0px 1px 1px #7676a6;
 }

@@ -31,6 +31,7 @@ export const logout = async function(req, res) {
         // destroy session & clear session id cookie
         req.session.destroy();
         res.setCookie('connect.sid', '', { expires: 0 });
+        res.clearSessionCookie();
         res.render('logout.ejs');
     } else {
         res.redirect('/');

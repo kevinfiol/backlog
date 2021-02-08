@@ -90,13 +90,20 @@ export const removeItem = async function(req, res) {
 
 export const resortItems = async function(req, res) {
     try {
-        let { newItemOrder, sectionid } = req.body;
-        typecheck({ string: newItemOrder, number: sectionid });
+        let { sectionOrders } = req.body;
+        typecheck({ object: sectionOrders });
 
-        let result = await ListService.updateItemOrder({ sectionid, itemidOrder: newItemOrder });
+        const promises = [];
+
+        for (let [sectionid, itemidOrder] of Object.entries(sectionOrders)) {
+            promises.push(ListService.updateItemOrder({ sectionid: parseInt(sectionid), itemidOrder }));
+        }
+
+        await Promise.all(promises);
+
         res.send(200);
     } catch(e) {
         console.error(e);
-        res.send(500, { message: 'Error occurred. Unabel to resort items.' });
+        res.send(500, { message: 'Error occurred. Unable to resort items.' });
     }
 };

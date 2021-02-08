@@ -8,7 +8,7 @@ const RemoveItemControls = ({ removeForm }) => [
             sectionid: removeForm.sectionid
         }]
     },
-        m('i.remove'),
+        m('i.delete'),
         'confirm'
     ),
 

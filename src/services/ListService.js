@@ -16,7 +16,7 @@ const ListService = {
             typecheck({ array: lists });
             return lists;
         } catch(e) {
-            throw Error('Could not retrieve lists for user.');
+            throw Error('Could not retrieve lists for user.', e);
         }
     },
 
@@ -38,7 +38,7 @@ const ListService = {
             typecheck({ array: rows });
             return rows;
         } catch(e) {
-            throw Error('Could not retrieve List by slug and username.')
+            throw Error('Could not retrieve List by slug and username.', e)
         }
     },
 
@@ -50,7 +50,7 @@ const ListService = {
             typecheck({ object: section });
             return section;
         } catch(e) {
-            throw Error('Could not retrieve Section by sectionid.');
+            throw Error('Could not retrieve Section by sectionid.', e);
         }
     },
 
@@ -127,8 +127,7 @@ const ListService = {
             typecheck({ object: list });
             return list;
         } catch(e) {
-            console.error(e);
-            throw Error('Could not retrieve items for list.');
+            throw Error('Could not retrieve items for list.', e);
         }
     },
 
@@ -146,13 +145,10 @@ const ListService = {
                 ':sectionid': parseInt(sectionid)
             });
 
-            if (result.changes < 1)
-                throw Error('Was not able to make changes to database.');
-
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error(`Unable to add new Item. ${e.message}`);
+            throw Error('Unable to add new Item.', e);
         }
     },
 
@@ -166,13 +162,10 @@ const ListService = {
                 slug: slugify(item.itemname)
             }, { itemid: item.itemid });
 
-            if (result.changes < 1)
-                throw Error('Was not able to make changes to database.');
-
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error(`Unable to edit Item. ${e.message}`);
+            throw Error('Unable to edit Item.', e);
         }
     },
 
@@ -187,13 +180,10 @@ const ListService = {
                 ':itemid': itemid
             });
 
-            if (result.changes < 1)
-                throw Error('Was not able to make changes to database.');
-
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error(`Unable to remove Item. ${e.message}`);
+            throw Error('Unable to remove Item.', e);
         }
     },
 
@@ -210,13 +200,30 @@ const ListService = {
                 ':sectionid': sectionid
             });
 
-            if (result.changes < 1)
-                throw Error('Was not able to update itemidOrder');
+            typecheck({ object: result });
+            return result;
+        } catch(e) {
+            throw Error('Unable to update Section.', e);
+        }
+    },
+
+    async updateSectionOrder({ listid, sectionidOrder }) {
+        try {
+            typecheck({ number: listid, string: sectionidOrder });
+
+            const result = await this.db.run(`
+                UPDATE List
+                SET sectionidOrder = :sectionidOrder
+                WHERE listid = :listid
+            `, {
+                ':sectionidOrder': sectionidOrder.trim(),
+                ':listid': listid
+            });
 
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error(`Unable to update Section. ${e.message}`);
+            throw Error('Unable to update List.', e);
         }
     }
 };

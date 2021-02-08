@@ -91,20 +91,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-5hYdAkZlcG8tOLujVDTgCT+uPX0VnpAH28gWsLfzpXYm7wP6mp5Q/gYyR7YQ0cKVJcXJnl3j2kpBan13PtQf6w==
-  /asn1.js-rfc2560/5.0.1:
-    dependencies:
-      asn1.js-rfc5280: 3.0.0
-    dev: false
-    peerDependencies:
-      asn1.js: ^5.0.0
-    resolution:
-      integrity: sha512-1PrVg6kuBziDN3PGFmRk3QrjpKvP9h/Hv5yMrFZvC1kpzP6dQRzf5BpKstANqHBkaOUmTpakJWhicTATOA/SbA==
-  /asn1.js-rfc5280/3.0.0:
-    dependencies:
-      asn1.js: 5.4.1
-    dev: false
-    resolution:
-      integrity: sha512-Y2LZPOWeZ6qehv698ZgOGGCZXBQShObWnGthTrIFlIQjuV1gg2B8QOhWFRExq/MR1VnPpIIe7P9vX2vElxv+Pg==
   /asn1.js/5.4.1:
     dependencies:
       bn.js: 4.11.9
@@ -382,7 +368,7 @@ packages:
       integrity: sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==
   /fs-extra/8.1.0:
     dependencies:
-      graceful-fs: 4.2.4
+      graceful-fs: 4.2.5
       jsonfile: 4.0.0
       universalify: 0.1.2
     dev: false
@@ -445,8 +431,13 @@ packages:
       integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
   /graceful-fs/4.2.4:
     dev: false
+    optional: true
     resolution:
       integrity: sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
+  /graceful-fs/4.2.5:
+    dev: false
+    resolution:
+      integrity: sha512-kBBSQbz2K0Nyn+31j/w36fUfxkBW9/gfwRWdUY1ULReH3iokVJgddZAFcD1D0xlgTmFxJCbUkUclAlc6/IDJkw==
   /har-schema/2.0.0:
     dev: false
     engines:
@@ -581,7 +572,7 @@ packages:
   /jsonfile/4.0.0:
     dev: false
     optionalDependencies:
-      graceful-fs: 4.2.4
+      graceful-fs: 4.2.5
     resolution:
       integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=
   /jsprim/1.4.1:
@@ -596,14 +587,14 @@ packages:
     optional: true
     resolution:
       integrity: sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=
-  /kruptein/2.2.1:
+  /kruptein/2.2.3:
     dependencies:
-      asn1.js-rfc2560: 5.0.1
+      asn1.js: 5.4.1
     dev: false
     engines:
       node: '>6'
     resolution:
-      integrity: sha512-eT168L5ZN3Qu6VvFQSNuImysxriKj+u0OAOw7b8+a99xayPxUKwGfZF2hjIdgWuBt9/n7SSmLs5mGwJa76rNtA==
+      integrity: sha512-BTwprBPTzkFT9oTugxKd3WnWrX630MqUDsnmBuoa98eQs12oD4n4TeI0GbpdGcYn/73Xueg2rfnw+oK4dovnJg==
   /mergerino/0.4.0:
     dev: false
     resolution:
@@ -996,7 +987,7 @@ packages:
     dependencies:
       bagpipe: 0.3.5
       fs-extra: 8.1.0
-      kruptein: 2.2.1
+      kruptein: 2.2.3
       object-assign: 4.1.1
       retry: 0.12.0
       write-file-atomic: 3.0.3
@@ -1258,7 +1249,7 @@ specifiers:
   microh: ^0.1.0
   node-watch: ^0.7.1
   polka: ^1.0.0-next.11
-  session-file-store: ^1.4.0
+  session-file-store: ^1.5.0
   sirv: ^1.0.6
   sortablejs: ^1.13.0
   sqlite: ^4.0.14

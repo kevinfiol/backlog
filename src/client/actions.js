@@ -107,12 +107,12 @@ export const removeItem = (state, { itemid, sectionid }) => [
     })
 ];
 
-export const resortItems = (state, { sectionid, newItemOrder }) => [
+export const resortItems = (state, { sectionOrders }) => [
     state,
     http({
         method: 'POST',
         url: '/api/list/resortItems',
-        params: { newItemOrder, sectionid },
+        params: { sectionOrders },
         error: (state, error) => {
             console.error(error);
             return { ...state, error };
@@ -138,23 +138,28 @@ export const mountSortables = (state) => [
         for (let itemList of document.getElementsByClassName('item-list')) {
             let sortable;
             sortable = Sortable.create(itemList, {
+                group: 'shared-items', // items can be moved between sections
                 animation: 100,
                 multiDrag: true,
                 selectedClass: 'sortablejs__item--selected',
-                handle: '.handle',
+                handle: '.item-handle',
                 onEnd: function(event) {
-                    // grab sectionid from dom
-                    const sectionid = parseInt(event.srcElement.id);
-                    const itemEls = event.srcElement.children;
-                    let newItemOrder = [];
+                    const getNewItemOrderFromDOM = function(listID, listChildren) {
+                        sectionOrders[listID] = [];
 
-                    for (let itemEl of itemEls) {
-                        newItemOrder.push(itemEl.id);
-                    }
+                        for (let itemEl of listChildren) {
+                            sectionOrders[listID].push(itemEl.id);
+                        }
 
-                    newItemOrder = newItemOrder.join(',');
+                        sectionOrders[listID] = sectionOrders[listID].join(',');
+                    };
 
-                    dispatch(resortItems, { sectionid, newItemOrder });
+                    const sectionOrders = {};
+
+                    getNewItemOrderFromDOM(event.from.id, event.from.children);
+                    if (event.to.id !== event.from.id) getNewItemOrderFromDOM(event.to.id, event.to.children);
+
+                    dispatch(resortItems, { sectionOrders });
                 }
             });
         }

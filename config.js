@@ -17,6 +17,7 @@ else
             filename: './backlog.db'
         },
         sessionConfig: {
+            name: 'my.connect.sid',
             secret: 'not-so-secret-secret',
             resave: false,
             saveUninitialized: false,
