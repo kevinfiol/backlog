@@ -58,68 +58,65 @@ const ListService = {
         try {
             typecheck({ number: listid });
 
-            const rows = await this.db.query(`
-                SELECT
-                    User.username,
-                    List.*, List.slug AS listslug,
-                    Section.sectionid, Section.sectionname, Section.itemidOrder, Section.slug AS sectionslug,
-                    Item.*
-                FROM Item
-                LEFT JOIN Section ON Item.sectionid = Section.sectionid
-                LEFT JOIN List ON Section.listid = List.listid
-                LEFT JOIN User ON User.userid = List.userid
-                WHERE List.listid = :listid
-            `, {
-                ':listid': listid
-            });
+            const [listRow, sectionRows, itemRows] = await Promise.all([
+                // get List & User data
+                this.db.query(`
+                    SELECT DISTINCT User.username, List.*
+                    FROM List
+                    LEFT JOIN User ON User.userid = List.userid
+                    WHERE List.listid = :listid
+                `, {
+                    ':listid': listid
+                }),
 
-            // retrieve list metadata
-            const list = {
-                listid: rows[0].listid,
-                listname: rows[0].listname,
-                slug: rows[0].listslug,
-                date_created: rows[0].date_created,
-                date_updated: rows[0].date_updated,
-                userid: rows[0].userid,
-                username: rows[0].username,
-                sectionidOrder: fromIntCSV(rows[0].sectionidOrder),
-                sections: []
-            };
+                // get Sections
+                this.db.query(`
+                    SELECT Section.*
+                    FROM Section
+                    WHERE Section.listid = :listid
+                `, {
+                    ':listid': listid
+                }),
 
-            const groupedBySectionid = groupBy('sectionid', rows);
+                // // get Items
+                this.db.query(`
+                    SELECT Item.itemid, Item.itemname, Item.slug, Item.url, Item.sectionid
+                    FROM Item
+                    LEFT JOIN Section ON Item.sectionid = Section.sectionid
+                    LEFT JOIN List ON List.listid = Section.listid
+                    WHERE List.listid = :listid
+                `, {
+                    ':listid': listid
+                })
+            ]);
+
+            if (listRow.length < 1)
+                throw Error('No List rows were retrieved from the database.');
+
+            const list = listRow[0];
+            list.sectionidOrder = fromIntCSV(list.sectionidOrder); // parse sectionidOrder, e.g., '1,2' => [1, 2]
+            list.sections = []; // init sections list
+
+            const groupedItems = groupBy('sectionid', itemRows);
+            const groupedSections = groupBy('sectionid', sectionRows);
 
             for (let i = 0, len = list.sectionidOrder.length; i < len; i++) {
                 const sectionid = list.sectionidOrder[i];
-                const itemList = groupedBySectionid[`${sectionid}`]; // int to str
-                const sectionname = itemList[0].sectionname;
-                const sectionslug = itemList[0].sectionslug;
-                const itemidOrder = fromIntCSV(itemList[0].itemidOrder); // grab itemidOrder from first item
+                const itemList = groupedItems[sectionid] || [];
+
+                // section metadata
+                const section = groupedSections[sectionid][0];
+                section.itemidOrder = fromIntCSV(section.itemidOrder);
+                section.items = [];
 
                 // iterate items
-                const items = [];
-                for (let j = 0, len = itemidOrder.length; j < len; j++) {
-                    const itemid = itemidOrder[j];
+                for (let j = 0, len = section.itemidOrder.length; j < len; j++) {
+                    const itemid = section.itemidOrder[j];
                     const idx = itemList.findIndex(i => i.itemid === itemid);
-                    const tempItem = itemList[idx];
+                    const item = itemList[idx];
                     itemList.splice(idx, 1); // remove index for next search
-
-                    items.push({
-                        itemid: tempItem.itemid,
-                        itemname: tempItem.itemname,
-                        sectionid: tempItem.sectionid,
-                        slug: tempItem.slug,
-                        url: tempItem.url
-                    });
+                    section.items.push(item);
                 }
-
-                const section = {
-                    sectionid: sectionid,
-                    sectionname: sectionname,
-                    slug: sectionslug,
-                    listid: list.listid,
-                    itemidOrder: itemidOrder,
-                    items: items
-                };
 
                 list.sections.push(section);
             }
@@ -127,6 +124,7 @@ const ListService = {
             typecheck({ object: list });
             return list;
         } catch(e) {
+            console.error(e);
             throw Error('Could not retrieve items for list.', e);
         }
     },
@@ -166,6 +164,21 @@ const ListService = {
             return result;
         } catch(e) {
             throw Error('Unable to edit Item.', e);
+        }
+    },
+
+    async updateItemSectionid({ itemid, sectionid }) {
+        try {
+            typecheck({ numbers: [itemid, sectionid] });
+
+            const result = await this.db.update('Item', {
+                sectionid: sectionid
+            }, { itemid: itemid });
+
+            typecheck({ object: result });
+            return result;
+        } catch(e) {
+            throw Error('Unable to update sectionid for Item.', e);
         }
     },
 

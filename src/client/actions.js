@@ -107,12 +107,12 @@ export const removeItem = (state, { itemid, sectionid }) => [
     })
 ];
 
-export const resortItems = (state, { sectionOrders }) => [
+export const sortItems = (state, { sectionOrders, moved }) => [
     state,
     http({
         method: 'POST',
-        url: '/api/list/resortItems',
-        params: { sectionOrders },
+        url: '/api/list/sortItems',
+        params: { sectionOrders, moved },
         error: (state, error) => {
             console.error(error);
             return { ...state, error };
@@ -155,11 +155,21 @@ export const mountSortables = (state) => [
                     };
 
                     const sectionOrders = {};
+                    const moved = {};
 
                     getNewItemOrderFromDOM(event.from.id, event.from.children);
-                    if (event.to.id !== event.from.id) getNewItemOrderFromDOM(event.to.id, event.to.children);
 
-                    dispatch(resortItems, { sectionOrders });
+                    if (event.to.id !== event.from.id) {
+                        // grab item order of the item list where items were moved
+                        getNewItemOrderFromDOM(event.to.id, event.to.children);
+
+                        // account for moved items between sections
+                        // necessary to update item's `sectionid` foreign keys
+                        moved.toSectionid = event.to.id;
+                        moved.itemids = event.clones.length > 0 ? event.clones.map(itemEl => itemEl.id) : [event.clone.id];
+                    }
+
+                    dispatch(sortItems, { sectionOrders, moved });
                 }
             });
         }

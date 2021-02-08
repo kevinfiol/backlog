@@ -88,22 +88,34 @@ export const removeItem = async function(req, res) {
     }
 };
 
-export const resortItems = async function(req, res) {
+export const sortItems = async function(req, res) {
     try {
-        let { sectionOrders } = req.body;
-        typecheck({ object: sectionOrders });
+        let { sectionOrders, moved } = req.body;
+        typecheck({ objects: [sectionOrders, moved] });
 
         const promises = [];
 
+        // update itemidOrders for Sections
         for (let [sectionid, itemidOrder] of Object.entries(sectionOrders)) {
             promises.push(ListService.updateItemOrder({ sectionid: parseInt(sectionid), itemidOrder }));
         }
 
-        await Promise.all(promises);
+        if (moved.toSectionid !== undefined && moved.itemids !== undefined && moved.itemids.length > 0) {
+            // update sectionid foreign keys for items that were moved to a new section
+            for (let itemid of moved.itemids) {
+                promises.push(
+                    ListService.updateItemSectionid({
+                        itemid: parseInt(itemid),
+                        sectionid: parseInt(moved.toSectionid)
+                    })
+                );
+            }
+        }
 
+        await Promise.all(promises);
         res.send(200);
     } catch(e) {
         console.error(e);
-        res.send(500, { message: 'Error occurred. Unable to resort items.' });
+        res.send(500, { message: 'Error occurred. Unable to sort items.' });
     }
 };
