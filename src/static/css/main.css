@@ -64,6 +64,7 @@ button.item-control, button.section-control {
 .list-controls {
     display: inline-block;
     z-index: 9;
+    max-height: 32.38px;
 }
 
 .list-control, input.list-control { display: inline; }

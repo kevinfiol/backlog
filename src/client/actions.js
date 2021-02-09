@@ -33,12 +33,12 @@ export const resetRemoveItemForm = state => [setState, {
     }
 }];
 
-export const getFullList = (state, { listid }) => [
+export const getFullList = state => [
     state,
     http({
         method: 'GET',
         url: '/api/list/getFullList/',
-        params: { listid },
+        params: { listid: state.list.listid },
         action: (state, { list }) => {
             console.log('new list...', list);
             return { ...state, list };
@@ -57,7 +57,7 @@ export const addItem = (state, { item, sectionid, itemPosition }) => [
         url: '/api/list/addItem/',
         params: { sectionid, itemPosition, item },
         action: () => {
-            return [getFullList, { listid: state.list.listid }];
+            return [getFullList];
         },
         error: (state, error) => {
             console.error(error);
@@ -76,7 +76,7 @@ export const editItem = (state, { item }) => [
         url: '/api/list/editItem/',
         params: { item },
         action: () => {
-            return [getFullList, { listid: state.list.listid }];
+            return [getFullList];
         },
         error: (state, error) => {
             console.error(error);
@@ -95,7 +95,7 @@ export const removeItem = (state, { itemid, sectionid }) => [
         url: '/api/list/removeItem',
         params: { itemid, sectionid },
         action: () => {
-            return [getFullList, { listid: state.list.listid }];
+            return [getFullList];
         },
         error: (state, error) => {
             console.error(error);
@@ -140,7 +140,7 @@ export const removeSection = (state, { sectionid }) => [
         url: '/api/list/removeSection',
         params: { sectionid },
         action: () => {
-            return [getFullList, { listid: state.list.listid }];
+            return [getFullList];
         },
         error: (state, error) => {
             console.error(error);
@@ -156,7 +156,7 @@ export const addSection = (state, { sectionname }) => [
         url: '/api/list/addSection',
         params: { sectionname, listid: state.list.listid },
         action: () => {
-            return [getFullList, { listid: state.list.listid }];
+            return [getFullList];
         },
         error: (state, error) => {
             console.error(error);
