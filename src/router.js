@@ -20,9 +20,15 @@ router.get('/:username/:listSlug', UserController.list);
 
 // ListController
 router.get('/api/list/getFullList/', ListController.getFullList);
+router.post('/api/list/removeList', ListController.removeList);
+
 router.post('/api/list/addItem/', ListController.addItem);
 router.post('/api/list/editItem/', ListController.editItem);
 router.post('/api/list/removeItem/', ListController.removeItem);
 router.post('/api/list/sortItems/', ListController.sortItems);
+
+router.post('/api/list/sortSections/', ListController.sortSections);
+router.post('/api/list/removeSection/', ListController.removeSection);
+router.post('/api/list/renameSection/', ListController.renameSection);
 
 export default router;

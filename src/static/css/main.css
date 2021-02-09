@@ -112,6 +112,12 @@ header.section-header > h2 {
     opacity: 0;
 }
 
+.section-handle {
+    display: inline;
+    vertical-align: text-bottom;
+    margin-right: 0.4rem;
+}
+
 /*SortableJS*/
 .sortablejs__item--selected {
     box-shadow: inset 0px 0px 1px 1px #7676a6;

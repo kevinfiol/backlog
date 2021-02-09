@@ -120,6 +120,35 @@ export const sortItems = (state, { sectionOrders, moved }) => [
     })
 ];
 
+export const sortSections = (state, { sectionidOrder }) => [
+    state,
+    http({
+        method: 'POST',
+        url: '/api/list/sortSections',
+        params: { listid: state.list.listid, sectionidOrder },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
+        }
+    })
+];
+
+export const removeSection = (state, { sectionid }) => [
+    state,
+    http({
+        method: 'POST',
+        url: '/api/list/removeSection',
+        params: { sectionid },
+        action: () => {
+            return [getFullList, { listid: state.list.listid }];
+        },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
+        }
+    })
+];
+
 // DOM-y Effects
 export const preventDefault = action => (state, event) => [
     state,
@@ -131,9 +160,39 @@ export const preventDefault = action => (state, event) => [
     ]
 ];
 
-export const mountSortables = (state) => [
+export const mountSortableSections = state => [
     (dispatch) => requestAnimationFrame(() => {
-        // mount SortableJS elements
+        // mount SortableJS on List, allowing sorting of sections
+        const sortable = Sortable.create(document.getElementById('list'), {
+            animation: 100,
+            multiDrag: false,
+            handle: '.section-handle',
+            draggable: '.section',
+            onChoose: function(event) {
+                dispatch(setState, { showItems: false }); // hide items while sorting sections
+            },
+            onUnchoose: function(event) {
+                dispatch(setState, { showItems: true });
+            },
+            onEnd: function(event) {
+                const sectionEls = document.getElementById('list').getElementsByClassName('section');
+                const sectionids = [];
+
+                for (let sectionEl of sectionEls) {
+                    sectionids.push(sectionEl.id);
+                }
+
+                const sectionidOrder = sectionids.join(',');
+                dispatch(sortSections, { sectionidOrder });
+                dispatch(setState, { showItems: true });
+            }
+        });
+    })
+]; 
+
+export const mountSortableItems = state => [
+    (dispatch) => requestAnimationFrame(() => {
+        // mount SortableJS on Item Lists
         Sortable.mount(new MultiDrag());
         for (let itemList of document.getElementsByClassName('item-list')) {
             let sortable;

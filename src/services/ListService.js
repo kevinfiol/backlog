@@ -16,7 +16,7 @@ const ListService = {
             typecheck({ array: lists });
             return lists;
         } catch(e) {
-            throw Error('Could not retrieve lists for user.', e);
+            throw Error('Could not retrieve lists for user: ' + e);
         }
     },
 
@@ -38,7 +38,7 @@ const ListService = {
             typecheck({ array: rows });
             return rows;
         } catch(e) {
-            throw Error('Could not retrieve List by slug and username.', e)
+            throw Error('Could not retrieve List by slug and username: ' + e)
         }
     },
 
@@ -50,7 +50,7 @@ const ListService = {
             typecheck({ object: section });
             return section;
         } catch(e) {
-            throw Error('Could not retrieve Section by sectionid.', e);
+            throw Error('Could not retrieve Section by sectionid: ' + e);
         }
     },
 
@@ -124,8 +124,7 @@ const ListService = {
             typecheck({ object: list });
             return list;
         } catch(e) {
-            console.error(e);
-            throw Error('Could not retrieve items for list.', e);
+            throw Error('Could not retrieve items for list: ' + e);
         }
     },
 
@@ -146,7 +145,7 @@ const ListService = {
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error('Unable to add new Item.', e);
+            throw Error('Unable to add new Item: ' + e);
         }
     },
 
@@ -163,7 +162,7 @@ const ListService = {
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error('Unable to edit Item.', e);
+            throw Error('Unable to edit Item: ' + e);
         }
     },
 
@@ -178,7 +177,7 @@ const ListService = {
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error('Unable to update sectionid for Item.', e);
+            throw Error('Unable to update sectionid for Item: ' + e);
         }
     },
 
@@ -196,7 +195,7 @@ const ListService = {
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error('Unable to remove Item.', e);
+            throw Error('Unable to remove Item: ' + e);
         }
     },
 
@@ -216,7 +215,46 @@ const ListService = {
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error('Unable to update Section.', e);
+            throw Error('Unable to update Section: ' + e);
+        }
+    },
+
+    async removeSection({ sectionid }) {
+        try {
+            typecheck({ number: sectionid });
+
+            // must update sectionidOrder for given List
+            const [list] = await this.db.query(`
+                SELECT List.listid, List.sectionidOrder
+                FROM List
+                LEFT JOIN Section ON List.listid = Section.listid
+                WHERE Section.sectionid = :sectionid
+            `, {
+                ':sectionid': sectionid
+            });
+
+            const sectionids = list.sectionidOrder.split(',').map(sectionid => parseInt(sectionid));
+            const idx = sectionids.findIndex(i => i === sectionid);
+            sectionids.splice(idx, 1);
+            const sectionidOrder = sectionids.join(',');
+
+            await this.db.exec(`
+                BEGIN TRANSACTION;
+
+                DELETE FROM Section
+                WHERE sectionid = ${sectionid};
+
+                DELETE FROM Item
+                WHERE sectionid = ${sectionid};
+
+                UPDATE List
+                SET sectionidOrder = '${sectionidOrder}'
+                WHERE listid = ${list.listid};
+
+                COMMIT;
+            `);
+        } catch(e) {
+            throw Error('Unable to remove Section: ' + e);
         }
     },
 
@@ -236,7 +274,7 @@ const ListService = {
             typecheck({ object: result });
             return result;
         } catch(e) {
-            throw Error('Unable to update List.', e);
+            throw Error('Unable to update List: ' + e);
         }
     }
 };

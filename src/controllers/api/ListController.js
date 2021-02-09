@@ -119,3 +119,29 @@ export const sortItems = async function(req, res) {
         res.send(500, { message: 'Error occurred. Unable to sort items.' });
     }
 };
+
+export const removeSection = async function(req, res) {
+    try {
+        let { sectionid } = req.body;
+        typecheck({ number: sectionid });
+
+        await ListService.removeSection({ sectionid });
+        res.send(200);
+    } catch(e) {
+        console.error(e);
+        res.send(500, { message: 'Error occured. Unable to remove section.' });
+    }
+};
+
+export const sortSections = async function(req, res) {
+    try {
+        let { listid, sectionidOrder } = req.body;
+        typecheck({ number: listid, string: sectionidOrder });
+
+        await ListService.updateSectionOrder({ listid, sectionidOrder });
+        res.send(200);
+    } catch(e) {
+        console.error(e);
+        res.send(500, { message: 'Error occured. Unable to sort sections.' });
+    }
+};

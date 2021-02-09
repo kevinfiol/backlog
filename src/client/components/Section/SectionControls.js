@@ -1,6 +1,7 @@
 import m from '../../m.js';
+import { removeSection } from '../../actions.js';
 
-const SectionControls = () => 
+const SectionControls = ({ sectionid }) => 
     m('div.section-controls',
         m('button.section-control', {
             onclick: undefined
@@ -10,7 +11,7 @@ const SectionControls = () =>
         ),
 
         m('button.section-control', {
-            onclick: undefined
+            onclick: [removeSection, { sectionid: sectionid }]
         },
             m('i.remove'),
             'remove'

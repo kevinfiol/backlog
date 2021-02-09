@@ -1,7 +1,7 @@
 import { app } from 'hyperapp';
 import m from './m.js';
 
-import { mountSortables } from './actions.js';
+import { mountSortableItems, mountSortableSections } from './actions.js';
 import ListControls from './components/List/ListControls.js';
 import Item from './components/Item/Item.js';
 import Section from './components/Section/Section.js';
@@ -16,11 +16,12 @@ const initialState = {
     list,
     error: null,
 
-    isSortingItems: false,
-    isSortingSections: false,
+    isSorting: false,
+    showItems: true,
 
     section: {
-        sectionid: null
+        sectionid: null,
+        sectionname: ''
     },
 
     item: {
@@ -48,21 +49,21 @@ const initialState = {
 
 const List = state => 
     m('div',
-        m(ListControls, { 
-            isSortingItems: state.isSortingItems,
-            isSortingSections: state.isSortingSections
-        }),
+        m(ListControls, { isSorting: state.isSorting }),
 
         state.list.sections.map(section =>
-            m(Section, { section, isSortingSections: state.isSortingSections },
-                // only show items when NOT sorting sections
-                !state.isSortingSections &&
+            m(Section, {
+                section,
+                isSorting: state.isSorting,
+                key: section.sectionid
+            },
+                state.showItems && 
                     section.items.map((item, index) =>
                         m(Item, {
                             item,
                             itemPosition: index,
                             itemState: state.item,
-                            isSortingItems: state.isSortingItems,
+                            isSorting: state.isSorting,
                             key: item.itemid
                         })
                     )
@@ -75,7 +76,8 @@ const List = state =>
 app({
     init: [
         initialState,
-        mountSortables()
+        mountSortableItems(),
+        mountSortableSections()
     ],
     view: List,
     node: LIST_CONTAINER

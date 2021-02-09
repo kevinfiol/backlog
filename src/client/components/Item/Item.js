@@ -7,8 +7,8 @@ import AddItemControls from './AddItemControls.js';
 import EditItemControls from './EditItemControls.js';
 import RemoveItemControls from './RemoveItemControls.js';
 
-const Item = ({ item, itemPosition, itemState, isSortingItems }) => {
-    const isUserMakingChanges = itemState.isAdding || itemState.isRemoving || itemState.isEditing || isSortingItems;
+const Item = ({ item, itemPosition, itemState, isSorting }) => {
+    const isUserMakingChanges = itemState.isAdding || itemState.isRemoving || itemState.isEditing || isSorting;
     const isAdding = itemState.isAdding && item.itemid === itemState.itemid;
     const isEditing = itemState.isEditing && item.itemid === itemState.itemid;
     const isRemoving = itemState.isRemoving && item.itemid === itemState.itemid;
@@ -18,7 +18,7 @@ const Item = ({ item, itemPosition, itemState, isSortingItems }) => {
             id: item.itemid // IMPORTANT; necessary for SortableJS to collect item ids and create new sort order
         },
             (!isEditing && !isRemoving) && [
-                isSortingItems ? m('td.item-handle', m('i.move')) : null,
+                isSorting && m('td.item-handle', m('i.move')),
                 m('td.item-name', item.itemname),
                 m('td.item-data', 'link & review'),
             ],
