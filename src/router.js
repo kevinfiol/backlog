@@ -28,6 +28,7 @@ router.post('/api/list/removeItem/', ListController.removeItem);
 router.post('/api/list/sortItems/', ListController.sortItems);
 
 router.post('/api/list/sortSections/', ListController.sortSections);
+router.post('/api/list/addSection', ListController.addSection);
 router.post('/api/list/removeSection/', ListController.removeSection);
 router.post('/api/list/renameSection/', ListController.renameSection);
 

@@ -8,6 +8,18 @@ const ListService = {
         this.db = db;
     },
 
+    async getList({ listid }) {
+        try {
+            typecheck({ number: listid });
+            const list = await this.db.get('List', { listid });
+
+            typecheck({ object: list });
+            return list;
+        } catch(e) {
+            throw Error('Could not retrieve list: ' + e);
+        }
+    },
+
     async getListsForUser({ userid }) {
         try {
             typecheck({ number: userid });
@@ -216,6 +228,27 @@ const ListService = {
             return result;
         } catch(e) {
             throw Error('Unable to update Section: ' + e);
+        }
+    },
+
+    async addSection({ listid, sectionname }) {
+        try {
+            typecheck({ number: listid });
+
+            const result = await this.db.run(`
+                INSERT INTO Section (sectionname, slug, listid, itemidOrder)
+                VALUES (:sectionname, :slug, :listid, :itemidOrder)
+            `, {
+                ':sectionname': sectionname.trim(),
+                ':slug': slugify(sectionname),
+                ':listid': parseInt(listid),
+                ':itemidOrder': ''
+            });
+
+            typecheck({ object: result });
+            return result;
+        } catch(e) {
+            throw Error('Unable to add Section: ' + e);
         }
     },
 

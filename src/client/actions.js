@@ -149,6 +149,32 @@ export const removeSection = (state, { sectionid }) => [
     })
 ];
 
+export const addSection = (state, { sectionname }) => [
+    state,
+    http({
+        method: 'POST',
+        url: '/api/list/addSection',
+        params: { sectionname, listid: state.list.listid },
+        action: () => {
+            return [getFullList, { listid: state.list.listid }];
+        },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
+        }
+    }),
+    action({
+        action: resetAddSectionForm
+    })
+];
+
+export const resetAddSectionForm = state => [setState, {
+    section: {
+        isAdding: false,
+        addForm: { sectionname: '' }
+    }
+}]
+
 // DOM-y Effects
 export const preventDefault = action => (state, event) => [
     state,

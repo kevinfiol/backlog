@@ -120,6 +120,31 @@ export const sortItems = async function(req, res) {
     }
 };
 
+export const addSection = async function(req, res) {
+    try {
+        let { sectionname, listid } = req.body;
+        typecheck({ string: sectionname, number: listid });
+
+        const [result, list] = await Promise.all([
+            ListService.addSection({ listid, sectionname }),
+            ListService.getList({ listid })
+        ]);
+
+        const newSectionID = result.lastID;
+        if (!list) throw Error('List does not exist.');
+
+        let sectionidOrder = fromIntCSV(list.sectionidOrder);
+        sectionidOrder.splice(0, 0, newSectionID);
+        sectionidOrder = sectionidOrder.join(',');
+
+        await ListService.updateSectionOrder({ listid, sectionidOrder });
+        res.send(200);
+    } catch(e) {
+        console.error(e);
+        res.send(500, { message: 'Error occured. Unable to add section.' });
+    }
+};
+
 export const removeSection = async function(req, res) {
     try {
         let { sectionid } = req.body;

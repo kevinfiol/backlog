@@ -21,7 +21,17 @@ const initialState = {
 
     section: {
         sectionid: null,
-        sectionname: ''
+        isAdding: false,
+        isRemoving: false,
+        isEditing: false,
+
+        editForm: {
+            sectionid: null,
+            sectionname: ''
+        },
+        addForm: {
+            sectionname: ''
+        }
     },
 
     item: {
@@ -49,7 +59,7 @@ const initialState = {
 
 const List = state => 
     m('div',
-        m(ListControls, { isSorting: state.isSorting }),
+        m(ListControls, { isSorting: state.isSorting, sectionState: state.section }),
 
         state.list.sections.map(section =>
             m(Section, {
