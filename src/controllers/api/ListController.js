@@ -88,38 +88,6 @@ export const removeItem = async function(req, res) {
     }
 };
 
-export const sortItems = async function(req, res) {
-    try {
-        let { sectionOrders, moved } = req.body;
-        typecheck({ objects: [sectionOrders, moved] });
-
-        const promises = [];
-
-        // update itemidOrders for Sections
-        for (let [sectionid, itemidOrder] of Object.entries(sectionOrders)) {
-            promises.push(ListService.updateItemOrder({ sectionid: parseInt(sectionid), itemidOrder }));
-        }
-
-        if (moved.toSectionid !== undefined && moved.itemids !== undefined && moved.itemids.length > 0) {
-            // update sectionid foreign keys for items that were moved to a new section
-            for (let itemid of moved.itemids) {
-                promises.push(
-                    ListService.updateItemSectionid({
-                        itemid: parseInt(itemid),
-                        sectionid: parseInt(moved.toSectionid)
-                    })
-                );
-            }
-        }
-
-        await Promise.all(promises);
-        res.send(200);
-    } catch(e) {
-        console.error(e);
-        res.send(500, { message: 'Error occurred. Unable to sort items.' });
-    }
-};
-
 export const addSection = async function(req, res) {
     try {
         let { sectionname, listid } = req.body;
@@ -158,15 +126,31 @@ export const removeSection = async function(req, res) {
     }
 };
 
-export const sortSections = async function(req, res) {
+export const updateListOrders = async function(req, res) {
     try {
-        let { listid, sectionidOrder } = req.body;
-        typecheck({ number: listid, string: sectionidOrder });
+        let { listid, sectionidOrder, itemidOrders, moved } = req.body;
+        typecheck({ number: listid, string: sectionidOrder, objects: [itemidOrders, moved] });
 
-        await ListService.updateSectionOrder({ listid, sectionidOrder });
+        const promises = [];
+        promises.push(ListService.updateSectionOrder({ listid, sectionidOrder }));
+
+        for (let [sectionid, itemidOrder] of Object.entries(itemidOrders)) {
+            promises.push(ListService.updateItemOrder({ sectionid: parseInt(sectionid), itemidOrder }));
+        }
+
+        for (let [itemid, { newSection }] of Object.entries(moved)) {
+            promises.push(
+                ListService.updateItemSectionid({
+                    itemid: parseInt(itemid),
+                    sectionid: parseInt(newSection)
+                })
+            );
+        }
+
+        await Promise.all(promises);
         res.send(200);
     } catch(e) {
         console.error(e);
-        res.send(500, { message: 'Error occured. Unable to sort sections.' });
+        res.send(500, { message: 'Error occurred. Unable update list orders.' });
     }
-};
+}

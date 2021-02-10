@@ -7,7 +7,7 @@ import AddItemControls from './AddItemControls.js';
 import EditItemControls from './EditItemControls.js';
 import RemoveItemControls from './RemoveItemControls.js';
 
-const Item = ({ item, itemPosition, itemState, isSorting }) => {
+const Item = ({ item, itemPosition, itemState, isSorting, showItems }) => {
     const isUserMakingChanges = itemState.isAdding || itemState.isRemoving || itemState.isEditing || isSorting;
     const isAdding = itemState.isAdding && item.itemid === itemState.itemid;
     const isEditing = itemState.isEditing && item.itemid === itemState.itemid;
@@ -15,6 +15,8 @@ const Item = ({ item, itemPosition, itemState, isSorting }) => {
 
     return [
         m('tr.item', {
+            'data-sectionid': item.sectionid,
+            class: { item: true, hide: !showItems },
             id: item.itemid, // IMPORTANT; necessary for SortableJS to collect item ids and create new sort order,
             key: item.itemid
         },

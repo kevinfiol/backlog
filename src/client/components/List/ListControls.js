@@ -1,6 +1,7 @@
 import m from '../../m.js';
 import Input from '../Input.js';
 import { setState } from '../../actions/init.js';
+import { beginSorting, saveSorting, stopSorting } from '../../actions/Sortable.js';
 import { addSection, resetAddSectionForm } from '../../actions/Section.js';
 
 const ListControls = ({ isSorting, sectionState }) => 
@@ -8,12 +9,10 @@ const ListControls = ({ isSorting, sectionState }) =>
         !sectionState.isAdding &&
             [
                 m('button.list-control', {
-                    onclick: [setState, {
-                        isSorting: !isSorting
-                    }]
+                    onclick: isSorting ? saveSorting : beginSorting
                 },
                     m('i.sort'),
-                    isSorting ? 'finish sorting' : 'sort'
+                    isSorting ? 'save' : 'sort'
                 ),
 
                 !isSorting &&
@@ -24,6 +23,15 @@ const ListControls = ({ isSorting, sectionState }) =>
                     },
                         m('i.add'),
                         'add section'
+                    )
+                ,
+
+                isSorting &&
+                    m('button.list-control', {
+                        onclick: stopSorting
+                    },
+                        m('i.cancel'),
+                        'cancel'
                     )
                 ,
             ]

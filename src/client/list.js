@@ -9,11 +9,13 @@ import Section from './components/Section/Section.js';
 const LIST_CONTAINER = document.getElementById('list');
 const { list } = window.viewData;
 
-// to do, use undefined, not null
 const initialState = {
     list,
     error: null,
     sortables: [],
+    sorting: {
+        moved: null
+    },
 
     isSorting: false,
     showItems: true,
@@ -65,27 +67,22 @@ const List = state =>
                 section,
                 isSorting: state.isSorting
             },
-                state.showItems && 
-                    section.items.map((item, index) =>
-                        m(Item, {
-                            item,
-                            itemPosition: index,
-                            itemState: state.item,
-                            isSorting: state.isSorting,
-                        })
-                    )
-                ,
+                section.items.map((item, index) =>
+                    m(Item, {
+                        item,
+                        showItems: state.showItems,
+                        itemPosition: index,
+                        itemState: state.item,
+                        isSorting: state.isSorting,
+                    })
+                )
             )
         )
     )
 ;
 
 app({
-    init: [
-        initialState,
-        mountSortableList(),
-        mountSortableItems()
-    ],
+    init: initialState,
     view: List,
     node: LIST_CONTAINER
 });
