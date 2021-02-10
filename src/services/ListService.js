@@ -66,6 +66,19 @@ const ListService = {
         }
     },
 
+    async getSectionsByListid({ listid }) {
+        try {
+            typecheck({ number: listid });
+            const sections = await this.db.all('Section', { listid }, 'sectionid');
+            const sectonids = sections.map(section => section.sectionid);
+
+            typecheck({ array: sectonids });
+            return sectonids;
+        } catch(e) {
+            throw Error('Could not retrieve Sections by listid: ' + e);
+        }
+    },
+
     async getFullList({ listid }) {
         try {
             typecheck({ number: listid });
@@ -137,6 +150,26 @@ const ListService = {
             return list;
         } catch(e) {
             throw Error('Could not retrieve items for list: ' + e);
+        }
+    },
+
+    async getItemsByListid({ listid }) {
+        try {
+            typecheck({ number: listid });
+            const rows = await this.db.query(`
+                SELECT Item.itemid
+                FROM Item
+                LEFT JOIN Section ON Item.sectionid = Section.sectionid
+                LEFT JOIN List ON List.listid = Section.listid
+                WHERE List.listid = :listid
+            `, {
+                ':listid': listid
+            });
+
+            const itemids = rows.map(item => item.itemid);
+            return itemids;
+        } catch(e) {
+            throw Error('Unable to get items: ' + e);
         }
     },
 

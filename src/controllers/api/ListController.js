@@ -131,6 +131,10 @@ export const updateListOrders = async function(req, res) {
         let { listid, sectionidOrder, itemidOrders, moved } = req.body;
         typecheck({ number: listid, string: sectionidOrder, objects: [itemidOrders, moved] });
 
+        // validate that the ids provided by the client correctly belong to the specified list
+        const areIdsValid = await validateListOrders(listid, sectionidOrder, itemidOrders, moved);
+        if (!areIdsValid) throw Error('Invalid ids supplied to updateListOrders');
+
         const promises = [];
         promises.push(ListService.updateSectionOrder({ listid, sectionidOrder }));
 
@@ -153,4 +157,47 @@ export const updateListOrders = async function(req, res) {
         console.error(e);
         res.send(500, { message: 'Error occurred. Unable update list orders.' });
     }
+}
+
+async function validateListOrders(listid, sectionidOrder, itemidOrders, moved) {
+    const [validSectionids, validItemids] = await Promise.all([
+        ListService.getSectionsByListid({ listid }),
+        ListService.getItemsByListid({ listid })
+    ]);
+
+    // validate sectionids and itemids
+    let allSectionids = [
+        ...sectionidOrder.split(',').map(sectionid => sectionid),
+        ...Object.keys(itemidOrders).map(sectionid => sectionid),
+        ...Object.values(moved).reduce((a,c) => [...a, c.originalSection, c.newSection], [])
+    ];
+
+    let allItemids = [
+        ...Object.values(itemidOrders).reduce((a, c) => [...a, ...c.split(',')], []),
+        ...Object.keys(moved)
+    ];
+
+    // narrowIds removes dups, empty strings, and parses Ints
+    allSectionids = narrowIds(allSectionids);
+    allItemids = narrowIds(allItemids);
+
+    for (let sectionid of allSectionids) {
+        if (!validSectionids.includes(sectionid)) return false;
+    }
+
+    for (let itemid of allItemids) {
+        if (!validItemids.includes(itemid)) return false;
+    }
+
+    return true;
+}
+
+function narrowIds(ids) {
+    return Array.from(
+        new Set( // use Set to remove dups
+            ids
+                .filter(id => id !== '') // remove empty strings
+                .map(id => parseInt(id)) // only ints
+        )
+    );
 }

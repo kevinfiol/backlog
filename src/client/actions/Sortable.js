@@ -98,7 +98,6 @@ function createSortableList(dispatch) {
     const sortable = Sortable.create(document.getElementById('list'), {
         animation: 100,
         multiDrag: false,
-        handle: '.section-handle',
         draggable: '.section',
         onStart: function(event) {
             dispatch(setState, { showItems: false }); // hide items while sorting sections
@@ -122,7 +121,6 @@ function createSortableItemLists(dispatch) {
             animation: 100,
             multiDrag: true,
             selectedClass: 'sortablejs__item--selected',
-            handle: '.item-handle',
             onEnd: function(event) {
                 const moved = {}; // keep track of items to update sectionid of
 
