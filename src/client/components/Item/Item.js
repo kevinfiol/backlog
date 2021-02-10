@@ -16,9 +16,8 @@ const Item = ({ item, itemPosition, itemState, isSorting, showItems }) => {
     return [
         m('tr.item', {
             class: { item: true, hide: !showItems },
-            'data-id': item.id,
+            'data-id': item.itemid,
             'data-sectionid': item.sectionid,
-            id: item.itemid, // IMPORTANT; necessary for SortableJS to collect item ids and create new sort order,
             key: item.itemid
         },
             (!isEditing && !isRemoving) && [

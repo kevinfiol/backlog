@@ -4,7 +4,6 @@ import SectionControls from './SectionControls.js';
 const Section = ({ section, isSorting }, children) => 
     m('div.section', {
         'data-id': section.sectionid,
-        id: section.sectionid,
         key: section.sectionid
     },
         m('header.section-header',
@@ -14,7 +13,9 @@ const Section = ({ section, isSorting }, children) =>
         ),
 
         m('table.item-table',
-            m('tbody.item-list', { 'data-id': section.sectionid, id: section.sectionid },
+            m('tbody.item-list', {
+                'data-id': section.sectionid
+            },
                 children
             )
         )

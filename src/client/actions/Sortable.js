@@ -124,13 +124,13 @@ function createSortableItemLists(dispatch) {
             onEnd: function(event) {
                 const moved = {}; // keep track of items to update sectionid of
 
-                if (event.to.id !== event.from.id) {
+                if (event.to.dataset.id !== event.from.dataset.id) {
                     if (event.items.length > 1) {
                         event.items.forEach(item => {
-                            moved[item.id] = { originalSection: item.dataset.sectionid, newSection: event.to.id };
+                            moved[item.dataset.id] = { originalSection: item.dataset.sectionid, newSection: event.to.dataset.id };
                         });
                     } else {
-                        moved[event.item.id] = { originalSection: event.item.dataset.sectionid, newSection: event.to.id };
+                        moved[event.item.dataset.id] = { originalSection: event.item.dataset.sectionid, newSection: event.to.dataset.id };
                     }
                 }
 
@@ -150,15 +150,15 @@ function getNewOrders() {
     const sectionids = [];
     const sections = {};
     for (let section of document.getElementsByClassName('item-list')) {
-        sectionids.push(section.id);
+        sectionids.push(section.dataset.id);
         
         const itemids = [];
 
         for (let item of section.getElementsByClassName('item')) {
-            itemids.push(item.id);
+            itemids.push(item.dataset.id);
         }
         
-        sections[section.id] = itemids.join(',');
+        sections[section.dataset.id] = itemids.join(',');
     }
 
     return { sectionidOrder: sectionids.join(','), itemidOrders: sections };
