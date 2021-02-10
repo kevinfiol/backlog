@@ -1,5 +1,6 @@
 import m from '../../m.js';
-import { setState, removeItem, resetRemoveItemForm } from '../../actions.js';
+import { setState } from '../../actions/init.js';
+import { removeItem, resetRemoveItemForm } from '../../actions/Item.js';
 
 const RemoveItemControls = ({ removeForm }) => [
     m('button.item-control', {

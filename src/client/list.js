@@ -1,15 +1,13 @@
 import { app } from 'hyperapp';
 import m from './m.js';
 
-import { mountSortableItems, mountSortableSections } from './actions.js';
+import { mountSortableItems, mountSortableList } from './actions/Sortable.js';
 import ListControls from './components/List/ListControls.js';
 import Item from './components/Item/Item.js';
 import Section from './components/Section/Section.js';
 
 const LIST_CONTAINER = document.getElementById('list');
 const { list } = window.viewData;
-
-console.log(list);
 
 // to do, use undefined, not null
 const initialState = {
@@ -64,8 +62,7 @@ const List = state =>
         state.list.sections.map(section =>
             m(Section, {
                 section,
-                isSorting: state.isSorting,
-                key: section.sectionid
+                isSorting: state.isSorting
             },
                 state.showItems && 
                     section.items.map((item, index) =>
@@ -74,7 +71,6 @@ const List = state =>
                             itemPosition: index,
                             itemState: state.item,
                             isSorting: state.isSorting,
-                            key: item.itemid
                         })
                     )
                 ,
@@ -86,8 +82,8 @@ const List = state =>
 app({
     init: [
         initialState,
-        mountSortableItems(),
-        mountSortableSections()
+        mountSortableList(),
+        mountSortableItems()
     ],
     view: List,
     node: LIST_CONTAINER

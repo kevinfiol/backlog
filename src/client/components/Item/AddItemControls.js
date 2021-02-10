@@ -1,5 +1,5 @@
 import m from '../../m.js';
-import { addItem, resetAddItemForm } from '../../actions.js';
+import { addItem, resetAddItemForm } from '../../actions/Item.js';
 
 const AddItemControls = ({ addForm }) => [
     m('button.item-control', {

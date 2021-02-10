@@ -1,4 +1,4 @@
-import request from '../../util/request.js';
+import request from '../../../util/request.js';
 
 const httpFx = async (dispatch, props) => {
     try {

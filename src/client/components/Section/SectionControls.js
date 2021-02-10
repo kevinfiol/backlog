@@ -1,5 +1,5 @@
 import m from '../../m.js';
-import { removeSection } from '../../actions.js';
+import { removeSection } from '../../actions/Section.js';
 
 const SectionControls = ({ sectionid }) => 
     m('div.section-controls',

@@ -1,5 +1,5 @@
 import m from '../../m.js';
-import { setState } from '../../actions.js';
+import { setState } from '../../actions/init.js';
 
 const ItemControls = ({ item, itemPosition }) => [
     m('button.item-control', {

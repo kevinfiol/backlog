@@ -1,6 +1,6 @@
 import m from '../../m.js';
 import Input from '../Input.js';
-import { setState } from '../../actions.js';
+import { setState } from '../../actions/init.js';
 
 const AddItemForm = ({ addForm }) => [
     m('td.item-name',

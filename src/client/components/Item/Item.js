@@ -15,7 +15,8 @@ const Item = ({ item, itemPosition, itemState, isSorting }) => {
 
     return [
         m('tr.item', {
-            id: item.itemid // IMPORTANT; necessary for SortableJS to collect item ids and create new sort order
+            id: item.itemid, // IMPORTANT; necessary for SortableJS to collect item ids and create new sort order,
+            key: item.itemid
         },
             (!isEditing && !isRemoving) && [
                 isSorting && m('td.item-handle', m('i.move')),
@@ -53,7 +54,7 @@ const Item = ({ item, itemPosition, itemState, isSorting }) => {
         ),
 
         isAdding &&
-            m('tr',
+            m('tr', { key: item.itemid },
                 m(AddItemForm, { addForm: itemState.addForm }),
                 m('td.item-controls.is-user-making-changes',
                     m(AddItemControls, { addForm: itemState.addForm })
