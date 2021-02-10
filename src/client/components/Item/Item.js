@@ -15,7 +15,7 @@ const Item = ({ item, itemPosition, itemState, isSorting, showItems }) => {
 
     return [
         m('tr.item', {
-            class: { item: true, hide: !showItems },
+            class: { item: true, hide: !showItems, 'cursor-grab': isSorting },
             'data-id': item.itemid,
             'data-sectionid': item.sectionid,
             key: item.itemid

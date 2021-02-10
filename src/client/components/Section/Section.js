@@ -2,7 +2,8 @@ import m from '../../m.js';
 import SectionControls from './SectionControls.js';
 
 const Section = ({ section, isSorting }, children) => 
-    m('div.section', {
+    m('div', {
+        class: { section: true, 'cursor-grab': isSorting },
         'data-id': section.sectionid,
         key: section.sectionid
     },
