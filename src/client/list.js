@@ -14,7 +14,7 @@ const initialState = {
     error: null,
     sortables: [],
     sorting: {
-        moved: null
+        movedItems: null
     },
 
     isSorting: false,
@@ -65,6 +65,7 @@ const List = state =>
         state.list.sections.map(section =>
             m(Section, {
                 section,
+                sectionState: state.section,
                 isSorting: state.isSorting
             },
                 section.items.map((item, index) =>

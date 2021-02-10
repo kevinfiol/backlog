@@ -9,14 +9,14 @@ export const addSortables = (state, { sortables }) => [setState, {
     sortables: [...state.sortables, ...sortables]
 }];
 
-export const setMoved = (state, { moved }) => {
-    for (let [itemid, { originalSection, newSection }] of Object.entries(moved)) {
+export const setMovedItems = (state, { movedItems }) => {
+    for (let [itemid, { originalSection, newSection }] of Object.entries(movedItems)) {
         if (originalSection === newSection) {
-            moved[itemid] = undefined;
+            movedItems[itemid] = undefined;
         }
     }
 
-    return [setState, { sorting: { moved } }];
+    return [setState, { sorting: { movedItems } }];
 };
 
 export const destroySortables = state => {
@@ -44,7 +44,7 @@ export const saveSorting = state => [
         dispatch => {
             const { sectionidOrder, itemidOrders } = getNewOrders();
             dispatch(setState, { list: { sections: [] } });
-            dispatch(updateListOrders, { sectionidOrder, itemidOrders, moved: state.sorting.moved || {} });
+            dispatch(updateListOrders, { sectionidOrder, itemidOrders, movedItems: state.sorting.movedItems || {} });
             dispatch(stopSorting);
         }
     ]
@@ -55,7 +55,7 @@ export const stopSorting = state => [
     [
         dispatch => {
             dispatch(destroySortables);
-            dispatch(setState, { list: { sections: [] }, sortables: [], isSorting: false, moved: null });
+            dispatch(setState, { list: { sections: [] }, sortables: [], isSorting: false, sorting: { movedItems: null } });
             dispatch(getFullList);
         }
     ]
@@ -75,7 +75,7 @@ export const mountSortableItems = () => [
     })
 ];
 
-export const updateListOrders = (state, { sectionidOrder, itemidOrders, moved }) => [
+export const updateListOrders = (state, { sectionidOrder, itemidOrders, movedItems }) => [
     state,
     http({
         method: 'POST',
@@ -84,7 +84,7 @@ export const updateListOrders = (state, { sectionidOrder, itemidOrders, moved })
             listid: state.list.listid,
             sectionidOrder,
             itemidOrders,
-            moved
+            movedItems
         },
         error: (state, error) => {
             console.error(error);
@@ -122,20 +122,20 @@ function createSortableItemLists(dispatch) {
             multiDrag: true,
             selectedClass: 'sortablejs__item--selected',
             onEnd: function(event) {
-                const moved = {}; // keep track of items to update sectionid of
+                const movedItems = {}; // keep track of items to update sectionid of
 
                 if (event.to.dataset.id !== event.from.dataset.id) {
                     if (event.items.length > 1) {
                         event.items.forEach(item => {
-                            moved[item.dataset.id] = { originalSection: item.dataset.sectionid, newSection: event.to.dataset.id };
+                            movedItems[item.dataset.id] = { originalSection: item.dataset.sectionid, newSection: event.to.dataset.id };
                         });
                     } else {
-                        moved[event.item.dataset.id] = { originalSection: event.item.dataset.sectionid, newSection: event.to.dataset.id };
+                        movedItems[event.item.dataset.id] = { originalSection: event.item.dataset.sectionid, newSection: event.to.dataset.id };
                     }
                 }
 
-                if (Object.keys(moved).length > 0) {
-                    dispatch(setMoved, { moved })
+                if (Object.keys(movedItems).length > 0) {
+                    dispatch(setMovedItems, { movedItems })
                 }
             }
         });

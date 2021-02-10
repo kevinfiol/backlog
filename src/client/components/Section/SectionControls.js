@@ -1,21 +1,74 @@
 import m from '../../m.js';
-import { removeSection } from '../../actions/Section.js';
+import Input from '../Input.js';
+import { setState } from '../../actions/init.js';
+import { editSection, removeSection, resetEditSectionForm } from '../../actions/Section.js';
 
-const SectionControls = ({ sectionid }) => 
+const SectionControls = ({ section, sectionState }) => 
     m('div.section-controls',
-        m('button.section-control', {
-            onclick: undefined
-        },
-            m('i.edit'),
-            'rename'
-        ),
+        (!sectionState.isEditing && !sectionState.isRemoving) && [
+            m('button.section-control', {
+                onclick: [setState, {
+                    section: {
+                        isEditing: true,
+                        editForm: {
+                            sectionid: section.sectionid,
+                            sectionname: section.sectionname
+                        }
+                    }
+                }]
+            },
+                m('i.edit'),
+                'rename'
+            ),
 
-        m('button.section-control', {
-            onclick: [removeSection, { sectionid: sectionid }]
-        },
-            m('i.remove'),
-            'remove'
-        )
+            m('button.section-control', {
+                onclick: [setState, { section: { isRemoving: true } }]
+            },
+                m('i.remove'),
+                'remove'
+            )
+        ],
+
+        sectionState.isRemoving && [
+            m('button.section-control', {
+                onclick: [removeSection, { sectionid: section.sectionid }]
+            },
+                m('i.delete'),
+                'confirm'
+            ),
+
+            m('button.section-control', {
+                onclick: [setState, { section: { isRemoving: false } }]
+            },
+                m('i.cancel'),
+                'cancel'
+            )
+        ],
+
+        sectionState.isEditing && [
+            m(Input, {
+                className: 'section-control',
+                placeholder: 'name...',
+                value: sectionState.editForm.sectionname,
+                oninput: (state, e) => [setState, {
+                    section: { editForm: { sectionname: e.target.value } }
+                }]
+            }),
+
+            m('button.section-control', {
+                onclick: [editSection, { sectionname: sectionState.editForm.sectionname }]
+            },
+                m('i.save'),
+                'save'
+            ),
+
+            m('button.section-control', {
+                onclick: resetEditSectionForm
+            },
+                m('i.cancel'),
+                'cancel'
+            )
+        ]
     )
 ;
 

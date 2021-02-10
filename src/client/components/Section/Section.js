@@ -1,16 +1,20 @@
 import m from '../../m.js';
 import SectionControls from './SectionControls.js';
 
-const Section = ({ section, isSorting }, children) => 
+const Section = ({ section, sectionState, isSorting }, children) => 
     m('div', {
         class: { section: true, 'cursor-grab': isSorting },
         'data-id': section.sectionid,
         key: section.sectionid
     },
         m('header.section-header',
-            isSorting && m('div.section-handle', m('i.move')),
+            isSorting &&
+                m('div.section-handle', m('i.move')),
+
             m('h2', section.sectionname),
-            !isSorting && m(SectionControls, { sectionid: section.sectionid })
+
+            !isSorting &&
+                m(SectionControls, { section, sectionState })
         ),
 
         m('table.item-table',

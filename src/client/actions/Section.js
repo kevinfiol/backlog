@@ -9,6 +9,13 @@ export const resetAddSectionForm = state => [setState, {
     }
 }]
 
+export const resetEditSectionForm = state => [setState, {
+    section: {
+        isEditing: false,
+        editForm: { sectionid: null, sectionname: '' }
+    }
+}];
+
 // Actions w/ Side Effects
 export const addSection = (state, { sectionname }) => [
     state,
@@ -26,6 +33,25 @@ export const addSection = (state, { sectionname }) => [
     }),
     action({
         action: resetAddSectionForm
+    })
+];
+
+export const editSection = (state, { sectionname }) => [
+    state,
+    http({
+        method: 'POST',
+        url: '/api/list/editSection',
+        params: { sectionname, listid: state.list.listid },
+        action: () => {
+            return [getFullList];
+        },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
+        }
+    }),
+    action({
+        action: resetEditSectionForm
     })
 ];
 

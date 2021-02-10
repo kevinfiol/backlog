@@ -49,12 +49,13 @@ const ListControls = ({ isSorting, sectionState }) =>
                 }),
 
                 m('button.list-control.inline', {
-                    onclick: [addSection, {
+                    disabled: sectionState.addForm.sectionname.trim().length < 1,
+                    onclick: sectionState.addForm.sectionname.trim().length < 1 ? null : [addSection, {
                         sectionname: sectionState.addForm.sectionname
                     }]
                 },
-                    m('i.add'),
-                    'add'
+                    m('i.save'),
+                    'save'
                 ),
 
                 m('button.list-control.inline', {

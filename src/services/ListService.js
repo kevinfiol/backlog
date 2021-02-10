@@ -199,7 +199,7 @@ const ListService = {
             typecheck({ object: item });
 
             const result = await this.db.update('Item', {
-                itemname: item.itemname,
+                itemname: item.itemname.trim(),
                 url: item.url,
                 slug: slugify(item.itemname)
             }, { itemid: item.itemid });
