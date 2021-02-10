@@ -13,6 +13,7 @@ const { list } = window.viewData;
 const initialState = {
     list,
     error: null,
+    sortables: [],
 
     isSorting: false,
     showItems: true,

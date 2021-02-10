@@ -4,7 +4,7 @@ import { http } from './effects/http.js';
 // Global Actions
 export const setState = (state, props) => {
     const newState = merge(state, props);
-    console.log(newState);
+    console.log('setState', newState);
     return newState;
 };
 

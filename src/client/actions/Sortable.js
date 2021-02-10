@@ -5,12 +5,63 @@ import { http } from './effects/http.js';
 // necessary for multidrag items
 Sortable.mount(new MultiDrag());
 
+export const getFullListAndRemount = state => [
+    state,
+    http({
+        method: 'GET',
+        url: '/api/list/getFullList/',
+        params: { listid: state.list.listid },
+        action: (state, { list }) => {
+            return [
+                state,
+                [
+                    dispatch => {
+                        dispatch(setState, { list });
+
+                        const newSortables = [
+                            createSortableList(dispatch),
+                            ...createSortableItemLists(dispatch)
+                        ];
+
+                        dispatch(setState, { sortables: newSortables });
+                    }
+                ]
+            ]
+        },
+        error: (state, error) => {
+            console.error(error);
+            return { ...state, error };
+        }
+    })
+];
+
+export const refreshList = (state) => [
+    state,
+    [
+        dispatch => {
+            dispatch(setState, { list: { sections: [] } });
+            dispatch(getFullListAndRemount);
+        }
+    ]
+];
+
 export const sortItems = (state, { sectionOrders, moved }) => [
     state,
     http({
         method: 'POST',
         url: '/api/list/sortItems',
         params: { sectionOrders, moved },
+        action: () => {
+            return [
+                state,
+                [
+                    dispatch => {
+                        dispatch(destroySortables);
+                        dispatch(refreshList);
+                    }
+                ]
+            ];
+        },
         error: (state, error) => {
             console.error(error);
             return { ...state, error };
@@ -24,6 +75,9 @@ export const sortSections = (state, { sectionidOrder }) => [
         method: 'POST',
         url: '/api/list/sortSections',
         params: { listid: state.list.listid, sectionidOrder },
+        action: () => {
+
+        },
         error: (state, error) => {
             console.error(error);
             return { ...state, error };
@@ -31,15 +85,29 @@ export const sortSections = (state, { sectionidOrder }) => [
     })
 ];
 
+export const addSortables = (state, { sortables }) => [setState, {
+    sortables: [...state.sortables, ...sortables]
+}];
+
+export const destroySortables = state => {
+    for (let sortable of state.sortables) {
+        sortable.destroy();
+    }
+
+    return { ...state, sortables: [] };
+}
+
 export const mountSortableList = () => [
     (dispatch) => requestAnimationFrame(() => {
-        createSortableList(dispatch);
+        const sortable = createSortableList(dispatch);
+        dispatch(addSortables, { sortables: [sortable] });
     })
 ]; 
 
 export const mountSortableItems = () => [
     (dispatch) => requestAnimationFrame(() => {
-        createSortableItemLists(dispatch);
+        const sortables = createSortableItemLists(dispatch);
+        dispatch(addSortables, { sortables });
     })
 ];
 
@@ -72,6 +140,7 @@ function createSortableList(dispatch) {
 
 function createSortableItemLists(dispatch) {
     const sortables = [];
+
     for (let itemList of document.getElementsByClassName('item-list')) {
         let sortable;
 
