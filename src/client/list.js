@@ -21,7 +21,6 @@ const initialState = {
     showItems: true,
 
     section: {
-        sectionid: null,
         isAdding: false,
         isRemoving: false,
         isEditing: false,

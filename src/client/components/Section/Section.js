@@ -9,12 +9,20 @@ const Section = ({ section, sectionState, isSorting }, children) =>
     },
         m('header.section-header',
             isSorting &&
-                m('div.section-handle', m('i.move')),
+                m('div.section-handle', m('i.move'))
+            ,
 
-            m('h2', section.sectionname),
+            m('h2', {
+                class: {
+                    'opacity-25': sectionState.isEditing && sectionState.editForm.sectionid == section.sectionid
+                }
+            },
+                section.sectionname
+            ),
 
             !isSorting &&
                 m(SectionControls, { section, sectionState })
+            ,
         ),
 
         m('table.item-table',

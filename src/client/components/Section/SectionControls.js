@@ -56,7 +56,11 @@ const SectionControls = ({ section, sectionState }) =>
             }),
 
             m('button.section-control', {
-                onclick: [editSection, { sectionname: sectionState.editForm.sectionname }]
+                disabled: sectionState.editForm.sectionname.trim().length < 1,
+                onclick: sectionState.editForm.sectionname.trim().length < 1 ? null : [editSection, {
+                    sectionid: sectionState.editForm.sectionid,
+                    sectionname: sectionState.editForm.sectionname
+                }]
             },
                 m('i.save'),
                 'save'

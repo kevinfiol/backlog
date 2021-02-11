@@ -36,12 +36,12 @@ export const addSection = (state, { sectionname }) => [
     })
 ];
 
-export const editSection = (state, { sectionname }) => [
+export const editSection = (state, { sectionid, sectionname }) => [
     state,
     http({
         method: 'POST',
         url: '/api/list/editSection',
-        params: { sectionname, listid: state.list.listid },
+        params: { sectionid, sectionname },
         action: () => {
             return [getFullList];
         },

@@ -113,6 +113,19 @@ export const addSection = async function(req, res) {
     }
 };
 
+export const editSection = async function(req, res) {
+    try {
+        let { sectionid, sectionname } = req.body;
+        typecheck({ number: sectionid, string: sectionname });
+
+        await ListService.editSection({ sectionid, sectionname });
+        res.send(200);
+    } catch(e) {
+        console.error(e);
+        res.send(500, { message: 'Error occured. Unable to edit section.' });
+    }
+};
+
 export const removeSection = async function(req, res) {
     try {
         let { sectionid } = req.body;

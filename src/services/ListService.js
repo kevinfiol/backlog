@@ -285,6 +285,26 @@ const ListService = {
         }
     },
 
+    async editSection({ sectionid, sectionname }) {
+        try {
+            typecheck({ number: sectionid, string: sectionname });
+
+            const result = await this.db.run(`
+                UPDATE Section
+                SET sectionname = :sectionname
+                WHERE sectionid = :sectionid
+            `, {
+                ':sectionname': sectionname.trim(),
+                ':sectionid': sectionid
+            });
+
+            typecheck({ object: result });
+            return result;
+        } catch(e) {
+            throw Error('Unable to update Section: ' + e);
+        }
+    },
+
     async removeSection({ sectionid }) {
         try {
             typecheck({ number: sectionid });
