@@ -1,55 +1,28 @@
 import m from '../../m.js';
-import { setState } from '../../actions/init.js';
+import Button from '../Button.js';
+import { initEditItemForm, initAddItemForm, initRemoveItem } from '../../actions/Item.js';
 
 const ItemControls = ({ item, itemPosition }) => [
-    m('button.item-control', {
-        onclick: [setState, {
-            item: {
-                itemid: item.itemid,
-                isEditing: true,
-                editForm: {
-                    itemid: item.itemid,
-                    itemname: item.itemname,
-                    url: item.url
-                }
-            }
-        }]
-    },
-        m('i.edit'),
-        'edit'
-    ),
+    m(Button, {
+        label: 'edit',
+        icon: 'edit',
+        className: 'item-control',
+        onclick: [initEditItemForm, { item }]
+    }),
 
-    m('button.item-control', {
-        onclick: [setState, {
-            item: {
-                itemid: item.itemid,
-                isAdding: true,
-                addForm: {
-                    sectionid: item.sectionid,
-                    itemPosition: itemPosition + 1
-                }
-            }
-        }]
-    },
-        m('i.add'),
-        'add'
-    ),
+    m(Button, {
+        label: 'add',
+        icon: 'add',
+        className: 'item-control',
+        onclick: [initAddItemForm, { item, itemPosition }]
+    }),
 
-    m('button.item-control', {
-        onclick: [setState, {
-            item: {
-                itemid: item.itemid,
-                isRemoving: true,
-                removeForm: {
-                    itemid: item.itemid,
-                    sectionid: item.sectionid
-                }
-            }
-        }]
-    },
-        m('i.remove'),
-        'remove'
-    )
+    m(Button, {
+        label: 'remove',
+        icon: 'remove',
+        className: 'item-control',
+        onclick: [initRemoveItem, { item }]
+    })
 ];
 
 export default ItemControls;

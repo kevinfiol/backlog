@@ -8,6 +8,10 @@ export const setState = (state, props) => {
     return newState;
 };
 
+export const setIsUserMakingChanges = (state, { isUserMakingChanges }) => [setState, {
+    isUserMakingChanges
+}];
+
 export const getFullList = state => [
     state,
     http({

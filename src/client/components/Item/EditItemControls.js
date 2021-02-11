@@ -1,28 +1,32 @@
 import m from '../../m.js';
+import Button from '../Button.js';
 import { editItem, resetEditItemForm } from '../../actions/Item.js';
 
 const EditItemControls = ({ editForm }) => {
     const isDisabled = editForm.itemname.trim().length < 1;
 
     return [
-        m('button.item-control', {
+        m(Button, {
+            label: 'save',
+            icon: 'save',
+            className: 'item-control',
             disabled: isDisabled,
-            onclick: isDisabled ? null : [editItem, { item: editForm }]
-        },
-            m('i.save'),
-            'save'
-        ),
+            onclick: isDisabled
+                ? null
+                : [editItem, {
+                    item: editForm
+                }]
+            ,
+        }),
 
-        m('button.item-control', {
+        m(Button, {
+            label: 'cancel',
+            icon: 'cancel',
+            className: 'item-control',
+            disabled: isDisabled,
             onclick: resetEditItemForm
-        },
-            m('i.cancel'),
-            'cancel'
-        )
+        })
     ];
 };
-
-
-
 
 export default EditItemControls;

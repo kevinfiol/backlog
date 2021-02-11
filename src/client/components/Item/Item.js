@@ -14,33 +14,46 @@ const Item = ({ item, itemPosition, itemState, isSorting, showItems }) => {
     const isRemoving = itemState.isRemoving && item.itemid === itemState.itemid;
 
     return [
-        m('tr.item', {
-            class: { item: true, hide: !showItems, 'cursor-grab': isSorting },
+        m('tr', {
+            class: {
+                item: true,
+                hide: !showItems,
+                'cursor-grab': isSorting
+            },
+
+            key: item.itemid,
+            // data attributes for sorting
             'data-id': item.itemid,
-            'data-sectionid': item.sectionid,
-            key: item.itemid
+            'data-sectionid': item.sectionid
         },
+            // default view of item
             (!isEditing && !isRemoving) && [
-                isSorting && m('td.item-handle', m('i.move')),
+                isSorting &&
+                    m('td', m('i.move'))
+                ,
                 m('td.item-name', item.itemname),
                 m('td.item-data', 'link & review'),
             ],
 
+            // Edit Form
             isEditing &&
                 m(EditItemForm, { editForm: itemState.editForm })
             ,
 
+            // Remove Form
             isRemoving && [
                 m('td.item-name', m('em', 'Remove ', m('b', item.itemname), '?')),
                 m('td.item-data', '') // empty cell
             ],
 
+            // Item Controls
             m('td', {
                 class: {
                     'item-controls': true,
                     'is-user-making-changes': isUserMakingChanges
                 }
             },
+                // Hides the Item Controls on all Items NOT being changed
                 !isUserMakingChanges &&
                     m(ItemControls, { item, itemPosition })
                 ,
@@ -55,8 +68,9 @@ const Item = ({ item, itemPosition, itemState, isSorting, showItems }) => {
             )
         ),
 
+        // Add Form
         isAdding &&
-            m('tr', { key: item.itemid },
+            m('tr',
                 m(AddItemForm, { addForm: itemState.addForm }),
                 m('td.item-controls.is-user-making-changes',
                     m(AddItemControls, { addForm: itemState.addForm })

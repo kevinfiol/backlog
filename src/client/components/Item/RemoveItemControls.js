@@ -1,24 +1,24 @@
 import m from '../../m.js';
-import { setState } from '../../actions/init.js';
+import Button from '../Button.js';
 import { removeItem, resetRemoveItemForm } from '../../actions/Item.js';
 
 const RemoveItemControls = ({ removeForm }) => [
-    m('button.item-control', {
+    m(Button, {
+        label: 'confirm',
+        icon: 'delete',
+        className: 'item-control',
         onclick: [removeItem, {
             itemid: removeForm.itemid,
             sectionid: removeForm.sectionid
         }]
-    },
-        m('i.delete'),
-        'confirm'
-    ),
+    }),
 
-    m('button.item-control', {
+    m(Button, {
+        label: 'cancel',
+        icon: 'cancel',
+        className: 'item-control',
         onclick: resetRemoveItemForm
-    },
-        m('i.cancel'),
-        'cancel'
-    )
+    })
 ];
 
 export default RemoveItemControls;

@@ -1,15 +1,13 @@
 import m from '../../m.js';
 import Input from '../Input.js';
-import { setState } from '../../actions/init.js';
+import { addItemFormInput } from '../../actions/Item.js';
 
 const AddItemForm = ({ addForm }) => [
     m('td.item-name',
         m(Input, {
             placeholder: 'new item name...',
             value: addForm.item.itemname,
-            oninput: (state, e) => [setState, {
-                item: { addForm: { item: { itemname: e.target.value } } }
-            }]
+            oninput: addItemFormInput('itemname')
         })
     ),
 
@@ -17,9 +15,7 @@ const AddItemForm = ({ addForm }) => [
         m(Input, {
             placeholder: 'url...',
             value: addForm.item.url,
-            oninput: (state, e) => [setState, {
-                item: { addForm: { item: { url: e.target.value } } }
-            }]
+            oninput: addItemFormInput('url')
         })
     )
 ];

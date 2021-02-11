@@ -2,6 +2,54 @@ import { setState, getFullList } from './init.js';
 import { http } from './effects/http.js';
 import { action } from './effects/action.js';
 
+export const addItemFormInput = key => (state, e) => [setState, {
+    item: {
+        addForm: {
+            item: { [key]: e.target.value }
+        }
+    }
+}];
+
+export const editItemFormInput = key => (state, e) => [setState, {
+    item: {
+        editForm: { [key]: e.target.value }
+    }
+}];
+
+export const initEditItemForm = (state, { item }) => [setState, {
+    item: {
+        itemid: item.itemid,
+        isEditing: true,
+        editForm: {
+            itemid: item.itemid,
+            itemname: item.itemname,
+            url: item.url
+        }
+    }
+}];
+
+export const initAddItemForm = (state, { item, itemPosition }) => [setState, {
+    item: {
+        itemid: item.itemid,
+        isAdding: true,
+        addForm: {
+            sectionid: item.sectionid,
+            itemPosition: itemPosition + 1
+        }
+    }
+}];
+
+export const initRemoveItem = (state, { item }) => [setState, {
+    item: {
+        itemid: item.itemid,
+        isRemoving: true,
+        removeForm: {
+            itemid: item.itemid,
+            sectionid: item.sectionid
+        }
+    }
+}];
+
 export const resetEditItemForm = state => [setState, {
     item: {
         itemid: null,
