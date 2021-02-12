@@ -5,7 +5,7 @@ import AddItemControls from './AddItemControls.js';
 import { initAddItemForm } from '../../actions/Item.js';
 
 const EmptyItemRow = ({ itemState, sectionid }) =>
-    m('tr.item',
+    m('tr.item.sortable-ignore',
         !itemState.isAdding &&
             m('td.item-data',
                 m(Button, {

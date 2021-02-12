@@ -1,79 +1,86 @@
 import m from '../../m.js';
 import Input from '../Input.js';
-import { setState } from '../../actions/init.js';
-import { editSection, removeSection, resetEditSectionForm } from '../../actions/Section.js';
+import Button from '../Button.js';
+import {
+    editSection,
+    removeSection,
+    initEditSectionForm,
+    initRemoveSection,
+    resetEditSectionForm,
+    resetRemoveSection
+} from '../../actions/Section.js';
 
-const SectionControls = ({ section, sectionState }) => 
-    m('div.section-controls',
-        (!sectionState.isEditing && !sectionState.isRemoving) && [
-            m('button.section-control', {
-                onclick: [setState, {
-                    section: {
-                        isEditing: true,
-                        editForm: {
-                            sectionid: section.sectionid,
-                            sectionname: section.sectionname
-                        }
-                    }
-                }]
-            },
-                m('i.edit'),
-                'rename'
-            ),
+const SectionControls = ({ section, sectionState }) => {
+    const showMainControls = !sectionState.isEditing && !sectionState.isRemoving;
+    const isRemoving = sectionState.isRemoving && sectionState.sectionid === section.sectionid;
+    const isEditing = sectionState.isEditing && sectionState.sectionid === section.sectionid;
+    const isEditFormValid = sectionState.editForm.sectionname.trim().length > 0;
 
-            m('button.section-control', {
-                onclick: [setState, { section: { isRemoving: true } }]
-            },
-                m('i.remove'),
-                'remove'
-            )
-        ],
+    return (
+        m('div.section-controls',
+            showMainControls && [
+                m(Button, {
+                    label: 'rename',
+                    icon: 'edit',
+                    className: 'section-control',
+                    onclick: initEditSectionForm
+                }),
 
-        sectionState.isRemoving && [
-            m('button.section-control', {
-                onclick: [removeSection, { sectionid: section.sectionid }]
-            },
-                m('i.delete'),
-                'confirm'
-            ),
+                m(Button, {
+                    label: 'remove',
+                    icon: 'remove',
+                    className: 'section-control',
+                    onclick: initRemoveSection
+                })
+            ],
 
-            m('button.section-control', {
-                onclick: [setState, { section: { isRemoving: false } }]
-            },
-                m('i.cancel'),
-                'cancel'
-            )
-        ],
+            isRemoving && [
+                m(Button, {
+                    label: 'confirm',
+                    icon: 'delete',
+                    className: 'section-control',
+                    onclick: [removeSection, { sectionid: section.sectionid }]
+                }),
 
-        sectionState.isEditing && [
-            m(Input, {
-                className: 'section-control',
-                placeholder: 'name...',
-                value: sectionState.editForm.sectionname,
-                oninput: (state, e) => [setState, {
-                    section: { editForm: { sectionname: e.target.value } }
-                }]
-            }),
+                m(Button, {
+                    label: 'cancel',
+                    icon: 'cancel',
+                    className: 'section-control',
+                    onclick: resetRemoveSection
+                })
+            ],
 
-            m('button.section-control', {
-                disabled: sectionState.editForm.sectionname.trim().length < 1,
-                onclick: sectionState.editForm.sectionname.trim().length < 1 ? null : [editSection, {
-                    sectionid: sectionState.editForm.sectionid,
-                    sectionname: sectionState.editForm.sectionname
-                }]
-            },
-                m('i.save'),
-                'save'
-            ),
+            isEditing && [
+                m(Input, {
+                    className: 'section-control',
+                    placeholder: 'name...',
+                    value: sectionState.editForm.sectionname,
+                    oninput: editSectionFormInput('sectionname')
+                }),
 
-            m('button.section-control', {
-                onclick: resetEditSectionForm
-            },
-                m('i.cancel'),
-                'cancel'
-            )
-        ]
-    )
-;
+                m(Button, {
+                    label: 'save',
+                    icon: 'save',
+                    className: 'section-control',
+                    disabled: !isEditFormValid,
+                    onclick: !isEditFormValid
+                        ? null
+                        : [editSection, {
+                            sectionid: sectionState.editForm.sectionid,
+                            sectionname: sectionState.editForm.sectionname
+                        }]
+                    ,
+                }),
+
+                m(Button, {
+                    label: 'cancel',
+                    icon: 'cancel',
+                    className: 'section-control',
+                    onclick: resetEditSectionForm
+                })
+            ]
+        )
+    );
+};
 
 export default SectionControls;

@@ -135,6 +135,8 @@ header.section-header > h2 {
     box-shadow: inset 0px 0px 1px 1px #7676a6;
 }
 
+.sortable-ignore { cursor: default; }
+
 /*Utility*/
 .opacity-25 { opacity: 0.25; }
 .cursor-grab { cursor: grab; }

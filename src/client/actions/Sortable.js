@@ -120,6 +120,7 @@ function createSortableItemLists(dispatch) {
             group: 'shared-items', // items can be moved between sections
             animation: 100,
             multiDrag: true,
+            filter: '.sortable-ignore',
             selectedClass: 'sortablejs__item--selected',
             onEnd: function(event) {
                 const movedItems = {}; // keep track of items to update sectionid of

@@ -2,6 +2,40 @@ import { setState, getFullList } from './init.js';
 import { http } from './effects/http.js';
 import { action } from './effects/action.js';
 
+export const addSectionFormInput = key => (state, e) => [setState, {
+    section: {
+        addForm: { [key]: e.target.value }
+    }
+}];
+
+export const editSectionFormInput = key => (state, e) => [setState, {
+    section: {
+        editForm: { [key]: e.target.value }
+    }
+}];
+
+export const initAddSectionForm = state => [setState, {
+    section: {
+        isAdding: true
+    }
+}];
+
+export const initEditSectionForm = state => [setState, {
+    section: {
+        isEditing: true,
+        editForm: {
+            sectionid: section.sectionid,
+            sectionname: section.sectionname
+        }
+    }
+}];
+
+export const initRemoveSection = state => [setState, {
+    section: {
+        isRemoving: true
+    }
+}];
+
 export const resetAddSectionForm = state => [setState, {
     section: {
         isAdding: false,
@@ -13,6 +47,12 @@ export const resetEditSectionForm = state => [setState, {
     section: {
         isEditing: false,
         editForm: { sectionid: null, sectionname: '' }
+    }
+}];
+
+export const resetRemoveSection = state => [setState, {
+    section: {
+        isRemoving: false
     }
 }];
 

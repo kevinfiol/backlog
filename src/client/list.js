@@ -99,11 +99,3 @@ app({
     view: List,
     node: LIST_CONTAINER
 });
-
-function anyTrue(bools) {
-    for (let i = 0, len = bools.length; i < len; i++) {
-        if (bools[i]) return true;
-    }
-
-    return false;
-}
