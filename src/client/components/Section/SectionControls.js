@@ -5,6 +5,7 @@ import {
     editSection,
     removeSection,
     initEditSectionForm,
+    editSectionFormInput,
     initRemoveSection,
     resetEditSectionForm,
     resetRemoveSection
@@ -12,25 +13,31 @@ import {
 
 const SectionControls = ({ section, sectionState }) => {
     const showMainControls = !sectionState.isEditing && !sectionState.isRemoving;
-    const isRemoving = sectionState.isRemoving && sectionState.sectionid === section.sectionid;
-    const isEditing = sectionState.isEditing && sectionState.sectionid === section.sectionid;
+    const isRemoving = sectionState.isRemoving && sectionState.removeForm.sectionid === section.sectionid;
+    const isEditing = sectionState.isEditing && sectionState.editForm.sectionid === section.sectionid;
     const isEditFormValid = sectionState.editForm.sectionname.trim().length > 0;
+    const isUserMakingChanges = isRemoving || isEditing;
 
     return (
-        m('div.section-controls',
+        m('div', {
+            class: {
+                'section-controls': true,
+                'is-user-making-changes': isUserMakingChanges
+            }
+        },
             showMainControls && [
                 m(Button, {
                     label: 'rename',
                     icon: 'edit',
                     className: 'section-control',
-                    onclick: initEditSectionForm
+                    onclick: [initEditSectionForm, { section }]
                 }),
 
                 m(Button, {
                     label: 'remove',
                     icon: 'remove',
                     className: 'section-control',
-                    onclick: initRemoveSection
+                    onclick: [initRemoveSection, { sectionid: section.sectionid }]
                 })
             ],
 

@@ -35,6 +35,9 @@ const initialState = {
         },
         addForm: {
             sectionname: ''
+        },
+        removeForm: {
+            sectionid: null
         }
     },
 

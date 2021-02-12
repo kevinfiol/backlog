@@ -20,7 +20,7 @@ export const initAddSectionForm = state => [setState, {
     }
 }];
 
-export const initEditSectionForm = state => [setState, {
+export const initEditSectionForm = (state, { section }) => [setState, {
     section: {
         isEditing: true,
         editForm: {
@@ -30,9 +30,10 @@ export const initEditSectionForm = state => [setState, {
     }
 }];
 
-export const initRemoveSection = state => [setState, {
+export const initRemoveSection = (state, { sectionid }) => [setState, {
     section: {
-        isRemoving: true
+        isRemoving: true,
+        removeForm: { sectionid }
     }
 }];
 
@@ -52,7 +53,8 @@ export const resetEditSectionForm = state => [setState, {
 
 export const resetRemoveSection = state => [setState, {
     section: {
-        isRemoving: false
+        isRemoving: false,
+        removeForm: { sectionid: null }
     }
 }];
 
