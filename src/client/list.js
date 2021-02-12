@@ -66,18 +66,24 @@ const initialState = {
 
 const List = state => 
     m('div',
-        m(ListControls, { isSorting: state.isSorting, sectionState: state.section }),
+        m(ListControls, {
+            isSorting: state.isSorting,
+            isUserMakingChanges: state.isUserMakingChanges,
+            sectionState: state.section
+        }),
 
         state.list.sections.map(section =>
             m(Section, {
                 section,
                 sectionState: state.section,
-                isSorting: state.isSorting
+                isSorting: state.isSorting,
+                isUserMakingChanges: state.isUserMakingChanges
             },
                 section.items.length < 1 &&
                     m(EmptyItemRow, {
                         itemState: state.item,
-                        sectionid: section.sectionid
+                        sectionid: section.sectionid,
+                        isUserMakingChanges: state.isUserMakingChanges
                     })
                 ,
 
@@ -89,6 +95,7 @@ const List = state =>
                             itemPosition: index,
                             itemState: state.item,
                             isSorting: state.isSorting,
+                            isUserMakingChanges: state.isUserMakingChanges
                         })
                     )
                 ,

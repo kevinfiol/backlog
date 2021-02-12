@@ -7,11 +7,11 @@ import AddItemControls from './AddItemControls.js';
 import EditItemControls from './EditItemControls.js';
 import RemoveItemControls from './RemoveItemControls.js';
 
-const Item = ({ item, itemPosition, itemState, isSorting, showItems }) => {
-    const isUserMakingChanges = itemState.isAdding || itemState.isRemoving || itemState.isEditing || isSorting;
+const Item = ({ item, itemPosition, itemState, isSorting, isUserMakingChanges, showItems }) => {
     const isAdding = itemState.isAdding && item.itemid === itemState.itemid;
     const isEditing = itemState.isEditing && item.itemid === itemState.itemid;
     const isRemoving = itemState.isRemoving && item.itemid === itemState.itemid;
+    const isBeingUsed = isAdding || isEditing || isRemoving;
 
     return [
         m('tr', {
@@ -50,11 +50,11 @@ const Item = ({ item, itemPosition, itemState, isSorting, showItems }) => {
             m('td', {
                 class: {
                     'item-controls': true,
-                    'is-user-making-changes': isUserMakingChanges
+                    'is-being-used': isBeingUsed
                 }
             },
-                // Hides the Item Controls on all Items NOT being changed
-                !isUserMakingChanges &&
+                // Shows Item Controls only on Items being used
+                (!isUserMakingChanges) &&
                     m(ItemControls, { item, itemPosition })
                 ,
 

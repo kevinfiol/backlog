@@ -15,12 +15,14 @@ export const editSectionFormInput = key => (state, e) => [setState, {
 }];
 
 export const initAddSectionForm = state => [setState, {
+    isUserMakingChanges: true,
     section: {
         isAdding: true
     }
 }];
 
 export const initEditSectionForm = (state, { section }) => [setState, {
+    isUserMakingChanges: true,
     section: {
         isEditing: true,
         editForm: {
@@ -31,6 +33,7 @@ export const initEditSectionForm = (state, { section }) => [setState, {
 }];
 
 export const initRemoveSection = (state, { sectionid }) => [setState, {
+    isUserMakingChanges: true,
     section: {
         isRemoving: true,
         removeForm: { sectionid }
@@ -38,6 +41,7 @@ export const initRemoveSection = (state, { sectionid }) => [setState, {
 }];
 
 export const resetAddSectionForm = state => [setState, {
+    isUserMakingChanges: false,
     section: {
         isAdding: false,
         addForm: { sectionname: '' }
@@ -45,6 +49,7 @@ export const resetAddSectionForm = state => [setState, {
 }]
 
 export const resetEditSectionForm = state => [setState, {
+    isUserMakingChanges: false,
     section: {
         isEditing: false,
         editForm: { sectionid: null, sectionname: '' }
@@ -52,6 +57,7 @@ export const resetEditSectionForm = state => [setState, {
 }];
 
 export const resetRemoveSection = state => [setState, {
+    isUserMakingChanges: false,
     section: {
         isRemoving: false,
         removeForm: { sectionid: null }

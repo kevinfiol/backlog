@@ -8,13 +8,54 @@ const ListService = {
         this.db = db;
     },
 
-    async getList({ listid }) {
+    async addList({ listname, userid }) {
+        try {
+            typecheck({ string: listname, number: userid });
+            const result = await this.db.run(`
+                INSERT INTO List (listname, slug, userid, sectionidOrder)
+                VALUES (:listname, :slug, :userid, :sectionidOrder)
+            `, {
+                ':listname': listname.trim(),
+                ':slug': slugify(listname),
+                ':userid': userid,
+                ':sectionidOrder': ''
+            });
+
+            typecheck({ object: result });
+            return result;
+        } catch(e) {
+            throw Error('Could not add list: ' + e);
+        }
+    },
+
+    async getList(params) {
         try {
             typecheck({ number: listid });
-            const list = await this.db.get('List', { listid });
+            const list = await this.db.get('List', params);
 
             typecheck({ object: list });
             return list;
+        } catch(e) {
+            throw Error('Could not retrieve list: ' + e);
+        }
+    },
+
+    async getListByListnameAndUsername({ username, listname }) {
+        try {
+            typecheck({ strings: [username, listname] });
+
+            const rows = await this.db.query(`
+                SELECT * FROM List
+                LEFT JOIN User on User.userid = List.userid
+                WHERE List.listname = :listname
+                AND User.username = :username
+            `, {
+                ':listname': listname,
+                ':username': username
+            });
+
+            typecheck({ array: rows });
+            return rows;
         } catch(e) {
             throw Error('Could not retrieve list: ' + e);
         }
@@ -274,7 +315,7 @@ const ListService = {
             `, {
                 ':sectionname': sectionname.trim(),
                 ':slug': slugify(sectionname),
-                ':listid': parseInt(listid),
+                ':listid': listid,
                 ':itemidOrder': ''
             });
 

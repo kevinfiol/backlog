@@ -1,7 +1,7 @@
 import m from '../../m.js';
 import SectionControls from './SectionControls.js';
 
-const Section = ({ section, sectionState, isSorting }, children) => {
+const Section = ({ section, sectionState, isSorting, isUserMakingChanges }, children) => {
     const isEditing = sectionState.isEditing && sectionState.editForm.sectionid == section.sectionid;
 
     return (
@@ -22,7 +22,7 @@ const Section = ({ section, sectionState, isSorting }, children) => {
                 ),
 
                 !isSorting &&
-                    m(SectionControls, { section, sectionState })
+                    m(SectionControls, { section, sectionState, isUserMakingChanges })
                 ,
             ),
 

@@ -65,7 +65,8 @@ button.item-control, button.section-control {
 .list-controls {
     display: inline-block;
     z-index: 9;
-    max-height: 32.38px;
+    height: 32.38px;
+    width: auto;
 }
 
 .list-control, .section-control, input.list-control, input.section-control { display: inline; }
@@ -101,7 +102,7 @@ button.list-control {
     text-align: right;
 }
 
-.item-controls:not(.is-user-making-changes) {
+.item-controls:not(.is-being-used) {
     opacity: 0;
 }
 
@@ -120,7 +121,7 @@ header.section-header > h2 {
     margin-left: 1rem;
 }
 
-.section-controls:not(.is-user-making-changes) {
+.section-controls:not(.is-being-used) {
     opacity: 0;
 }
 
@@ -138,5 +139,6 @@ header.section-header > h2 {
 .sortable-ignore { cursor: default; }
 
 /*Utility*/
+.opacity-100 { opacity: 1; }
 .opacity-25 { opacity: 0.25; }
 .cursor-grab { cursor: grab; }

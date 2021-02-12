@@ -17,6 +17,11 @@ router.post('/signup', IndexController.signup);
 // UserController
 router.get('/:username', UserController.user);
 router.get('/:username/:listSlug', UserController.list);
+router.get('/:username/list/create', UserController.createList);
+router.get('/:username/list/remove/:listid', UserController.removeList);
+
+router.post('/:username/list/create', UserController.createList);
+router.post('/:username/list/remove/:listid', UserController.removeList);
 
 // ListController
 router.get('/api/list/getFullList/', ListController.getFullList);

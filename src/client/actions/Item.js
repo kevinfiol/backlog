@@ -17,6 +17,7 @@ export const editItemFormInput = key => (state, e) => [setState, {
 }];
 
 export const initEditItemForm = (state, { item }) => [setState, {
+    isUserMakingChanges: true,
     item: {
         itemid: item.itemid,
         isEditing: true,
@@ -29,6 +30,7 @@ export const initEditItemForm = (state, { item }) => [setState, {
 }];
 
 export const initAddItemForm = (state, { item, itemPosition }) => [setState, {
+    isUserMakingChanges: true,
     item: {
         itemid: item.itemid,
         isAdding: true,
@@ -40,6 +42,7 @@ export const initAddItemForm = (state, { item, itemPosition }) => [setState, {
 }];
 
 export const initRemoveItem = (state, { item }) => [setState, {
+    isUserMakingChanges: true,
     item: {
         itemid: item.itemid,
         isRemoving: true,
@@ -51,6 +54,7 @@ export const initRemoveItem = (state, { item }) => [setState, {
 }];
 
 export const resetEditItemForm = state => [setState, {
+    isUserMakingChanges: false,
     item: {
         itemid: null,
         isEditing: false,
@@ -59,6 +63,7 @@ export const resetEditItemForm = state => [setState, {
 }];
 
 export const resetAddItemForm = state => [setState, {
+    isUserMakingChanges: false,
     item: {
         itemid: null,
         isAdding: false,
@@ -67,6 +72,7 @@ export const resetAddItemForm = state => [setState, {
 }];
 
 export const resetRemoveItemForm = state => [setState, {
+    isUserMakingChanges: false,
     item: {
         itemid: null,
         isRemoving: false,

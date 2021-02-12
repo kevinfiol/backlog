@@ -6,6 +6,7 @@
     <h2><%= it.user.username %></h2>
 
     <h2>lists</h2>
+    <a href="/<%= it.user.username %>/list/create">create new list</a>
 
     <% if (it.lists && it.lists.length > 0) { %>
         <% for (let list of it.lists) { %>

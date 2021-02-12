@@ -33,7 +33,7 @@ export const beginSorting = state => [
     mountSortableItems(),
     [
         dispatch => {
-            dispatch(setState, { isSorting: true });
+            dispatch(setState, { isUserMakingChanges: true, isSorting: true });
         }
     ]
 ];
@@ -55,7 +55,15 @@ export const stopSorting = state => [
     [
         dispatch => {
             dispatch(destroySortables);
-            dispatch(setState, { list: { sections: [] }, sortables: [], isSorting: false, sorting: { movedItems: null } });
+
+            dispatch(setState, {
+                list: { sections: [] },
+                sortables: [],
+                isSorting: false,
+                isUserMakingChanges: false,
+                sorting: { movedItems: null }
+            });
+
             dispatch(getFullList);
         }
     ]
