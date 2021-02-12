@@ -4,7 +4,7 @@ import Button from '../Button.js';
 import { beginSorting, saveSorting, stopSorting } from '../../actions/Sortable.js';
 import { initAddSectionForm, addSection, addSectionFormInput, resetAddSectionForm } from '../../actions/Section.js';
 
-const ListControls = ({ isSorting, isUserMakingChanges, sectionState }) => {
+const ListControls = ({ isSorting, isUserMakingChanges, sectionState, listIsEmpty }) => {
     const isBeingUsed = sectionState.isAdding || isSorting;
     const isAddFormValid = sectionState.addForm.sectionname.trim().length > 0;
 
@@ -17,6 +17,7 @@ const ListControls = ({ isSorting, isUserMakingChanges, sectionState }) => {
                         m(Button, {
                             label: isSorting ? 'save' : 'sort',
                             icon: 'sort',
+                            disabled: listIsEmpty,
                             className: 'list-control',
                             onclick: isSorting ? saveSorting : beginSorting
                         }),

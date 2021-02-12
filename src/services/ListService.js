@@ -30,7 +30,7 @@ const ListService = {
 
     async getList(params) {
         try {
-            typecheck({ number: listid });
+            typecheck({ object: params });
             const list = await this.db.get('List', params);
 
             typecheck({ object: list });

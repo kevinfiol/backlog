@@ -91,15 +91,14 @@ export const removeItem = async function(req, res) {
 export const addSection = async function(req, res) {
     try {
         let { sectionname, listid } = req.body;
+        console.log(listid);
         typecheck({ string: sectionname, number: listid });
 
-        const [result, list] = await Promise.all([
-            ListService.addSection({ listid, sectionname }),
-            ListService.getList({ listid })
-        ]);
-
-        const newSectionID = result.lastID;
+        const list = await ListService.getList({ listid });
         if (!list) throw Error('List does not exist.');
+
+        const result = await ListService.addSection({ listid, sectionname });
+        const newSectionID = result.lastID;
 
         let sectionidOrder = fromIntCSV(list.sectionidOrder);
         sectionidOrder.splice(0, 0, newSectionID);

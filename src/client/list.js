@@ -69,8 +69,15 @@ const List = state =>
         m(ListControls, {
             isSorting: state.isSorting,
             isUserMakingChanges: state.isUserMakingChanges,
-            sectionState: state.section
+            sectionState: state.section,
+            listIsEmpty: state.list.sections.length < 1
         }),
+
+        state.list.sections.length < 1 &&
+            m('div.my4',
+                m('em', 'List is currently empty.')
+            )
+        ,
 
         state.list.sections.map(section =>
             m(Section, {
