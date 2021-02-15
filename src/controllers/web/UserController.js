@@ -7,9 +7,8 @@ export const user = async function(req, res) {
         typecheck({ string: username });
 
         // get user
-        let user = await UserService.getUser({ username });
-        if (!user) throw Error('User does not exist.');
-        user = { userid: user.userid, username: user.username };
+        const user = await UserService.getUser({ username });
+        if (user.userid === undefined) throw Error('User does not exist.');
 
         // get lists
         let lists = await ListService.getListsForUser({ userid: user.userid });
@@ -27,19 +26,18 @@ export const createList = async function(req, res) {
     try {
         if (req.method === 'POST') {
             const { listname } = req.body;
-            const username = req.session.username;
-            if (!username || username.trim().length < 1)
+            const { username, userid } = req.session;
+            typecheck({ string: username, number: userid });
+
+            if (username.trim().length < 1)
                 throw Error('User not logged in.');
 
-            const validation = await validateCreateList(username, listname);
+            const validation = await validateCreateList(userid, listname);
 
             if (!validation.ok) {
                 res.setViewData({ error: validation.error });
             } else {
-                const user = await UserService.getUser({ username });
-                if (!user) throw Error('User does not exist!'); // just to be safe :)
-
-                const result = await ListService.addList({ listname, userid: user.userid });
+                const result = await ListService.addList({ listname, userid });
                 res.redirect(`/${username}`);
                 return;
             }
@@ -60,6 +58,42 @@ export const createList = async function(req, res) {
     }
 };
 
+export const removeList = async function(req, res) {
+    const username = req.getRouteParam('username');
+    let listid = req.getRouteParam('listid');
+    typecheck({ strings: [username, listid] });
+
+    try {
+        if (req.method === 'POST') {
+            const validation = await validateRemoveList(req.session.username, listid);
+
+            if (!validation.ok) {
+                res.setViewData({ error: validation.error })
+            } else {
+                const result = await ListService.removeList({ listid });
+                res.redirect(`/${req.session.username}`);
+                return;
+            }
+        } else if (req.method === 'GET') {
+            if (req.session.username !== username) {
+                res.redirect('/');
+                return;
+            }
+
+            // get list data
+            const list = await ListService.getList({ listid });
+            if (list.listid === undefined) throw Error('List does not exist.');
+
+            res.setViewData({ listname: list.listname, slug: list.slug });
+        }
+
+        res.render('removeList.ejs', res.viewData);
+    } catch(e) {
+        res.statusCode = 404;
+        res.error(e);
+    }
+};
+
 export const list = async function(req, res) {
     try {
         // route params
@@ -68,7 +102,7 @@ export const list = async function(req, res) {
         typecheck({ strings: [username, listSlug] });
 
         // get list if it exists
-        const rows = await ListService.getListBySlug({ slug: listSlug, username });
+        const rows = await ListService.getListBySlugAndUsername({ slug: listSlug, username });
         if (rows.length < 1) throw Error('List does not exist.')
         const listData = rows[0];
 
@@ -84,20 +118,27 @@ export const list = async function(req, res) {
     }
 };
 
-async function validateCreateList(username, listname) {
-    const valid = { ok: true, error: '' };
+async function validateCreateList(userid, listname) {
+    const validation = { ok: true, error: '' };
 
-    if (username.trim().length < 1 || listname.trim().length < 1) {
-        valid.ok = false;
-        valid.error = 'listname cannot be empty.'
+    if (listname.trim().length < 1) {
+        validation.ok = false;
+        validation.error = 'listname cannot be empty.'
+        return validation;
     }
 
-    const lists = await ListService.getListByListnameAndUsername({ username, listname });
-
-    if (lists.length > 0) {
-        valid.ok = false;
-        valid.error = 'a list with given name already exists on this account.'
+    const list = await ListService.getList({ userid, listname });
+    if (list.listid !== undefined) {
+        validation.ok = false;
+        validation.error = 'a list with given name already exists on this account.'
     }
 
-    return valid;
+    return validation;
+}
+
+async function validateRemoveList(username, listid) {
+    const validation = { ok: true, error: '' };
+
+    // make sure the list even belongs to this user
+    const result = await ListService({  })
 }

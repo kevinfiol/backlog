@@ -142,3 +142,4 @@ header.section-header > h2 {
 .opacity-100 { opacity: 1; }
 .opacity-25 { opacity: 0.25; }
 .cursor-grab { cursor: grab; }
+.escondido { display: none; } /*honeypot*/

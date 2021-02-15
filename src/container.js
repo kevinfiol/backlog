@@ -6,6 +6,8 @@ const sessionConfig = config.sessionConfig;
 // services
 import UserService from './services/UserService.js';
 import ListService from './services/ListService.js';
+import SectionService from './services/SectionService.js';
+import ItemService from './services/ItemService.js';
 
 // sqlite
 import SQLite from './services/SQLite.js';
@@ -22,6 +24,8 @@ open({
     // services that depend on SQLite service
     UserService.init(SQLite);
     ListService.init(SQLite);
+    SectionService.init(SQLite);
+    ItemService.init(SQLite);
 });
 
 export {
@@ -30,5 +34,7 @@ export {
 
     // services
     UserService,
-    ListService
+    ListService,
+    SectionService,
+    ItemService
 };

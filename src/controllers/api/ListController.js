@@ -1,10 +1,6 @@
-import { ListService } from '../../container.js';
+import { ListService, SectionService, ItemService } from '../../container.js';
 import { fromIntCSV } from '../../util/fromCSV.js';
 import typecheck from '../../util/typecheck.js';
-
-/**
-* todo: implement some kind of rollback for adding/removing items in case error
-*/
 
 export const getFullList = async function(req, res) {
     try {
@@ -26,7 +22,7 @@ export const addItem = async function(req, res) {
         let { item, sectionid, itemPosition } = req.body;
         typecheck({ object: item, numbers: [sectionid, itemPosition] });
 
-        const section = await ListService.getSection({ sectionid });
+        const section = await SectionService.getSection({ sectionid });
         if (!section) throw Error('Section does not exist.');
 
         const itemidOrder = fromIntCSV(section.itemidOrder);
@@ -34,11 +30,11 @@ export const addItem = async function(req, res) {
             itemPosition = itemidOrder.length;
 
         // add the item to DB
-        let result = await ListService.addItem({ sectionid: section.sectionid, item })
+        let result = await ItemService.addItem({ sectionid: section.sectionid, item })
         const newItemID = result.lastID;
 
         itemidOrder.splice(itemPosition, 0, newItemID);
-        result = await ListService.updateItemOrder({ sectionid: section.sectionid, itemidOrder: itemidOrder.join(',') });
+        result = await SectionService.updateItemOrder({ sectionid: section.sectionid, itemidOrder: itemidOrder.join(',') });
 
         typecheck({ object: item, number: newItemID });
         res.send(200, { item: { ...item, itemid: newItemID } });
@@ -54,7 +50,7 @@ export const editItem = async function(req, res) {
         typecheck({ object: item });
 
         const editedItem = { itemid: item.itemid, itemname: item.itemname, url: item.url };
-        let result = await ListService.editItem({ item: editedItem });
+        let result = await ItemService.editItem({ item: editedItem });
 
         typecheck({ object: editedItem });
         res.send(200, { item: { ...editedItem } })
@@ -69,7 +65,7 @@ export const removeItem = async function(req, res) {
         let { itemid, sectionid } = req.body;
         typecheck({ numbers: [itemid, sectionid] });
 
-        const section = await ListService.getSection({ sectionid });
+        const section = await SectionService.getSection({ sectionid });
 
         let itemidOrder = fromIntCSV(section.itemidOrder);
         if (!itemidOrder.includes(itemid)) throw Error('Item not in given section');
@@ -77,8 +73,8 @@ export const removeItem = async function(req, res) {
         const itemPosition = itemidOrder.indexOf(itemid);
         itemidOrder.splice(itemPosition, 1);
 
-        let result = await ListService.updateItemOrder({ sectionid, itemidOrder: itemidOrder.join(',') });
-        result = await ListService.removeItem({ itemid });
+        let result = await SectionService.updateItemOrder({ sectionid, itemidOrder: itemidOrder.join(',') });
+        result = await ItemService.removeItem({ itemid });
 
         typecheck({ number: itemid });
         res.send(200, { itemid });
@@ -95,9 +91,9 @@ export const addSection = async function(req, res) {
         typecheck({ string: sectionname, number: listid });
 
         const list = await ListService.getList({ listid });
-        if (!list) throw Error('List does not exist.');
+        if (list.listid === undefined) throw Error('List does not exist.');
 
-        const result = await ListService.addSection({ listid, sectionname });
+        const result = await SectionService.addSection({ listid, sectionname });
         const newSectionID = result.lastID;
 
         let sectionidOrder = fromIntCSV(list.sectionidOrder);
@@ -117,7 +113,7 @@ export const editSection = async function(req, res) {
         let { sectionid, sectionname } = req.body;
         typecheck({ number: sectionid, string: sectionname });
 
-        await ListService.editSection({ sectionid, sectionname });
+        await SectionService.editSection({ sectionid, sectionname });
         res.send(200);
     } catch(e) {
         console.error(e);
@@ -130,7 +126,7 @@ export const removeSection = async function(req, res) {
         let { sectionid } = req.body;
         typecheck({ number: sectionid });
 
-        await ListService.removeSection({ sectionid });
+        await SectionService.removeSection({ sectionid });
         res.send(200);
     } catch(e) {
         console.error(e);
@@ -151,12 +147,12 @@ export const updateListOrders = async function(req, res) {
         promises.push(ListService.updateSectionOrder({ listid, sectionidOrder }));
 
         for (let [sectionid, itemidOrder] of Object.entries(itemidOrders)) {
-            promises.push(ListService.updateItemOrder({ sectionid: parseInt(sectionid), itemidOrder }));
+            promises.push(SectionService.updateItemOrder({ sectionid: parseInt(sectionid), itemidOrder }));
         }
 
         for (let [itemid, { newSection }] of Object.entries(movedItems)) {
             promises.push(
-                ListService.updateItemSectionid({
+                ItemService.updateItemSectionid({
                     itemid: parseInt(itemid),
                     sectionid: parseInt(newSection)
                 })
@@ -173,8 +169,8 @@ export const updateListOrders = async function(req, res) {
 
 async function validateListOrders(listid, sectionidOrder, itemidOrders, movedItems) {
     const [validSectionids, validItemids] = await Promise.all([
-        ListService.getSectionsByListid({ listid }),
-        ListService.getItemsByListid({ listid })
+        SectionService.getSectionsByListid({ listid }),
+        ItemService.getItemsByListid({ listid })
     ]);
 
     // validate sectionids and itemids
