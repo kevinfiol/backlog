@@ -9,6 +9,6 @@ export default () => {
     return session({
         ...sessionConfig,
         genid: () => v4(),
-        store: new FileStore({ path: './sessions' })
+        store: new FileStore({ path: './sessions', retries: 0 })
     });
 };

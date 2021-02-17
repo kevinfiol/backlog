@@ -88,7 +88,7 @@ const ListService = {
     async removeList({ listid }) {
         try {
             typecheck({ number: listid });
-            const list = this.getList({ listid });
+            const list = await this.getList({ listid });
             if (list === undefined) throw Error('List does not exist for given listid');
 
             let sectionidsStr = list.sectionidOrder !== undefined
@@ -110,13 +110,13 @@ const ListService = {
                     BEGIN TRANSACTION;
 
                     DELETE FROM Item
-                    WHERE Item.sectionid IN (${sectionsidsStr});
+                    WHERE Item.sectionid IN (${sectionidsStr});
 
                     DELETE FROM Section
-                    WHERE Section.sectionid IN (${sectionsidsStr});
+                    WHERE Section.sectionid IN (${sectionidsStr});
 
                     DELETE FROM List
-                    WHERE List.listid = ${listid}
+                    WHERE List.listid = ${listid};
 
                     COMMIT;
                 `);
