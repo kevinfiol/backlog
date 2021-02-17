@@ -86,7 +86,7 @@ const List = state =>
                 isSorting: state.isSorting,
                 isUserMakingChanges: state.isUserMakingChanges
             },
-                section.items.length < 1 &&
+                (section.items.length < 1 && !state.isSorting) &&
                     m(EmptyItemRow, {
                         itemState: state.item,
                         sectionid: section.sectionid,

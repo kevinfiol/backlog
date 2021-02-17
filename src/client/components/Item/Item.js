@@ -72,7 +72,7 @@ const Item = ({ item, itemPosition, itemState, isSorting, isUserMakingChanges, s
         isAdding &&
             m('tr',
                 m(AddItemForm, { addForm: itemState.addForm }),
-                m('td.item-controls.is-user-making-changes',
+                m('td.item-controls.is-being-used',
                     m(AddItemControls, { addForm: itemState.addForm })
                 )
             )

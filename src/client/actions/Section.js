@@ -116,5 +116,8 @@ export const removeSection = (state, { sectionid }) => [
             console.error(error);
             return { ...state, error };
         }
+    }),
+    action({
+        action: resetRemoveSection
     })
 ];

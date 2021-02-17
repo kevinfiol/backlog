@@ -4,34 +4,39 @@ import AddItemForm from './AddItemForm.js';
 import AddItemControls from './AddItemControls.js';
 import { initAddItemForm } from '../../actions/Item.js';
 
-const EmptyItemRow = ({ itemState, sectionid }) =>
-    m('tr.item.sortable-ignore',
-        !itemState.isAdding &&
-            m('td.item-data',
-                m(Button, {
-                    label: 'add item',
-                    icon: 'add',
-                    className: 'item-control',
-                    onclick: [initAddItemForm, {
-                        item: { itemid: null, sectionid },
-                        itemPosition: -1
-                    }]
-                })
-            )
-        ,
+const EmptyItemRow = ({ itemState, sectionid, isUserMakingChanges }) => {
+    const isAdding = itemState.isAdding && sectionid === itemState.addForm.sectionid;
 
-        itemState.isAdding && [
-            m(AddItemForm, {
-                addForm: itemState.addForm
-            }),
+    return (
+        m('tr.item.sortable-ignore',
+            !isAdding &&
+                m('td.item-data',
+                    m(Button, {
+                        label: 'add item',
+                        icon: 'add',
+                        disabled: isUserMakingChanges,
+                        className: 'item-control',
+                        onclick: [initAddItemForm, {
+                            item: { itemid: null, sectionid },
+                            itemPosition: -1
+                        }]
+                    })
+                )
+            ,
 
-            m('td.item-controls',
-                m(AddItemControls, {
+            isAdding && [
+                m(AddItemForm, {
                     addForm: itemState.addForm
-                })
-            )
-        ],
-    )
-;
+                }),
+
+                m('td.item-controls.is-being-used',
+                    m(AddItemControls, {
+                        addForm: itemState.addForm
+                    })
+                )
+            ],
+        )
+    );
+};
 
 export default EmptyItemRow;
