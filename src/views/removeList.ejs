@@ -3,7 +3,7 @@
 <main>
     <h1>remove list <em><%= it.listname %></em>?</h1>
 
-    <form action="/<%= it.sessionUser.username %>/list/remove/4" method="post">
+    <form action="/<%= it.sessionUser.username %>/list/remove/<%= it.listid %>" method="post">
         <p>are you sure you want to delete this list? all sections and items will be deleted as well</p>
         <button type="submit">confirm</button>
 

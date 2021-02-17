@@ -88,15 +88,15 @@ const ListService = {
     async removeList({ listid }) {
         try {
             typecheck({ number: listid });
-            const list = getList({ listid });
+            const list = this.getList({ listid });
             if (list === undefined) throw Error('List does not exist for given listid');
 
-            // get all the sectionids of given list
-            const sections = await this.db.all('Section', { listid }, 'sectionid');
-            console.log(sections);
-            const sectionsidsStr = sections.map(section => section.sectionid).join(',');
+            let sectionidsStr = list.sectionidOrder !== undefined
+                ? list.sectionidOrder.split(',').join(', ').trim()
+                : ''
+            ;
 
-            if (sections.length < 1) {
+            if (sectionidsStr.length < 1) {
                 // just remove list
                 await this.db.exec(`
                     BEGIN TRANSACTION;
@@ -105,22 +105,21 @@ const ListService = {
                     COMMIT;
                 `);
             } else {
-                console.log(sectionidsStr);
-                // await this.db.exec(`
-                //     BEGIN TRANSACTION;
+                // remove all sections and items belonging to list
+                await this.db.exec(`
+                    BEGIN TRANSACTION;
 
-                //     DELETE FROM Section
-                //     WHERE sectionid = ${sectionid};
+                    DELETE FROM Item
+                    WHERE Item.sectionid IN (${sectionsidsStr});
 
-                //     DELETE FROM Item
-                //     WHERE sectionid = ${sectionid};
+                    DELETE FROM Section
+                    WHERE Section.sectionid IN (${sectionsidsStr});
 
-                //     UPDATE List
-                //     SET sectionidOrder = '${sectionidOrder}'
-                //     WHERE listid = ${list.listid};
+                    DELETE FROM List
+                    WHERE List.listid = ${listid}
 
-                //     COMMIT;
-                // `);
+                    COMMIT;
+                `);
             }
         } catch(e) {
             throw Error('Unable to remove List: ' + e);

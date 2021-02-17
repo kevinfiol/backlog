@@ -62,18 +62,18 @@ export const createList = async function(req, res) {
 
 export const removeList = async function(req, res) {
     const username = req.getRouteParam('username');
-    let listid = req.getRouteParam('listid');
-    typecheck({ strings: [username, listid] });
+    const listid = parseInt(req.getRouteParam('listid'));
+    typecheck({ string: username, number: listid });
 
     try {
         if (req.method === 'POST') {
-            const validation = await validateRemoveList(req.session.username, listid);
+            const validation = await validateRemoveList(req.session.userid, listid);
 
             if (!validation.ok) {
                 res.setViewData({ error: validation.error })
             } else {
                 const result = await ListService.removeList({ listid });
-                res.redirect(`/${req.session.username}`);
+                res.redirect(`/${username}`);
                 return;
             }
         } else if (req.method === 'GET') {
@@ -86,7 +86,7 @@ export const removeList = async function(req, res) {
             const list = await ListService.getList({ listid });
             if (list.listid === undefined) throw Error('List does not exist.');
 
-            res.setViewData({ listname: list.listname, slug: list.slug });
+            res.setViewData({ listname: list.listname, slug: list.slug, listid: list.listid });
         }
 
         res.render('removeList.ejs', res.viewData);
@@ -141,9 +141,21 @@ async function validateCreateList(userid, listname) {
     return validation;
 }
 
-async function validateRemoveList(username, listid) {
+async function validateRemoveList(userid, listid) {
     const validation = { ok: true, error: '' };
 
+    if (typeof userid !== 'number' || typeof listid !== 'number') {
+        validation.ok = false;
+        validation.error = 'invalid userid or listid';
+        return validation;
+    }
+
     // make sure the list even belongs to this user
-    const result = await ListService({  })
+    const list = await ListService.getList({ userid, listid });
+    if (list.listid === undefined || list.listid !== listid) {
+        validation.ok = false;
+        validation.error = 'list does not belong to logged in user';
+    }
+
+    return validation;
 }
