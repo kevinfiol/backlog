@@ -13,9 +13,11 @@ export const user = async function(req, res) {
         // get lists
         let lists = await ListService.getListsForUser({ userid: user.userid });
 
-        typecheck({ object: user, array: lists });
-        res.setViewData({ user, lists });
-        res.render('dashboard.ejs', res.viewData);
+        const isAuth = req.session.username === user.username && req.session.userid === user.userid;
+
+        typecheck({ object: user, array: lists, boolean: isAuth });
+        res.setViewData({ user, lists, isAuth });
+        res.render('user.ejs', res.viewData);
     } catch(e) {
         res.statusCode = 404;
         res.error(e);
@@ -109,8 +111,11 @@ export const list = async function(req, res) {
         // retrieve sections + items
         const list = await ListService.getFullList({ listid: listData.listid });
 
-        typecheck({ object: list, string: username });
-        res.setViewData({ list, username });
+        // check if user is authed to modify list
+        const isAuth = (req.session.username === username && req.session.userid === list.userid);
+
+        typecheck({ object: list, string: username, boolean: isAuth });
+        res.setViewData({ list, username, isAuth });
         res.render('list.ejs', res.viewData);
     } catch(e) {
         res.statusCode = 404;

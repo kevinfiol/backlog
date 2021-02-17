@@ -4,10 +4,15 @@
     <p>
         <a href="/<%= it.username %>"><%= it.username %>'s lists</a>
     </p>
-    <h1><%= it.list.listname %></h1> <span><a href="/<%= it.username %>/list/remove/<%= it.list.listid %>">remove list</a>
+
+    <h1><%= it.list.listname %></h1>
+
+    <% if (it.isAuth) { %>
+        <a href="/<%= it.username %>/list/remove/<%= it.list.listid %>">remove list</a>
+    <% } %>
 
     <div id="list">
-        <noscript>
+        <% if (!it.isAuth) { %>
             <% for (const section of it.list.sections) { %>
                 <h2><%= section.sectionname %></h2>
                 <ul>
@@ -16,17 +21,19 @@
                     <% } %>
                 </ul>
             <% } %>
-        </noscript>
+        <% } %>
     </div>
 </main>
 
-<script nonce="<%- it.nonce %>">
-    (() => {
-        window.viewData = {
-            list: <%- JSON.stringify(it.list) %>
-        };
-    })();
-</script>
-<script defer src="/app/list.js"></script>
+<% if (it.isAuth) { %>
+    <script nonce="<%- it.nonce %>">
+        (() => {
+            window.viewData = {
+                list: <%- JSON.stringify(it.list) %>
+            };
+        })();
+    </script>
+    <script defer src="/app/list.js"></script>
+<% } %>
 
 <%- include('_includes/footer.ejs') %>

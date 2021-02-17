@@ -1,12 +1,13 @@
 <%- include('_includes/header.ejs', { user: it.sessionUser }) %>
 
 <main>
-    <h1>dashboard</h1>
-
-    <h2><%= it.user.username %></h2>
+    <h1><%= it.user.username %></h1>
 
     <h2>lists</h2>
-    <a href="/<%= it.user.username %>/list/create">create new list</a>
+
+    <% if (it.isAuth) { %>
+        <a href="/<%= it.user.username %>/list/create">create new list</a>
+    <% } %>
 
     <% if (it.lists && it.lists.length > 0) { %>
         <% for (let list of it.lists) { %>
