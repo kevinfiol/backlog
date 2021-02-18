@@ -5,3 +5,4 @@ backups
 *.db
 *.sqlite
 *.db-journal
+config-dev.js

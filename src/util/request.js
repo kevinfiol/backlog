@@ -1,4 +1,4 @@
-import { send } from 'httpie/fetch';
+import { send } from 'httpie';
 
 const request = {
     get(url, params = {}) {

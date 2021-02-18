@@ -1,28 +1,17 @@
+/**
+* if config-dev.js does not exist in root directory
+* create a copy of config-dev.default.js and rename it to config-dev.js
+* don't delete config-dev.default.js
+**/
+
+import config_prod from './config-prod.js';
+import config_dev from './config-dev.js';
+
 let config;
 
 if (process.env.PROD == 1)
-    config = {
-        port: 8080,
-        sessionConfig: {
-            secret: process.env.SESSION_SECRET,
-            resave: false,
-            saveUninitialized: false,
-            cookie: { secure: true, httpOnly: true, sameSite: true }
-        }
-    };
+    config = config_prod;
 else
-    config = {
-        port: 8080,
-        database: {
-            filename: './backlog.db'
-        },
-        sessionConfig: {
-            name: 'my.connect.sid',
-            secret: 'not-so-secret-secret',
-            resave: false,
-            saveUninitialized: false,
-            cookie: { secure: false, httpOnly: true, sameSite: true }
-        }
-    };
+    config = config_dev;
 
 export default config;

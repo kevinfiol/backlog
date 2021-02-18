@@ -3,12 +3,16 @@ import config from '../config.js';
 // session configuration
 const sessionConfig = config.sessionConfig;
 
+// api keys
+const rawgApiKey = config.api.rawg;
+
 // services
 import UserService from './services/UserService.js';
 import ListService from './services/ListService.js';
 import SectionService from './services/SectionService.js';
 import ItemService from './services/ItemService.js';
 import HLTBService from './services/HLTBService.js';
+import GameService from './services/GameService.js';
 
 // sqlite
 import SQLite from './services/SQLite.js';
@@ -31,6 +35,7 @@ open({
     SectionService.init(SQLite);
     ItemService.init(SQLite);
     HLTBService.init(new HowLongToBeatService(), SQLite);
+    GameService.init(SQLite, rawgApiKey);
 });
 
 export {
@@ -42,5 +47,6 @@ export {
     ListService,
     SectionService,
     ItemService,
-    HLTBService
+    HLTBService,
+    GameService
 };
