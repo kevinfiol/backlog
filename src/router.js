@@ -2,6 +2,7 @@ import polka from 'polka';
 import * as IndexController from './controllers/web/IndexController.js';
 import * as UserController from './controllers/web/UserController.js';
 import * as ListController from './controllers/api/ListController.js';
+import * as HowLongToBeat from './controllers/api/HowLongToBeat.js';
 
 const router = polka();
 
@@ -36,5 +37,7 @@ router.post('/api/list/addSection', ListController.addSection);
 router.post('/api/list/editSection', ListController.editSection);
 router.post('/api/list/removeSection/', ListController.removeSection);
 router.post('/api/list/renameSection/', ListController.renameSection);
+
+router.post('/api/hltb/search', HowLongToBeat.search);
 
 export default router;

@@ -8,11 +8,15 @@ import UserService from './services/UserService.js';
 import ListService from './services/ListService.js';
 import SectionService from './services/SectionService.js';
 import ItemService from './services/ItemService.js';
+import HLTBService from './services/HLTBService.js';
 
 // sqlite
 import SQLite from './services/SQLite.js';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
+
+// hltb
+import { HowLongToBeatService } from 'howlongtobeat';
 
 open({
     driver: sqlite3.cached.Database,
@@ -26,6 +30,7 @@ open({
     ListService.init(SQLite);
     SectionService.init(SQLite);
     ItemService.init(SQLite);
+    HLTBService.init(new HowLongToBeatService(), SQLite);
 });
 
 export {
@@ -36,5 +41,6 @@ export {
     UserService,
     ListService,
     SectionService,
-    ItemService
+    ItemService,
+    HLTBService
 };
