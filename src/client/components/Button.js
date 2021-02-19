@@ -1,6 +1,6 @@
 import m from '../m.js';
 
-const Button = ({ onclick, className, disabled, label, icon }, children) => 
+const Button = ({ onclick, className, disabled, label, icon, children }) => 
     m('button', {
         className,
         onclick,
