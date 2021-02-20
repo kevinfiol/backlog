@@ -7,7 +7,7 @@ const { list } = window.viewData;
 const initialState = {
     list,
     error: null,
-    isUserMakingChanges: false,
+    isChanging: false,
     isSorting: false,
     showItems: true,
     sortables: [],
@@ -15,5 +15,6 @@ const initialState = {
 };
 
 const store = createStore(initialState);
+store.subscribe(console.log);
 
 export { store, actions, connect, Provider };
