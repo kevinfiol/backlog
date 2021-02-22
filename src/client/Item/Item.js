@@ -7,7 +7,20 @@ import AddItem from './AddItem.js';
 import EditItem from './EditItem.js';
 import RemoveItem from './RemoveItem.js';
 
-const Item = ({ setIsChanging, item, itemPos, isSorting, isChanging, showItems }) => {
+const Item = ({
+    // actions
+    setIsChanging,
+    addItem,
+    editItem,
+    removeItem,
+
+    // props
+    item,
+    itemPos,
+    isSorting,
+    isChanging,
+    showItems
+}) => {
     const [state, setState] = useState({
         isAdding: false,
         isEditing: false,
@@ -16,15 +29,13 @@ const Item = ({ setIsChanging, item, itemPos, isSorting, isChanging, showItems }
 
     const initChanges = key => () => {
         setIsChanging(true);
-        setState(state => ({ ...state, [key]: true }));
+        setState({ [key]: true });
     };
 
     const finishChanges = key => () => {
         setIsChanging(false);
-        setState(state => ({ ...state, [key]: false }));
+        setState({ [key]: false });
     };
-
-    const isBeingUsed = state.isAdding || state.isEditing || state.isRemoving;
 
     return [
         m('tr.item', {
@@ -48,23 +59,27 @@ const Item = ({ setIsChanging, item, itemPos, isSorting, isChanging, showItems }
 
             state.isEditing &&
                 m(EditItem, {
+                    editItem,
                     onFinish: finishChanges('isEditing'),
-                    currentItemname: item.itemname,
-                    currentUrl: item.url
+                    item
                 })
             ,
 
             state.isRemoving &&
                 m(RemoveItem, {
+                    removeItem: removeItem,
                     onFinish: finishChanges('isRemoving'),
-                    itemname: item.itemname
+                    item
                 })
             ,
         ),
 
         state.isAdding &&
             m(AddItem, {
-                onFinish: finishChanges('isAdding')
+                addItem,
+                onFinish: finishChanges('isAdding'),
+                itemPosition: itemPos + 1,
+                sectionid: item.sectionid
             })
         ,
     ];

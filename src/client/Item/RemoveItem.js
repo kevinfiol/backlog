@@ -1,11 +1,11 @@
 import m from '../m.js';
 import Button from '../components/Button.js';
 
-const RemoveItem = ({ onFinish, itemname }) => [
+const RemoveItem = ({ removeItem, onFinish, item }) => [
     m('td.item-name',
         m('em',
             'Remove ',
-            m('b', itemname),
+            m('b', item.itemname),
             '?'
         )
     ),
@@ -19,8 +19,8 @@ const RemoveItem = ({ onFinish, itemname }) => [
             className: 'item-control',
             label: 'confirm',
             icon: 'delete',
-            onclick: () => {
-                console.log('delete: ' + itemname);
+            onclick: async () => {
+                await removeItem({ itemid: item.itemid, sectionid: item.sectionid });
                 onFinish();
             }
         }),

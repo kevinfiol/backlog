@@ -1,28 +1,35 @@
 import m from './m.js';
 import { render } from 'preact';
-import { store, actions, connect, Provider } from './store.js';
+import { store, connect, Provider } from './store.js';
+import actions from './actions.js';
 
 import Section from './Section/Section.js';
 import Item from './Item/Item.js';
 
 const List = connect(store => store, actions)(
-    (state) => {
-        const setIsChanging = isChanging => state.setVal(['isChanging', isChanging]);
+    (store) => {
+        const setIsChanging = isChanging => store.setVal(['isChanging', isChanging]);
 
         return (
             m('div',
-                state.list.sections.map(section =>
+                store.list.sections.map(section =>
                     m(Section, {
                         section
                     },
                         section.items.map((item, index) =>
                             m(Item, {
+                                // actions
+                                setIsChanging: setIsChanging,
+                                addItem: store.addItem,
+                                editItem: store.editItem,
+                                removeItem: store.removeItem,
+
+                                // props
                                 item,
                                 itemPos: index,
-                                isSorting: state.isSorting,
-                                isChanging: state.isChanging,
-                                showItems: state.showItems,
-                                setIsChanging: setIsChanging
+                                isSorting: store.isSorting,
+                                isChanging: store.isChanging,
+                                showItems: store.showItems
                             })
                         )
                     )

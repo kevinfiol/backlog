@@ -3,10 +3,15 @@ import { useState } from 'preact/hooks';
 import Button from '../components/Button.js';
 import Input from '../components/Input.js';
 
-const AddItem = ({ onFinish }) => {
+const AddItem = ({ addItem, onFinish, itemPosition, sectionid }) => {
     const [itemname, setItemname] = useState('');
     const [url, setUrl] = useState('');
     const isDisabled = itemname.trim().length < 1;
+
+    async function saveChanges() {
+        await addItem({ item: { itemname, url }, sectionid, itemPosition });
+        onFinish();
+    }
 
     return (
         m('tr.item',
@@ -32,13 +37,7 @@ const AddItem = ({ onFinish }) => {
                     label: 'save',
                     icon: 'save',
                     disabled: isDisabled,
-                    onclick: isDisabled
-                        ? null
-                        : () => {
-                            console.log(`add item!: ${itemname}`);
-                            onFinish();
-                        }
-                    ,
+                    onclick: isDisabled ? null : saveChanges
                 }),
 
                 m(Button, {

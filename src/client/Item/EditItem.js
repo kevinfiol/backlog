@@ -3,10 +3,15 @@ import { useState } from 'preact/hooks';
 import Button from '../components/Button.js';
 import Input from '../components/Input.js';
 
-const EditItem = ({ onFinish, currentItemname, currentUrl }) => {
-    const [itemname, setItemname] = useState(currentItemname);
-    const [url, setUrl] = useState(currentUrl);
+const EditItem = ({ editItem, onFinish, item }) => {
+    const [itemname, setItemname] = useState(item.itemname);
+    const [url, setUrl] = useState(item.url);
     const isDisabled = itemname.trim().length < 1;
+
+    async function saveChanges() {
+        await editItem({ itemid: item.itemid, itemname, url });
+        onFinish();
+    }
 
     return [
         m('td.item-name',
@@ -31,13 +36,7 @@ const EditItem = ({ onFinish, currentItemname, currentUrl }) => {
                 label: 'save',
                 icon: 'save',
                 disabled: isDisabled,
-                onclick: isDisabled
-                    ? null
-                    : () => {
-                        console.log('edit item', itemname);
-                        onFinish();
-                    }
-                ,
+                onclick: isDisabled ? null : saveChanges
             }),
 
             m(Button, {
