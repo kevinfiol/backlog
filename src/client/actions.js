@@ -15,7 +15,6 @@ const actions = store => {
                 const { list } = res.data;
                 return { list };
             } catch (e) {
-                console.log('line 17');
                 return { error: e.message };
             }
         },
