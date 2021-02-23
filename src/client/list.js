@@ -14,7 +14,15 @@ const List = connect(store => store, actions)(
             m('div',
                 store.list.sections.map(section =>
                     m(Section, {
-                        section
+                        // actions
+                        setIsChanging: setIsChanging,
+                        editSection: store.editSection,
+                        removeSection: store.removeSection,
+
+                        // props
+                        section,
+                        isSorting: store.isSorting,
+                        isChanging: store.isChanging
                     },
                         section.items.map((item, index) =>
                             m(Item, {

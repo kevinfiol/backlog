@@ -1,5 +1,5 @@
 import m from '../m.js';
-import cc from 'classcat';
+import cc from 'obj-str';
 import { useState } from 'preact/hooks';
 import Button from '../components/Button.js';
 
@@ -87,7 +87,7 @@ const Item = ({
 
 export default Item;
 
-const Controls = ({ item, initEditing, initAdding, initRemoving }) => [
+const Controls = ({ initEditing, initAdding, initRemoving }) => [
     m(Button, {
         label: 'edit',
         icon: 'edit',

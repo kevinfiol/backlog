@@ -52,6 +52,29 @@ const actions = store => {
             } catch (e) {
                 return { error: e.message };
             }
+        },
+
+        // Section
+        async editSection(state, { sectionid, sectionname }) {
+            try {
+                const res = await api.editSection({ sectionid, sectionname });
+                if (!res.ok) throw Error('Could not edit section');
+                const newState = await actions.refreshList(state);
+                store.setState(newState);
+            } catch(e) {
+                return { error: e.message };
+            }
+        },
+
+        async removeSection(state, sectionid) {
+            try {
+                const res = await api.removeSection(sectionid);
+                if (!res.ok) throw Error('Could not remove section');
+                const newState = await actions.refreshList(state);
+                store.setState(newState);
+            } catch(e) {
+                return { error: e.message };
+            }
         }
     };
 
