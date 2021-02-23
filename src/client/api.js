@@ -16,7 +16,7 @@ const api = {
         });
     },
 
-    editItem(item) {
+    editItem({ item }) {
         return post(endpoint('editItem'), { item });
     },
 
@@ -42,7 +42,7 @@ const api = {
         });
     },
 
-    removeSection(sectionid) {
+    removeSection({ sectionid }) {
         return post(endpoint('removeSection'), { sectionid });
     }
 };

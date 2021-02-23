@@ -20,61 +20,62 @@ const actions = store => {
             }
         },
 
-        // Item
-        async addItem(state, { item, sectionid, itemPosition }) {
+        async apiAction(state, { action, params }) {
             try {
-                const res = await api.addItem({ item, sectionid, itemPosition });
-                if (!res.ok) throw Error('Could not add item');
+                const res = await api[action](params);
+                if (!res.ok) throw Error(`${action} could not be completed.`);
                 const newState = await actions.refreshList(state);
                 store.setState(newState);
-            } catch (e) {
+            } catch(e) {
                 return { error: e.message };
             }
+        },
+
+        // Item
+        async addItem(state, { item, sectionid, itemPosition }) {
+            await actions.apiAction(state, {
+                action: 'addItem',
+                params: {
+                    item,
+                    sectionid,
+                    itemPosition
+                }
+            });
         },
 
         async editItem(state, item) {
-            try {
-                const res = await api.editItem(item);
-                if (!res.ok) throw Error('Could not edit item');
-                const newState = await actions.refreshList(state);
-                store.setState(newState);
-            } catch (e) {
-                return { error: e.message };
-            }
+            await actions.apiAction(state, {
+                action: 'editItem',
+                params: { item }
+            });
         },
 
         async removeItem(state, { itemid, sectionid }) {
-            try {
-                const res = await api.removeItem({ itemid, sectionid });
-                if (!res.ok) throw Error('Could not remove item');
-                const newState = await actions.refreshList(state);
-                store.setState(newState);
-            } catch (e) {
-                return { error: e.message };
-            }
+            await actions.apiAction(state, {
+                action: 'removeItem',
+                params: {
+                    itemid,
+                    sectionid
+                }
+            });
         },
 
         // Section
         async editSection(state, { sectionid, sectionname }) {
-            try {
-                const res = await api.editSection({ sectionid, sectionname });
-                if (!res.ok) throw Error('Could not edit section');
-                const newState = await actions.refreshList(state);
-                store.setState(newState);
-            } catch(e) {
-                return { error: e.message };
-            }
+            await actions.apiAction(state, {
+                action: 'editSection',
+                params: {
+                    sectionid,
+                    sectionname
+                }
+            });
         },
 
         async removeSection(state, sectionid) {
-            try {
-                const res = await api.removeSection(sectionid);
-                if (!res.ok) throw Error('Could not remove section');
-                const newState = await actions.refreshList(state);
-                store.setState(newState);
-            } catch(e) {
-                return { error: e.message };
-            }
+            await actions.apiAction(state, {
+                action: 'removeSection',
+                params: { sectionid }
+            });
         }
     };
 
