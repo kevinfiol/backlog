@@ -1,5 +1,6 @@
 import m from '../m.js';
 import cc from 'obj-str';
+import { Fragment } from 'preact';
 import { useState } from 'preact/hooks';
 import Button from '../components/Button.js';
 
@@ -37,10 +38,9 @@ const Item = ({
         setState({ [key]: false });
     };
 
-    return [
+    return m(Fragment, { key: item.itemid },
         m('tr.item', {
-            className: cc({ hide: !showItems, 'cursor-grab': isSorting }),
-            key: item.itemid
+            className: cc({ hide: !showItems, 'cursor-grab': isSorting })
         },
             (!state.isEditing && !state.isRemoving) && [
                 m('td.item-name', item.itemname),
@@ -82,7 +82,7 @@ const Item = ({
                 sectionid: item.sectionid
             })
         ,
-    ];
+    );
 };
 
 export default Item;

@@ -3,15 +3,31 @@ import { render } from 'preact';
 import { store, connect, Provider } from './store.js';
 import actions from './actions.js';
 
+import EmptyRow from './Item/EmptyRow.js';
+import ListControls from './List/ListControls.js';
 import Section from './Section/Section.js';
 import Item from './Item/Item.js';
 
 const List = connect(store => store, actions)(
     (store) => {
         const setIsChanging = isChanging => store.setVal(['isChanging', isChanging]);
+        const setIsSorting = isSorting => store.setVal(['isSorting', isSorting]);
+        const isListEmpty = store.list.sections.length < 1;
 
         return (
             m('div',
+                m(ListControls, {
+                    // actions
+                    setIsChanging,
+                    setIsSorting,
+                    addSection: store.addSection,
+
+                    // props
+                    listid: store.list.listid,
+                    isListEmpty,
+                    isSorting: store.isSorting
+                }),
+
                 store.list.sections.map(section =>
                     m(Section, {
                         // actions
@@ -24,6 +40,18 @@ const List = connect(store => store, actions)(
                         isSorting: store.isSorting,
                         isChanging: store.isChanging
                     },
+                        (section.items.length < 1 && !store.isSorting) &&
+                            m(EmptyRow, {
+                                // actions
+                                setIsChanging,
+                                addItem: store.addItem,
+
+                                // props
+                                sectionid: section.sectionid,
+                                isChanging: store.isChanging
+                            })
+                        ,
+
                         section.items.map((item, index) =>
                             m(Item, {
                                 // actions

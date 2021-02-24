@@ -35,6 +35,7 @@ const Section = ({
 
     return (
         m('div.section', {
+            key: section.sectionid,
             className: cc({ 'cursor-grab': isSorting })
         },
             m('header.section-header',

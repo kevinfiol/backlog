@@ -60,6 +60,16 @@ const actions = store => {
         },
 
         // Section
+        async addSection(state, { listid, sectionname }) {
+            await actions.apiAction(state, {
+                action: 'addSection',
+                params: {
+                    listid,
+                    sectionname
+                }
+            });
+        },
+
         async editSection(state, { sectionid, sectionname }) {
             await actions.apiAction(state, {
                 action: 'editSection',
