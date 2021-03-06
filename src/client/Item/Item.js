@@ -40,7 +40,9 @@ const Item = ({
 
     return m(Fragment, { key: item.itemid },
         m('tr.item', {
-            className: cc({ hide: !showItems, 'cursor-grab': isSorting })
+            className: cc({ hide: !showItems, draggable: isSorting }),
+            key: item.itemid,
+            'data-id': item.itemid
         },
             (!state.isEditing && !state.isRemoving) && [
                 m('td.item-name', item.itemname),

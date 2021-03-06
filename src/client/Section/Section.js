@@ -42,7 +42,7 @@ const Section = ({
                 (!state.isEditing && !state.isRemoving) && [
                     m('h2', section.sectionname),
 
-                    !isSorting &&
+                    (!isSorting && !isChanging) &&
                         m('div.section-controls',
                             m(Controls, {
                                 initEditing: initChanges('isEditing'),

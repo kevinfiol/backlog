@@ -132,14 +132,12 @@ header.section-header > h2 {
 }
 
 /*SortableJS*/
-.sortablejs__item--selected {
-    box-shadow: inset 0px 0px 1px 1px #7676a6;
-}
-
-.sortable-ignore { cursor: default; }
+.draggable { user-select: none; cursor: -webkit-grab; cursor: grab; }
+/*.drag * { pointer-events: none; }*/
+.dragging { background-color: red; cursor: -webkit-grabbing; cursor: grabbing; }
+.dropping { background-color: greenyellow; }
 
 /*Utility*/
 .opacity-100 { opacity: 1; }
 .opacity-25 { opacity: 0.25; }
-.cursor-grab { cursor: grab; }
 .escondido { display: none; } /*honeypot*/

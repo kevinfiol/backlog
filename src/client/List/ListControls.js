@@ -16,6 +16,16 @@ const ListControls = ({
 }) => {
     const [isAdding, setIsAdding] = useState(false);
 
+    const initSorting = () => {
+        setIsSorting(true);
+        setIsChanging(true);
+    };
+
+    const finishSorting = () => {
+        setIsSorting(false);
+        setIsChanging(false);
+    };
+
     const initAdding = () => {
         setIsChanging(true);
         setIsAdding(true);
@@ -34,7 +44,7 @@ const ListControls = ({
                     icon: 'sort',
                     className: 'list-control',
                     disabled: isListEmpty,
-                    onclick: () => setIsSorting(true)
+                    onclick: initSorting
                 }),
 
                 m(Button, {
@@ -43,6 +53,15 @@ const ListControls = ({
                     className: 'list-control',
                     onclick: initAdding
                 })
+            ],
+
+            isSorting && [
+                m(Button, {
+                    label: 'save sorting',
+                    icon: 'save',
+                    className: 'list-control',
+                    onclick: finishSorting
+                }),
             ],
 
             isAdding &&

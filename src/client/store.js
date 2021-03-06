@@ -8,9 +8,7 @@ const initialState = {
     error: null,
     isChanging: false,
     isSorting: false,
-    showItems: true,
-    sortables: [],
-    sorting: { movedItems: null }
+    showItems: true
 };
 
 const store = createStore(initialState);
