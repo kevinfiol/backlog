@@ -1,6 +1,7 @@
 import m from '../m.js';
 import cc from 'obj-str';
-import { useState } from 'preact/hooks';
+import Sortable from 'sortablejs/modular/sortable.core.esm.js';
+import { useState, useRef, useEffect } from 'preact/hooks';
 import Button from '../components/Button.js';
 
 import EditSection from './EditSection.js';
@@ -18,6 +19,9 @@ const Section = ({
     isChanging,
     children
 }) => {
+    const sortable = useRef(null);
+    const sortableEl = useRef(null);
+
     const [state, setState] = useState({
         isEditing: false,
         isRemoving: false
@@ -33,10 +37,29 @@ const Section = ({
         setState({ [key]: false });
     };
 
+    useEffect(() => {
+        if (isSorting && sortableEl.current && !sortable.current) {
+            sortable.current = Sortable.create(sortableEl.current, {
+                animation: 100,
+                draggable: '.draggable',
+                dataIdAttr: 'data-id'
+            });
+        }
+
+        return () => {
+            if (sortable.current) {
+                sortable.current.destroy();
+                sortable.current = null;
+            }
+        };
+    }, [isSorting]);
+
     return (
         m('div.section', {
             key: section.sectionid,
-            className: cc({ 'cursor-grab': isSorting })
+            className: cc({ 'draggable': isSorting }),
+            draggable: isSorting,
+            'data-id': section.sectionid
         },
             m('header.section-header',
                 (!state.isEditing && !state.isRemoving) && [
@@ -70,7 +93,7 @@ const Section = ({
             ),
 
             m('table.item-table',
-                m('tbody.item-list',
+                m('tbody.item-list', { ref: sortableEl },
                     children
                 )
             )

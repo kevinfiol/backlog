@@ -1,5 +1,7 @@
 import m from './m.js';
+import Sortable from 'sortablejs/modular/sortable.core.esm.js';
 import { render } from 'preact';
+import { useRef, useEffect } from 'preact/hooks';
 import { store, connect, Provider } from './store.js';
 import actions from './actions.js';
 
@@ -10,17 +12,44 @@ import Item from './Item/Item.js';
 
 const List = connect(store => store, actions)(
     (store) => {
+        const sortable = useRef(null);
+        const sortableEl = useRef(null);
+
         const setIsChanging = isChanging => store.setVal(['isChanging', isChanging]);
         const setIsSorting = isSorting => store.setVal(['isSorting', isSorting]);
         const isListEmpty = store.list.sections.length < 1;
 
+        useEffect(() => {
+            if (store.isSorting && sortableEl.current && !sortable.current) {
+                sortable.current = Sortable.create(sortableEl.current, {
+                    animation: 100,
+                    draggable: '.draggable',
+                    dataIdAttr: 'data-id',
+                    onStart: () => {
+                        document.querySelectorAll('.section').forEach(el => el.classList.add('short-section'));
+                    },
+                    onEnd: () => {
+                        document.querySelectorAll('.section').forEach(el => el.classList.remove('short-section'));
+                    }
+                });
+            }
+
+            return () => {
+                if (sortable.current) {
+                    sortable.current.destroy();
+                    sortable.current = null;
+                }
+            };
+        }, [store.isSorting]);
+
         return (
-            m('div',
+            m('div', { ref: sortableEl },
                 m(ListControls, {
                     // actions
                     setIsChanging,
                     setIsSorting,
                     addSection: store.addSection,
+                    updateListOrders: store.updateListOrders,
 
                     // props
                     listid: store.list.listid,

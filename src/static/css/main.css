@@ -131,6 +131,11 @@ header.section-header > h2 {
     margin-right: 0.4rem;
 }
 
+.short-section {
+    height: 97px;
+    overflow: hidden;
+}
+
 /*SortableJS*/
 .draggable { user-select: none; cursor: -webkit-grab; cursor: grab; }
 /*.drag * { pointer-events: none; }*/

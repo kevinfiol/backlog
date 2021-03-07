@@ -7,6 +7,14 @@ const api = {
         return get(endpoint('getFullList'), { listid });
     },
 
+    updateListOrders({ listid, sectionidOrder, itemidOrders }) {
+        return post(endpoint('updateListOrders'), {
+            listid,
+            sectionidOrder,
+            itemidOrders
+        });
+    },
+
     // Item
     addItem({ item, sectionid, itemPosition }) {
         return post(endpoint('addItem'), {

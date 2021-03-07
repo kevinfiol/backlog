@@ -30,6 +30,34 @@ const actions = store => {
             }
         },
 
+        // List
+        async updateListOrders(state) {
+            const sectionids = [];
+            const itemidOrders = {};
+            for (let section of document.getElementsByClassName('section')) {
+                sectionids.push(section.dataset.id);
+
+                const itemids = [];
+
+                for (let item of section.getElementsByClassName('item')) {
+                    itemids.push(item.dataset.id);
+                }
+                
+                itemidOrders[section.dataset.id] = itemids.join(',');
+            }
+
+            const sectionidOrder = sectionids.join(',');
+
+            await actions.apiAction(state, {
+                action: 'updateListOrders',
+                params: {
+                    listid: state.list.listid,
+                    sectionidOrder,
+                    itemidOrders
+                }
+            });
+        },
+
         // Item
         async addItem(state, { item, sectionid, itemPosition }) {
             await actions.apiAction(state, {

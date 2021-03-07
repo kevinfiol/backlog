@@ -8,6 +8,7 @@ const ListControls = ({
     setIsChanging,
     setIsSorting,
     addSection,
+    updateListOrders,
 
     // props
     listid,
@@ -21,7 +22,8 @@ const ListControls = ({
         setIsChanging(true);
     };
 
-    const finishSorting = () => {
+    const finishSorting = async () => {
+        await updateListOrders();
         setIsSorting(false);
         setIsChanging(false);
     };
