@@ -34,12 +34,12 @@ router.post('/api/list/addItem/', ListController.addItem);
 router.post('/api/list/editItem/', ListController.editItem);
 router.post('/api/list/removeItem/', ListController.removeItem);
 
-router.post('/api/list/addSection', ListController.addSection);
-router.post('/api/list/editSection', ListController.editSection);
+router.post('/api/list/addSection/', ListController.addSection);
+router.post('/api/list/editSection/', ListController.editSection);
 router.post('/api/list/removeSection/', ListController.removeSection);
 router.post('/api/list/renameSection/', ListController.renameSection);
 
-router.post('/api/game/search', GameController.search);
-router.post('/api/hltb/search', HowLongToBeat.search);
+router.post('/api/game/search/', GameController.search);
+router.post('/api/hltb/search/', HowLongToBeat.search);
 
 export default router;

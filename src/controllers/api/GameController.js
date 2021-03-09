@@ -11,6 +11,6 @@ export const search = async function(req, res) {
         res.send(200, { results });
     } catch(e) {
         console.error(e);
-        res.send(500, { message: 'Error occured. Unable to search HowLongToBeat.' });
+        res.send(500, { message: 'Error occured. Unable to search RAWG.' });
     }
 };

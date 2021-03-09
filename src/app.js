@@ -22,6 +22,12 @@ import logger from './middleware/logger.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_ASSETS_MAX_AGE = 31536000;
 
+const polkaOpts = {
+    onError(err, req, res, next) {
+        if (err.code == 'ECONNRESET') next();
+    }
+};
+
 // static assets
 const assets = sirv(join(__dirname, 'static'), {
     maxAge: STATIC_ASSETS_MAX_AGE,
@@ -30,7 +36,7 @@ const assets = sirv(join(__dirname, 'static'), {
 });
 
 // app + middleware
-const app = polka().use(
+const app = polka(polkaOpts).use(
     // helpers
     logger(),
     urlencoded(),

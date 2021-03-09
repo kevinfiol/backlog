@@ -136,11 +136,11 @@ export const removeSection = async function(req, res) {
 
 export const updateListOrders = async function(req, res) {
     try {
-        let { listid, sectionidOrder, itemidOrders, movedItems } = req.body;
-        typecheck({ number: listid, string: sectionidOrder, objects: [itemidOrders, movedItems] });
+        let { listid, sectionidOrder, itemidOrders } = req.body;
+        typecheck({ number: listid, string: sectionidOrder, object: itemidOrders });
 
         // validate that the ids provided by the client correctly belong to the specified list
-        const areIdsValid = await validateListOrders(listid, sectionidOrder, itemidOrders, movedItems);
+        const areIdsValid = await validateListOrders(listid, sectionidOrder, itemidOrders);
         if (!areIdsValid) throw Error('Invalid ids supplied to updateListOrders');
 
         const promises = [];
@@ -148,15 +148,6 @@ export const updateListOrders = async function(req, res) {
 
         for (let [sectionid, itemidOrder] of Object.entries(itemidOrders)) {
             promises.push(SectionService.updateItemOrder({ sectionid: parseInt(sectionid), itemidOrder }));
-        }
-
-        for (let [itemid, { newSection }] of Object.entries(movedItems)) {
-            promises.push(
-                ItemService.updateItemSectionid({
-                    itemid: parseInt(itemid),
-                    sectionid: parseInt(newSection)
-                })
-            );
         }
 
         await Promise.all(promises);
@@ -167,7 +158,7 @@ export const updateListOrders = async function(req, res) {
     }
 }
 
-async function validateListOrders(listid, sectionidOrder, itemidOrders, movedItems) {
+async function validateListOrders(listid, sectionidOrder, itemidOrders) {
     const [validSectionids, validItemids] = await Promise.all([
         SectionService.getSectionsByListid({ listid }),
         ItemService.getItemsByListid({ listid })
@@ -176,13 +167,11 @@ async function validateListOrders(listid, sectionidOrder, itemidOrders, movedIte
     // validate sectionids and itemids
     let allSectionids = [
         ...sectionidOrder.split(',').map(sectionid => sectionid),
-        ...Object.keys(itemidOrders).map(sectionid => sectionid),
-        ...Object.values(movedItems).reduce((a,c) => [...a, c.originalSection, c.newSection], [])
+        ...Object.keys(itemidOrders).map(sectionid => sectionid)
     ];
 
     let allItemids = [
-        ...Object.values(itemidOrders).reduce((a, c) => [...a, ...c.split(',')], []),
-        ...Object.keys(movedItems)
+        ...Object.values(itemidOrders).reduce((a, c) => [...a, ...c.split(',')], [])
     ];
 
     // narrowIds removes dups, empty strings, and parses Ints
