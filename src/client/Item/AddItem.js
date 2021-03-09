@@ -1,9 +1,12 @@
 import m from '../m.js';
-import { useState } from 'preact/hooks';
+import { useState, useRef } from 'preact/hooks';
 import Button from '../components/Button.js';
 import Input from '../components/Input.js';
+import AutoInput from '../components/AutoInput.js';
+import createGameSource from './createGameSource.js';
 
 const AddItem = ({ addItem, onFinish, itemPosition, sectionid }) => {
+    const controller = useRef(null);
     const [itemname, setItemname] = useState('');
     const [url, setUrl] = useState('');
     const isDisabled = itemname.trim().length < 1;
@@ -16,11 +19,21 @@ const AddItem = ({ addItem, onFinish, itemPosition, sectionid }) => {
     return (
         m('tr.item',
             m('td.item-name',
-                m(Input, {
-                    placeholder: 'new item name...',
-                    value: itemname,
-                    oninput: (ev) => setItemname(ev.target.value)
-                }),
+                m(AutoInput, {
+                    config: {
+                        placeholder: 'new item name...',
+                        onSelect: (choice) => {
+                            setUrl(url => {
+                                if (url.trim().length < 1 && choice.url.trim().length > 1) return choice.url;
+                                else return url;
+                            });
+                        },
+                        onValue: (value) => {
+                            setItemname(value);
+                        },
+                        source: createGameSource(controller.current)
+                    }
+                })
             ),
 
             m('td.item-data',

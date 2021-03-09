@@ -1,14 +1,19 @@
 import { send } from 'httpie/fetch';
 
-const endpoint = (action) => `/api/list/${action}/`;
+const listEndpoint = (action) => `/api/list/${action}/`;
+const gameEndpoint = (action) => `/api/game/${action}/`;
 
 const api = {
+    searchGame(name, fetchOpts) {
+        return post(gameEndpoint('search'), { name }, fetchOpts);
+    },
+
     getFullList(listid) {
-        return get(endpoint('getFullList'), { listid });
+        return get(listEndpoint('getFullList'), { listid });
     },
 
     updateListOrders({ listid, sectionidOrder, itemidOrders }) {
-        return post(endpoint('updateListOrders'), {
+        return post(listEndpoint('updateListOrders'), {
             listid,
             sectionidOrder,
             itemidOrders
@@ -17,7 +22,7 @@ const api = {
 
     // Item
     addItem({ item, sectionid, itemPosition }) {
-        return post(endpoint('addItem'), {
+        return post(listEndpoint('addItem'), {
             item,
             sectionid,
             itemPosition
@@ -25,11 +30,11 @@ const api = {
     },
 
     editItem({ item }) {
-        return post(endpoint('editItem'), { item });
+        return post(listEndpoint('editItem'), { item });
     },
 
     removeItem({ itemid, sectionid }) {
-        return post(endpoint('removeItem'), {
+        return post(listEndpoint('removeItem'), {
             itemid,
             sectionid
         });
@@ -37,21 +42,21 @@ const api = {
 
     // Section
     addSection({ listid, sectionname }) {
-        return post(endpoint('addSection'), {
+        return post(listEndpoint('addSection'), {
             listid,
             sectionname
         });
     },
 
     editSection({ sectionid, sectionname }) {
-        return post(endpoint('editSection'), {
+        return post(listEndpoint('editSection'), {
             sectionid,
             sectionname
         });
     },
 
     removeSection({ sectionid }) {
-        return post(endpoint('removeSection'), { sectionid });
+        return post(listEndpoint('removeSection'), { sectionid });
     }
 };
 
@@ -61,8 +66,8 @@ function get(url, params = {}) {
     return send('GET', url + buildQueryString(params));
 }
 
-function post(url, body = {}) {
-    return send('POST', url, { body })
+function post(url, body = {}, opts = {}) {
+    return send('POST', url, { body, ...opts });
 }
 
 function buildQueryString(params) {

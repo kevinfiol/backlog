@@ -4,7 +4,7 @@ dependencies:
   '@polka/send': 1.0.0-next.7
   compression: 1.7.4
   cookie: 0.4.1
-  etto: 1.4.2
+  etto: 1.5.4
   express-session: 1.17.1
   helmet: 4.2.0
   httpie: 2.0.0-next.13
@@ -310,10 +310,10 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha512-oidFLXssA7IccYzkqLVZSqNJDwDq8Mh/vqvrW+3fPWM7iUiC5O2bCllhnO8+K9LlyL/2Z6n+WwRJAz9fqSIVRg==
-  /etto/1.4.2:
+  /etto/1.5.4:
     dev: false
     resolution:
-      integrity: sha512-OXUNyxfugObKFE1uzZEdDf8wX1Y9J0b8I6DaXqPYIBehdHx2BQgtLhdTWEr00uGZi8gSN8S5bxN17e7aMblw0Q==
+      integrity: sha512-DbyzuYip97jpjWFWHTnDv8bj34G/Wivr9mDFa/0qLHCkD+qteywlS8HK7gK8saEQv2glrEf00GPM8KHucCxkuA==
   /express-session/1.17.1:
     dependencies:
       cookie: 0.4.0
@@ -1266,7 +1266,7 @@ specifiers:
   compression: ^1.7.4
   cookie: ^0.4.1
   esbuild: ^0.8.50
-  etto: ^1.4.2
+  etto: ^1.5.4
   express-session: ^1.17.1
   helmet: ^4.2.0
   httpie: ^2.0.0-next.13
