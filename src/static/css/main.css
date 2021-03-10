@@ -51,6 +51,9 @@ i.delete { background-image: url('/assets/delete.png'); }
 i.sort { background-image: url('/assets/sort.png'); }
 i.save { background-image: url('/assets/save.png'); }
 i.cancel { background-image: url('/assets/cancel.png'); }
+i.editor { background-image: url('/assets/editor.png'); }
+i.bookmark { background-image: url('/assets/bookmark.png'); }
+i.internet { background-image: url('/assets/internet.png'); }
 i.move { background-image: url('/assets/move.png'); height: 18px; width: 18px; }
 
 /*Buttons*/
@@ -88,7 +91,7 @@ button.list-control {
 .item-table { margin: 0 0; }
 
 .item-name, .item-data {
-    width: 30%;
+    width: 35%;
     text-align: left;
 }
 
@@ -97,8 +100,10 @@ button.list-control {
     width: 100%;
 }
 
+.item-url { display: flex; align-items: center; width: max-content; }
+
 .item-controls {
-    width: 40%;
+    width: 30%;
     text-align: right;
 }
 

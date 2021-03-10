@@ -46,7 +46,9 @@ const Item = ({
         },
             (!state.isEditing && !state.isRemoving) && [
                 m('td.item-name', item.itemname),
-                m('td.item-data', 'link/review'),
+                m('td.item-data',
+                    item.url && m('a.item-url', { href: item.url }, m('i.internet'))
+                ),
                 m('td.item-controls',
                     !isChanging &&
                         m(Controls, {
