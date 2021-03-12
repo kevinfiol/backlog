@@ -18,12 +18,14 @@ const ListControls = ({
     const [isAdding, setIsAdding] = useState(false);
 
     const initSorting = () => {
+        window.sortorderHasChanged = false; // prevent api calls when no sorting was done
         setIsSorting(true);
         setIsChanging(true);
     };
 
     const finishSorting = async () => {
-        await updateListOrders();
+        if (window.sortorderHasChanged) await updateListOrders();
+        window.sortorderHasChanged = false;
         setIsSorting(false);
         setIsChanging(false);
     };

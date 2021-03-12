@@ -25,6 +25,7 @@ const List = connect(store => store, actions)(
                     animation: 100,
                     draggable: '.draggable',
                     dataIdAttr: 'data-id',
+                    onSort: () => { window.sortorderHasChanged = true; },
                     onStart: () => {
                         document.querySelectorAll('.section').forEach(el => el.classList.add('short-section'));
                     },

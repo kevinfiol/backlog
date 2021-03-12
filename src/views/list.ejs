@@ -5,11 +5,13 @@
         <a href="/<%= it.username %>"><%= it.username %>'s lists</a>
     </p>
 
-    <h1><%= it.list.listname %></h1>
+    <div class="list-header">
+        <h1><%= it.list.listname %></h1>
 
-    <% if (it.isAuth) { %>
-        <a href="/<%= it.username %>/list/remove/<%= it.list.listid %>">remove list</a>
-    <% } %>
+<!--         <% if (it.isAuth) { %>
+            <a class="remove-list" href="/<%= it.username %>/list/remove/<%= it.list.listid %>">remove list</a>
+        <% } %> -->
+    </div>
 
     <div id="list">
         <% if (!it.isAuth) { %>

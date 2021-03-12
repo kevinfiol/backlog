@@ -39,17 +39,18 @@ const Item = ({
     };
 
     return m(Fragment, { key: item.itemid },
-        m('tr.item', {
+        m('div.item', {
+            role: 'row',
             className: cc({ hide: !showItems, draggable: isSorting }),
             key: item.itemid,
             'data-id': item.itemid
         },
             (!state.isEditing && !state.isRemoving) && [
-                m('td.item-name', item.itemname),
-                m('td.item-data',
+                m('div.item-name', { role: 'cell' }, item.itemname),
+                m('div.item-data', { role: 'cell' },
                     item.url && m('a.item-url', { href: item.url }, m('i.internet'))
                 ),
-                m('td.item-controls',
+                m('div.item-controls', { role: 'cell' },
                     !isChanging &&
                         m(Controls, {
                             item,

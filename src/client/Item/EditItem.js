@@ -17,7 +17,7 @@ const EditItem = ({ editItem, onFinish, item }) => {
     }
 
     return [
-        m('td.item-name',
+        m('div.item-name', { role: 'cell' },
             m(AutoInput, {
                 initialValue: itemname,
                 config: {
@@ -36,7 +36,7 @@ const EditItem = ({ editItem, onFinish, item }) => {
             })
         ),
 
-        m('td.item-data',
+        m('div.item-data', { role: 'cell' },
             m(Input, {
                 placeholder: 'url...',
                 value: url,
@@ -44,7 +44,7 @@ const EditItem = ({ editItem, onFinish, item }) => {
             })
         ),
 
-        m('td.item-controls.is-being-used',
+        m('div.item-controls.is-being-used', { role: 'cell' },
             m(Button, {
                 className: 'item-control',
                 label: 'save',

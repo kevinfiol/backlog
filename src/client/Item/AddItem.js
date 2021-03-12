@@ -17,8 +17,8 @@ const AddItem = ({ addItem, onFinish, itemPosition, sectionid }) => {
     }
 
     return (
-        m('tr.item',
-            m('td.item-name',
+        m('div.item', { role: 'row' },
+            m('div.item-name', { role: 'cell' },
                 m(AutoInput, {
                     config: {
                         placeholder: 'new item name...',
@@ -36,7 +36,7 @@ const AddItem = ({ addItem, onFinish, itemPosition, sectionid }) => {
                 })
             ),
 
-            m('td.item-data',
+            m('div.item-data', { role: 'cell' },
                 m(Input, {
                     placeholder: 'url...',
                     value: url,
@@ -44,7 +44,7 @@ const AddItem = ({ addItem, onFinish, itemPosition, sectionid }) => {
                 })
             ),
 
-            m('td.item-controls.is-being-used',
+            m('div.item-controls.is-being-used', { role: 'cell' },
                 m(Button, {
                     className: 'item-control',
                     label: 'save',

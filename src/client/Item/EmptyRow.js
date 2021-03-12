@@ -19,8 +19,8 @@ const EmptyRow = ({ setIsChanging, addItem, sectionid, isChanging }) => {
 
     return [
         !isAdding &&
-            m('tr.item.sortable-ignore',
-                m('td.item-data',
+            m('div.item.sortable-ignore', { role: 'row' },
+                m('div.item-data', { role: 'cell' },
                     m(Button, {
                         label: 'add item',
                         icon: 'add',
@@ -29,8 +29,8 @@ const EmptyRow = ({ setIsChanging, addItem, sectionid, isChanging }) => {
                         onclick: isChanging ? null : initAdding
                     })
                 ),
-                m('td.item-data', ''),
-                m('td.item-data', '')
+                m('div.item-data',  { role: 'cell' }, ''),
+                m('div.item-data',  { role: 'cell' }, '')
             )
         ,
 

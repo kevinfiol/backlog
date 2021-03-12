@@ -42,7 +42,8 @@ const Section = ({
             sortable.current = Sortable.create(sortableEl.current, {
                 animation: 100,
                 draggable: '.draggable',
-                dataIdAttr: 'data-id'
+                dataIdAttr: 'data-id',
+                onSort: () => { window.sortorderHasChanged = true; }
             });
         }
 
@@ -92,8 +93,8 @@ const Section = ({
                 ,
             ),
 
-            m('table.item-table',
-                m('tbody.item-list', { ref: sortableEl },
+            m('div.item-table', { role: 'table' },
+                m('div.item-list', { ref: sortableEl, role: 'rowgroup' },
                     children
                 )
             )

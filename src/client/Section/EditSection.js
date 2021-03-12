@@ -20,20 +20,22 @@ const EditSection = ({ editSection, onFinish, section }) => {
             oninput: (ev) => setSectionname(ev.target.value)
         }),
 
-        m(Button, {
-            label: 'save',
-            icon: 'save',
-            className: 'section-control',
-            disabled: isDisabled,
-            onclick: isDisabled ? null : saveChanges
-        }),
+        m('div.section-controls',
+            m(Button, {
+                label: 'save',
+                icon: 'save',
+                className: 'section-control',
+                disabled: isDisabled,
+                onclick: isDisabled ? null : saveChanges
+            }),
 
-        m(Button, {
-            label: 'cancel',
-            icon: 'cancel',
-            className: 'section-control',
-            onclick: onFinish
-        }),
+            m(Button, {
+                label: 'cancel',
+                icon: 'cancel',
+                className: 'section-control',
+                onclick: onFinish
+            })
+        )
     ];
 };
 
