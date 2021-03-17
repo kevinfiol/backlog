@@ -54,6 +54,19 @@ const UserService = {
         } catch(e) {
             throw Error('Could not retrieve User: ' + e);
         }
+    },
+
+    async getReviews(userid) {
+        try {
+            typecheck({ number: userid });
+            let reviews = await this.db.all('Review', { userid });
+            if (reviews === undefined) reviews = [];
+
+            typecheck({ array: reviews });
+            return reviews;
+        } catch(e) {
+            throw Error('Could not retrieve Reviews for User: ' + e);
+        }
     }
 };
 

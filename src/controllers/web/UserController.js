@@ -24,6 +24,28 @@ export const user = async function(req, res) {
     }
 };
 
+export const reviews = async function(req, res) {
+    try {
+        const username = req.getRouteParam('username');
+        typecheck({ string: username });
+
+        // get user
+        const user = await UserService.getUser({ username });
+        if (user.userid === undefined) throw Error('User does not exist.');
+
+        // get reviews
+        let reviews = await UserService.getReviews(user.userid);
+        const isAuth = req.session.username === user.username && req.session.userid === user.userid;
+
+        typecheck({ object: user, array: reviews, boolean: isAuth });
+        res.setViewData({ user, reviews, isAuth });
+        res.render('reviews.ejs', res.viewData);
+    } catch(e) {
+        res.statusCode = 404;
+        res.error(e);
+    }
+};
+
 export const createList = async function(req, res) {
     try {
         if (req.method === 'POST') {

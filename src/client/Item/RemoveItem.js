@@ -2,7 +2,7 @@ import m from '../m.js';
 import Button from '../components/Button.js';
 
 const RemoveItem = ({ removeItem, onFinish, item }) => [
-    m('td.item-name',
+    m('div.item-name', { role: 'cell' },
         m('em',
             'Remove ',
             m('b', item.itemname),
@@ -10,11 +10,7 @@ const RemoveItem = ({ removeItem, onFinish, item }) => [
         )
     ),
 
-    m('td.item-data',
-        // empty cell
-    ),
-
-    m('td.item-controls.is-being-used',
+    m('div.item-controls.is-being-used', { role: 'cell' },
         m(Button, {
             className: 'item-control',
             label: 'confirm',

@@ -46,10 +46,14 @@ const Item = ({
             'data-id': item.itemid
         },
             (!state.isEditing && !state.isRemoving) && [
-                m('div.item-name', { role: 'cell' }, item.itemname),
-                m('div.item-data', { role: 'cell' },
-                    item.url && m('a.item-url', { href: item.url }, m('i.internet'))
-                ),
+                m('div.item-name', { role: 'cell' }, [
+                    item.itemname,
+
+                    m('div.item-data',
+                        item.url && m('a.item-url', { href: item.url }, m('i.internet'))
+                    )
+                ]),
+
                 m('div.item-controls', { role: 'cell' },
                     !isChanging &&
                         m(Controls, {

@@ -18,6 +18,7 @@ router.post('/signup', IndexController.signup);
 
 // UserController
 router.get('/:username', UserController.user);
+router.get('/:username/reviews', UserController.reviews);
 router.get('/:username/:listSlug', UserController.list);
 router.get('/:username/list/create', UserController.createList);
 router.get('/:username/list/remove/:listid', UserController.removeList);

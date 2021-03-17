@@ -3,11 +3,13 @@
 <main>
     <h1><%= it.user.username %></h1>
 
-    <h2>lists</h2>
-
     <% if (it.isAuth) { %>
         <a href="/<%= it.user.username %>/list/create">create new list</a>
     <% } %>
+
+    <a href="/<%= it.user.username %>/reviews/">reviews</a>
+
+    <h2>lists</h2>
 
     <% if (it.lists && it.lists.length > 0) { %>
         <% for (let list of it.lists) { %>

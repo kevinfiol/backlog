@@ -24,6 +24,9 @@ const user = {
         { itemname: 'Bastion', url: 'https://www.igdb.com/games/bastion', sectionid: 3 },
         { itemname: 'Dustforce', url: null, sectionid: 4 },
         { itemname: 'Spelunky 2', url: null, sectionid: 4 }
+    ],
+    reviews: [
+        { reviewname: 'Final Fantasy II', reviewtext: 'good game', userid: 1 }
     ]
 }
 
@@ -64,7 +67,16 @@ connectDb.then(async db => {
         ${user.items.map(item => `
             ('${item.itemname}', '${slugify(item.itemname)}', ${item.url ? `'${item.url}'` : 'NULL'}, ${item.sectionid})
         `)}
-    `)
+    `);
+
+    // create reviews
+    await db.run(`
+        INSERT INTO Review (reviewname, reviewtext, userid)
+        VALUES
+        ${user.reviews.map(review => `
+            ('${review.reviewname}', '${review.reviewtext}', ${review.userid})
+        `)}
+    `);
 }).catch(e => {
     console.error('Failed to seed database: ' + e.message);
 });

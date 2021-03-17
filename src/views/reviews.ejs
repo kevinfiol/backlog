@@ -1,0 +1,22 @@
+<%- include('_includes/header.ejs', { user: it.sessionUser }) %>
+
+<main>
+    <h1><%= it.user.username %> reviews</h1>
+
+    <% if (it.isAuth) { %>
+        <a href="/<%= it.user.username %>/review/create">new review</a>
+    <% } %>
+
+    <% if (it.reviews && it.reviews.length > 0) { %>
+        <% for (let review of it.reviews) { %>
+            <div>
+                <h3><%= review.reviewname %></h3>
+                <p><%= review.reviewtext %></p>
+            </div>
+        <% } %>
+    <% } else { %>
+        <em>this user has not written any reviews yet</em>
+    <% } %>
+</main>
+
+<%- include('_includes/footer.ejs') %>

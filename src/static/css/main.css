@@ -4,7 +4,6 @@ i {
     width: 16px;
     display: inline-block;
     font-size: inherit;
-    vertical-align: text-bottom;
     margin-right: 0.15rem;
 }
 
@@ -83,15 +82,33 @@ button.list-control {
 /*Item*/
 .item-list {
     padding-left: 1rem;
-    display: grid;
-    grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
 }
 
 .item {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
     align-items: center;
-    height: 3em;
+}
+
+.item-name {
+    display: flex;
+    align-items: center;
+}
+
+.item-data {
+    display: flex;
+    align-items: center;
+    padding: 0 0.4em;
+}
+
+.item,
+.item-name,
+.item-data {
+    height: 1.8em;
+}
+
+a.item-url {
+    line-height: 1;
 }
 
 .item-controls:not(.is-being-used) {
@@ -105,7 +122,7 @@ button.list-control {
 
 /*Section*/
 .section {
-    margin: 2.4rem 0;
+    margin: 1.6rem 0;
 }
 
 .section-header {

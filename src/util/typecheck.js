@@ -25,7 +25,7 @@ function typecheck(obj = {}) {
                 .filter(s => !/(TypeError)|(typecheck.js)|(node_modules)|(node:internal)/.test(s))
                 .map(function(s) {
                     const filename = s.match(/([^/\\]*)\.(js)|(ts)/g)[0];
-                    let line = `> \x1b[43m${filename}\x1b[0m ${s.trim()}`;
+                    let line = `> \x1b[41m${filename}\x1b[0m ${s.trim()}`;
                     return line.split(' (').join('\n(');
                 })
             ;
