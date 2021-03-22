@@ -6,7 +6,10 @@
     <form action="<%= it.reviewIsEditing ? `/${it.sessionUser.username}/review/edit/${it.reviewid}` : `/${it.sessionUser.username}/review/create` %>" method="post">
         <fieldset class="review-fieldset">
             <label for="reviewname">reviewname:</label>
-            <input id="reviewname" name="reviewname" type="text" maxlength="30" required>
+            <noscript>
+                <input id="reviewname" name="reviewname" type="text" maxlength="30" required>
+            </noscript>
+            <div id="reviewname-container"></div>
 
             <label for="reviewtext"></label>
             <textarea id="reviewtext" name="reviewtext" rows="20" required></textarea>
@@ -18,5 +21,21 @@
         <p>error: <%= it.error %></p>
     <% } %>
 </main>
+
+<script src="/js/etto.min.js"></script>
+<script nonce="<%- it.nonce %>">
+    (() => {
+        window.viewData = {
+            itemnames: <%- JSON.stringify(it.itemnames) %>
+        };
+
+        console.log(window.viewData.itemnames);
+        new Etto(
+            document.getElementById('reviewname-container'),
+            { inputAttributes: { id: 'reviewname', name: 'reviewname', maxlength: '30', required: true } },
+            window.viewData.itemnames
+        );
+    })();
+</script>
 
 <%- include('_includes/footer.ejs') %>

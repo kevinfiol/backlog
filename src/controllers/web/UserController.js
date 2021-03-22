@@ -1,4 +1,4 @@
-import { UserService, ListService } from '../../container.js';
+import { UserService, ListService, ItemService } from '../../container.js';
 import typecheck from '../../util/typecheck.js';
 
 export const user = async function(req, res) {
@@ -168,13 +168,19 @@ export const createReview = async function(req, res) {
             }
         } else if (req.method === 'GET') {
             const username = req.getRouteParam('username');
+            const { userid } = req.session;
             typecheck({ string: username });
 
-            res.viewData.reviewIsEditing = false;
+            res.setViewData({ reviewIsEditing: false });
 
             if (req.session.username !== username) {
                 res.redirect('/');
                 return;
+            } else {
+                // get list of items for etto autocomplete
+                let itemnames = await ItemService.getItemsByUserid({ userid });
+                itemnames = itemnames.map((name) => ({ label: name }));
+                res.setViewData({ itemnames })
             }
         }
 

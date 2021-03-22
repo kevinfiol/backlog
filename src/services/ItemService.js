@@ -26,6 +26,26 @@ const ItemService = {
         }
     },
 
+    async getItemsByUserid({ userid }) {
+        try {
+            typecheck({ number: userid });
+            const rows = await this.db.query(`
+                SELECT Item.itemname
+                FROM Item
+                LEFT JOIN Section ON Item.sectionid = Section.sectionid
+                LEFT JOIN List ON List.listid = Section.listid
+                WHERE List.userid = :userid
+            `, {
+                ':userid': userid
+            });
+
+            const itemnames = rows.map(item => item.itemname);
+            return itemnames;
+        } catch (e) {
+            throw Error('Unable to get items: ' + e);
+        }
+    },
+
     async addItem({ sectionid, item }) {
         try {
             typecheck({ number: sectionid, object: item });
@@ -39,7 +59,7 @@ const ItemService = {
 
             typecheck({ object: result });
             return result;
-        } catch(e) {
+        } catch (e) {
             throw Error('Unable to add new Item: ' + e);
         }
     },
@@ -56,7 +76,7 @@ const ItemService = {
 
             typecheck({ object: result });
             return result;
-        } catch(e) {
+        } catch (e) {
             throw Error('Unable to edit Item: ' + e);
         }
     },
@@ -71,7 +91,7 @@ const ItemService = {
 
             typecheck({ object: result });
             return result;
-        } catch(e) {
+        } catch (e) {
             throw Error('Unable to update sectionid for Item: ' + e);
         }
     },
@@ -89,7 +109,7 @@ const ItemService = {
 
             typecheck({ object: result });
             return result;
-        } catch(e) {
+        } catch (e) {
             throw Error('Unable to remove Item: ' + e);
         }
     }
