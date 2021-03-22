@@ -8,10 +8,19 @@
     <% } %>
 
     <% if (it.reviews && it.reviews.length > 0) { %>
-        <% for (let review of it.reviews) { %>
+        <% for (let review of it.reviews.reverse()) { %>
             <div>
                 <h3><%= review.reviewname %></h3>
-                <p><%= review.reviewtext %></p>
+                <a href="/<%= it.sessionUser.username %>/review/remove/<%= review.reviewid %>">remove</a>
+                <a href="/<%= it.sessionUser.username %>/review/edit/<%= review.reviewid %>">edit</a>
+                <div>
+                    <% let texts = review.reviewtext.split('\r\n') %>
+                    <% for (let text of texts) { %>
+                        <% if (text.trim()) { %>
+                            <p><%= text %></p>
+                        <% } %>
+                    <% } %>
+                </div>
             </div>
         <% } %>
     <% } else { %>

@@ -24,6 +24,33 @@ export const user = async function(req, res) {
     }
 };
 
+export const list = async function(req, res) {
+    try {
+        // route params
+        const username = req.getRouteParam('username');
+        const listSlug = req.getRouteParam('listSlug');
+        typecheck({ strings: [username, listSlug] });
+
+        // get list if it exists
+        const rows = await ListService.getListBySlugAndUsername({ slug: listSlug, username });
+        if (rows.length < 1) throw Error('List does not exist.')
+        const listData = rows[0];
+
+        // retrieve sections + items
+        const list = await ListService.getFullList({ listid: listData.listid });
+
+        // check if user is authed to modify list
+        const isAuth = (req.session.username === username && req.session.userid === list.userid);
+
+        typecheck({ object: list, string: username, boolean: isAuth });
+        res.setViewData({ list, username, isAuth });
+        res.render('list.ejs', res.viewData);
+    } catch(e) {
+        res.statusCode = 404;
+        res.error(e);
+    }
+};
+
 export const reviews = async function(req, res) {
     try {
         const username = req.getRouteParam('username');
@@ -36,6 +63,8 @@ export const reviews = async function(req, res) {
         // get reviews
         let reviews = await UserService.getReviews(user.userid);
         const isAuth = req.session.username === user.username && req.session.userid === user.userid;
+
+        console.log(reviews);
 
         typecheck({ object: user, array: reviews, boolean: isAuth });
         res.setViewData({ user, reviews, isAuth });
@@ -118,32 +147,43 @@ export const removeList = async function(req, res) {
     }
 };
 
-export const list = async function(req, res) {
+export const createReview = async function(req, res) {
     try {
-        // route params
-        const username = req.getRouteParam('username');
-        const listSlug = req.getRouteParam('listSlug');
-        typecheck({ strings: [username, listSlug] });
+        if (req.method === 'POST') {
+            const { reviewname, reviewtext } = req.body;
+            const { username, userid } = req.session;
+            typecheck({ strings: [reviewname, reviewtext, username], number: userid });
 
-        // get list if it exists
-        const rows = await ListService.getListBySlugAndUsername({ slug: listSlug, username });
-        if (rows.length < 1) throw Error('List does not exist.')
-        const listData = rows[0];
+            if (username.trim().length < 1)
+                throw Error('User not logged in.');
 
-        // retrieve sections + items
-        const list = await ListService.getFullList({ listid: listData.listid });
+            const validation = validateCreateReview(reviewname, reviewtext);
 
-        // check if user is authed to modify list
-        const isAuth = (req.session.username === username && req.session.userid === list.userid);
+            if (!validation.ok) {
+                res.setViewData({ error: validation.error });
+            } else {
+                const result = await UserService.addReview({ reviewname, reviewtext, userid });
+                res.redirect(`/${username}/reviews`);
+                return;
+            }
+        } else if (req.method === 'GET') {
+            const username = req.getRouteParam('username');
+            typecheck({ string: username });
 
-        typecheck({ object: list, string: username, boolean: isAuth });
-        res.setViewData({ list, username, isAuth });
-        res.render('list.ejs', res.viewData);
+            res.viewData.reviewIsEditing = false;
+
+            if (req.session.username !== username) {
+                res.redirect('/');
+                return;
+            }
+        }
+
+        res.render('editReview.ejs', res.viewData);
     } catch(e) {
         res.statusCode = 404;
         res.error(e);
     }
-};
+}
 
 async function validateCreateList(userid, listname) {
     const validation = { ok: true, error: '' };
@@ -177,6 +217,62 @@ async function validateRemoveList(userid, listid) {
     if (list.listid === undefined || list.listid !== listid) {
         validation.ok = false;
         validation.error = 'list does not belong to logged in user';
+    }
+
+    return validation;
+}
+
+function validateCreateReview(reviewname, reviewtext) {
+    const validation = { ok: true, error: '' };
+
+    if (!reviewname.trim() || !reviewtext.trim()) {
+        validation.ok = false;
+        validation.error = 'please provide a review name & review text';
+        return validation;
+    }
+
+    return validation;
+}
+
+async function validateEditReview(userid, { reviewid, reviewname, reviewtext }) {
+    const validation = { ok: true, error: '' };
+
+    if (typeof userid !== 'number' || typeof reviewid !== 'number') {
+        validation.ok = false;
+        validation.error = 'invalid userid or reviewid';
+        return validation;
+    }
+
+    if (!reviewname.trim() || !reviewtext.trim()) {
+        validation.ok = false;
+        validation.error = 'please provide a review name & review text';
+        return validation;
+    }
+
+    // make sure review belongs to user
+    const review = await UserService.getReview({ userid, reviewid });
+    if (review.reviewid === undefined || review.reviewid !== reviewid) {
+        validation.ok = false;
+        validation.error = 'review does not belong to logged in user';
+    }
+
+    return validation;
+}
+
+async function validateRemoveReview(userid, reviewid) {
+    const validation = { ok: true, error: '' };
+
+    if (typeof userid !== 'number' || typeof reviewid !== 'number') {
+        validation.ok = false;
+        validation.error = 'invalid userid or reviewid';
+        return validation;
+    }
+
+    // make sure review belongs to user
+    const review = await UserService.getReview({ userid, reviewid });
+    if (review.reviewid === undefined || review.reviewid !== reviewid) {
+        validation.ok = false;
+        validation.error = 'review does not belong to logged in user';
     }
 
     return validation;

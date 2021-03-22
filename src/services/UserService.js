@@ -67,6 +67,22 @@ const UserService = {
         } catch(e) {
             throw Error('Could not retrieve Reviews for User: ' + e);
         }
+    },
+
+    async addReview({ reviewname, reviewtext, userid }) {
+        try {
+            typecheck({ strings: [reviewname, reviewtext], number: userid });
+            const result = await this.db.insert('Review', {
+                reviewname: reviewname.trim(),
+                reviewtext: reviewtext.trim(),
+                userid
+            });
+
+            typecheck({ object: result });
+            return result;
+        } catch(e) {
+            throw Error('Could not add new Review: ' + e);
+        }
     }
 };
 

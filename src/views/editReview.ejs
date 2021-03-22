@@ -1,0 +1,22 @@
+<%- include('_includes/header.ejs', { user: it.sessionUser }) %>
+
+<main>
+    <h1>new review</h1>
+
+    <form action="<%= it.reviewIsEditing ? `/${it.sessionUser.username}/review/edit/${it.reviewid}` : `/${it.sessionUser.username}/review/create` %>" method="post">
+        <fieldset class="review-fieldset">
+            <label for="reviewname">reviewname:</label>
+            <input id="reviewname" name="reviewname" type="text" maxlength="30" required>
+
+            <label for="reviewtext"></label>
+            <textarea id="reviewtext" name="reviewtext" rows="20" required></textarea>
+        </fieldset>
+        <button type="submit" value="OK">submit</button>
+    </form>
+
+    <% if (it.error) { %>
+        <p>error: <%= it.error %></p>
+    <% } %>
+</main>
+
+<%- include('_includes/footer.ejs') %>

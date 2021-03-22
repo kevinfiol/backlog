@@ -22,9 +22,16 @@ router.get('/:username/reviews', UserController.reviews);
 router.get('/:username/:listSlug', UserController.list);
 router.get('/:username/list/create', UserController.createList);
 router.get('/:username/list/remove/:listid', UserController.removeList);
+router.get('/:username/review/create', UserController.createReview);
+router.get('/:username/review/edit/:reviewid', UserController.editReview);
+router.get('/:username/review/remove/:reviewid', UserController.removeReview);
 
 router.post('/:username/list/create', UserController.createList);
 router.post('/:username/list/remove/:listid', UserController.removeList);
+
+router.post('/:username/review/create', UserController.createReview);
+router.post('/:username/review/edit/:reviewid', UserController.editReview);
+router.post('/:username/review/remove/:reviewid', UserController.removeReview);
 
 // ListController
 router.get('/api/list/getFullList/', ListController.getFullList);

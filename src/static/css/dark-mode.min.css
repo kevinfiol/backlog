@@ -38,7 +38,11 @@
 [data-theme="dark"] button:hover { background-color: rgba(255, 255, 255, 0.1); }
 [data-theme="dark"] button:focus { background-color: rgba(255, 255, 255, 0.2); }
 
-[data-theme="dark"] input[type="text"], [data-theme="dark"] input[type="password"] { color: #dfd0d0; }
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="password"],
+[data-theme="dark"] textarea {
+    color: #dfd0d0;
+}
 
 [data-theme="dark"] .etto-highlighted,
 [data-theme="dark"] .etto-li:hover:not(.etto-selected) {

@@ -23,13 +23,15 @@ body { max-width: 48rem; }
 h1, h2, h3, h4, h5, h6 { font-family: monospace; }
 fieldset { border: 0; padding: 0; margin: 1rem auto; }
 
-input, input:focus, input:active {
+input, input:focus, input:active,
+textarea, textarea:focus, textarea:active {
     border-style: solid;
     border-width: 1px;
     border-radius: 3px;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"],
+textarea {
     background-color: rgba(0, 0, 0, 0);
     display: block;
     padding: 0.5rem;
@@ -157,6 +159,19 @@ a.item-url {
 .short-section {
     height: 97px;
     overflow: hidden;
+}
+
+/*Reviews*/
+.review-fieldset {
+    display:  flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.review-fieldset,
+.review-fieldset input,
+.review-fieldset textarea {
+    width:  100%;
 }
 
 /*SortableJS*/
