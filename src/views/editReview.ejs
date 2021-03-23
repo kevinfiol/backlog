@@ -7,12 +7,21 @@
         <fieldset class="review-fieldset">
             <label for="reviewname">reviewname:</label>
             <noscript>
-                <input id="reviewname" name="reviewname" type="text" maxlength="30" required>
+                <input
+                    id="reviewname"
+                    name="reviewname"
+                    type="text"
+                    maxlength="30"
+                    required
+                    <% if (it.payload.review && it.payload.review.reviewname) { %>
+                        value = <%= it.payload.review.reviewname %>
+                    <% } %>
+                >
             </noscript>
             <div id="reviewname-container"></div>
 
             <label for="reviewtext"></label>
-            <textarea id="reviewtext" name="reviewtext" rows="20" required></textarea>
+            <textarea id="reviewtext" name="reviewtext" rows="20" required><% if (it.payload.review && it.payload.review.reviewtext) { %><%= it.payload.review.reviewtext %><% } %></textarea>
         </fieldset>
         <button type="submit" value="OK">submit</button>
     </form>
@@ -26,15 +35,22 @@
 <script nonce="<%- it.nonce %>">
     (() => {
         window.viewData = {
-            itemnames: <%- JSON.stringify(it.itemnames) %>
+            payload: <%- JSON.stringify(it.payload) %>
         };
 
-        console.log(window.viewData.itemnames);
-        new Etto(
+        let { itemnames, review } = window.viewData.payload;
+
+        const etto = new Etto(
             document.getElementById('reviewname-container'),
-            { inputAttributes: { id: 'reviewname', name: 'reviewname', maxlength: '30', required: true } },
-            window.viewData.itemnames
+            {
+                inputAttributes: { id: 'reviewname', name: 'reviewname', maxlength: '30', required: true }
+            },
+            itemnames
         );
+
+        if (review && review.reviewname) {
+            etto.value = review.reviewname;
+        }
     })();
 </script>
 

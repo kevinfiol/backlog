@@ -69,6 +69,19 @@ const UserService = {
         }
     },
 
+    async getReview(params) {
+        try {
+            typecheck({ object: params });
+            let review = await this.db.get('Review', params);
+            if (review === undefined) review = {};
+
+            typecheck({ object: review });
+            return review;
+        } catch (e) {
+            throw Error('Could not retrieve Review: ' + e);
+        }
+    },
+
     async addReview({ reviewname, reviewtext, userid }) {
         try {
             typecheck({ strings: [reviewname, reviewtext], number: userid });
@@ -82,6 +95,41 @@ const UserService = {
             return result;
         } catch(e) {
             throw Error('Could not add new Review: ' + e);
+        }
+    },
+
+    async editReview({ reviewid, reviewname, reviewtext }) {
+        try {
+            typecheck({ number: reviewid, strings: [reviewname, reviewtext] });
+            const result = await this.db.update('Review', {
+                reviewname: reviewname.trim(),
+                reviewtext: reviewtext.trim()
+            }, {
+                reviewid
+            });
+
+            typecheck({ object: result });
+            return result;
+        } catch (e) {
+            throw Error('Could not update Review: ', + e);
+        }
+    },
+
+    async removeReview({ reviewid }) {
+        try {
+            typecheck({ number: reviewid });
+
+            const result = await this.db.run(`
+                DELETE FROM Review
+                WHERE reviewid = :reviewid
+            `, {
+                ':reviewid': reviewid
+            });
+
+            typecheck({ object: result });
+            return result;
+        } catch (e) {
+            throw Error('Unable to remove Review: ' + e);
         }
     }
 };

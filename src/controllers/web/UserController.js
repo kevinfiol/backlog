@@ -180,7 +180,7 @@ export const createReview = async function(req, res) {
                 // get list of items for etto autocomplete
                 let itemnames = await ItemService.getItemsByUserid({ userid });
                 itemnames = itemnames.map((name) => ({ label: name }));
-                res.setViewData({ itemnames })
+                res.setViewData({ payload: { itemnames } })
             }
         }
 
@@ -189,7 +189,96 @@ export const createReview = async function(req, res) {
         res.statusCode = 404;
         res.error(e);
     }
-}
+};
+
+export const editReview = async function(req, res) {
+    try {
+        if (req.method === 'POST') {
+            let reviewid = req.getRouteParam('reviewid');
+            reviewid = parseInt(reviewid);
+
+            const { reviewname, reviewtext } = req.body;
+            const { username, userid } = req.session;
+            typecheck({ strings: [reviewname, reviewtext, username], numbers: [userid, reviewid] });
+
+            if (username.trim().length < 1)
+                throw Error('User not logged in.');
+
+            const validation = await validateEditReview(userid, { reviewid, reviewname, reviewtext });
+
+            if (!validation.ok) {
+                res.setViewData({ error: validation.error });
+            } else {
+                const result = await UserService.editReview({ reviewid, reviewname, reviewtext });
+                res.redirect(`/${username}/reviews`);
+                return;
+            }
+        } else if (req.method === 'GET') {
+            const username = req.getRouteParam('username');
+            let reviewid = req.getRouteParam('reviewid');
+            reviewid = parseInt(reviewid);
+            const { userid } = req.session;
+            typecheck({ string: username, number: reviewid });
+
+            res.setViewData({ reviewIsEditing: true });
+
+            if (req.session.username !== username) {
+                res.redirect('/');
+                return;
+            } else {
+                let [itemnames, review] = await Promise.all([
+                    ItemService.getItemsByUserid({ userid }),
+                    UserService.getReview({ reviewid })
+                ]);
+
+                itemnames = itemnames.map((name) => ({ label: name }));
+                res.setViewData({ reviewid, payload: { itemnames, review } });
+            }
+        }
+
+        res.render('editReview.ejs', res.viewData);
+    } catch (e) {
+        res.statusCode = 404;
+        res.error(e);
+    }
+};
+
+export const removeReview = async function(req, res) {
+    const username = req.getRouteParam('username');
+    const reviewid = parseInt(req.getRouteParam('reviewid'));
+    typecheck({ string: username, number: reviewid });
+
+    try {
+        if (req.method === 'POST') {
+            const { userid } = req.session;
+            const validation = await validateRemoveReview(userid, reviewid);
+
+            if (!validation.ok) {
+                res.setViewData({ error: validation.error })
+            } else {
+                const result = await UserService.removeReview({ reviewid });
+                res.redirect(`/${username}/reviews`);
+                return;
+            }
+        } else if (req.method === 'GET') {
+            if (req.session.username !== username)  {
+                res.redirect('/');
+                return;
+            }
+
+            // get list data
+            const review = await UserService.getReview({ reviewid });
+            if (review.reviewid === undefined) throw Error('Review does not exist.');
+
+            res.setViewData({ reviewname: review.reviewname, reviewid: review.reviewid });
+        }
+
+        res.render('removeReview.ejs', res.viewData);
+    } catch(e) {
+        res.statusCode = 404;
+        res.error(e);
+    }
+};
 
 async function validateCreateList(userid, listname) {
     const validation = { ok: true, error: '' };
