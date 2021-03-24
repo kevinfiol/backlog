@@ -92,6 +92,10 @@ button.list-control {
     align-items: center;
 }
 
+.item input {
+    width: 100%;
+}
+
 .item-name {
     display: flex;
     align-items: center;

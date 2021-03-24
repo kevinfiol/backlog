@@ -25,7 +25,7 @@ const AutoInput = ({ initialValue, config, choices }) => {
         };
     }, []);
 
-    return m('div', { ref: ettoContainer });
+    return m('div', { ref: ettoContainer, style: 'width:100%;' });
 };
 
 export default AutoInput;

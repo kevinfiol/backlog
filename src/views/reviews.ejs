@@ -1,18 +1,19 @@
 <%- include('_includes/header.ejs', { user: it.sessionUser }) %>
 
 <main>
-    <h1><%= it.user.username %> reviews</h1>
+    <h1><%= it.user.username %>'s reviews</h1>
 
-    <% if (it.isAuth) { %>
-        <a href="/<%= it.user.username %>/review/create">new review</a>
-    <% } %>
+    <div>
+        <a href="/<%= it.user.username %>"><%= it.user.username %></a>
+        <% if (it.isAuth) { %>
+            <a href="/<%= it.user.username %>/review/create">create review</a>
+        <% } %>
+    </div>
 
     <% if (it.reviews && it.reviews.length > 0) { %>
         <% for (let review of it.reviews.reverse()) { %>
-            <div>
+            <div class="review">
                 <h3><%= review.reviewname %></h3>
-                <a href="/<%= it.sessionUser.username %>/review/remove/<%= review.reviewid %>">remove</a>
-                <a href="/<%= it.sessionUser.username %>/review/edit/<%= review.reviewid %>">edit</a>
                 <div>
                     <% let texts = review.reviewtext.split('\r\n') %>
                     <% for (let text of texts) { %>
@@ -21,6 +22,10 @@
                         <% } %>
                     <% } %>
                 </div>
+                <% if (it.isAuth) { %>
+                    <a href="/<%= it.sessionUser.username %>/review/edit/<%= review.reviewid %>">edit</a>
+                    <a href="/<%= it.sessionUser.username %>/review/remove/<%= review.reviewid %>">remove</a>
+                <% } %>
             </div>
         <% } %>
     <% } else { %>

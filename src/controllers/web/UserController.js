@@ -283,9 +283,15 @@ export const removeReview = async function(req, res) {
 async function validateCreateList(userid, listname) {
     const validation = { ok: true, error: '' };
 
+    if (listname.trim().toUpperCase() == 'REVIEWS') {
+        validation.ok = false;
+        validation.error = 'listname cannot be "reviews"';
+        return validation;
+    }
+
     if (listname.trim().length < 1) {
         validation.ok = false;
-        validation.error = 'listname cannot be empty.'
+        validation.error = 'listname cannot be empty.';
         return validation;
     }
 

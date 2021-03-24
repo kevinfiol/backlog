@@ -58,6 +58,10 @@ const List = connect(store => store, actions)(
                     isSorting: store.isSorting
                 }),
 
+                store.list.sections.length < 1 &&
+                    m('em', 'No sections have been added yet.')
+                ,
+
                 store.list.sections.map(section =>
                     m(Section, {
                         // actions

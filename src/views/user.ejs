@@ -3,26 +3,26 @@
 <main>
     <h1><%= it.user.username %></h1>
 
-    <% if (it.isAuth) { %>
-        <a href="/<%= it.user.username %>/list/create">create new list</a>
-    <% } %>
-
-    <a href="/<%= it.user.username %>/reviews/">reviews</a>
-
-    <h2>lists</h2>
+    <div>
+        <a href="/<%= it.user.username %>/reviews/"><%= it.user.username %>'s reviews</a>
+    </div>
 
     <% if (it.lists && it.lists.length > 0) { %>
-        <% for (let list of it.lists) { %>
-            <div>
-                <h3>
+        <ul>
+            <% for (let list of it.lists) { %>
+                <li>
                     <a href="/<%= it.user.username %>/<%= list.slug %>">
                         <%= list.listname %>
                     </a>
-                </h3>
-            </div>
-        <% } %>
+                </li>
+            <% } %>
+        </ul>
     <% } else { %>
         <em>this user has not made any lists yet</em>
+    <% } %>
+
+    <% if (it.isAuth) { %>
+        <div><a href="/<%= it.user.username %>/list/create">create new list</a></div>
     <% } %>
 </main>
 

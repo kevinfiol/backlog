@@ -1,27 +1,43 @@
 <%- include('_includes/header.ejs', { user: it.user }) %>
 
 <main>
-    <p>
-        <a href="/<%= it.username %>"><%= it.username %>'s lists</a>
-    </p>
-
     <div class="list-header">
         <h1><%= it.list.listname %></h1>
 
-<!--         <% if (it.isAuth) { %>
-            <a class="remove-list" href="/<%= it.username %>/list/remove/<%= it.list.listid %>">remove list</a>
-        <% } %> -->
+        <div>
+            <a href="/<%= it.username %>"><%= it.username %>'s profile</a>
+            <% if (it.isAuth) { %>
+                <a class="remove-list" href="/<%= it.username %>/list/remove/<%= it.list.listid %>">remove list</a>
+            <% } %>
+        </div>
     </div>
 
     <div id="list">
         <% if (!it.isAuth) { %>
             <% for (const section of it.list.sections) { %>
-                <h2><%= section.sectionname %></h2>
-                <ul>
-                    <% for (const item of section.items) { %>
-                        <li><%= item.itemname %></li>
-                    <% } %>
-                </ul>
+                <div class="section">
+                    <header class="section-header">
+                        <h2><%= section.sectionname %></h2>
+                    </header>
+                    <div class="item-table" role="table">
+                        <div class="item-list" role="rowgroup">
+                            <% for (const item of section.items) { %>
+                                <div class="item" role="row">
+                                    <div class="item-name" role="cell">
+                                        <%= item.itemname %>
+                                        <% if (item.url) { %>
+                                            <div class="item-data">
+                                                <a class="item-url" href="<%= item.url %>">
+                                                    <i class="internet"></i>
+                                                </a>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
             <% } %>
         <% } %>
     </div>

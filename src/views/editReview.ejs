@@ -1,7 +1,7 @@
 <%- include('_includes/header.ejs', { user: it.sessionUser }) %>
 
 <main>
-    <h1>new review</h1>
+    <h1><%= it.reviewIsEditing ? 'edit' : 'create' %> review</h1>
 
     <form action="<%= it.reviewIsEditing ? `/${it.sessionUser.username}/review/edit/${it.reviewid}` : `/${it.sessionUser.username}/review/create` %>" method="post">
         <fieldset class="review-fieldset">
