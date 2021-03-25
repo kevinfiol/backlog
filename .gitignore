@@ -6,3 +6,4 @@ backups
 *.sqlite
 *.db-journal
 config-dev.js
+*.env

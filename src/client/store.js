@@ -12,6 +12,5 @@ const initialState = {
 };
 
 const store = createStore(initialState);
-// store.subscribe(console.log);
 
 export { store, connect, Provider };

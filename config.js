@@ -1,17 +1,25 @@
-/**
-* if config-dev.js does not exist in root directory
-* create a copy of config-dev.default.js and rename it to config-dev.js
-* don't delete config-dev.default.js
-**/
+import env from 'env-smart';
+env.load();
 
-import config_prod from './config-prod.js';
-import config_dev from './config-dev.js';
-
-let config;
-
-if (process.env.PROD == 1)
-    config = config_prod;
-else
-    config = config_dev;
+const config = {
+    port: process.env.PORT,
+    database: {
+        filename: process.env.DB_FILENAME
+    },
+    sessionConfig: {
+        name: process.env.SESSION_NAME,
+        secret: process.env.SESSION_SECRET,
+        resave: process.env.SESSION_RESAVE,
+        saveUninitialized: process.env.SESSION_SAVE_UNINITIALIZED,
+        cookie: {
+            secure: process.env.SESSION_COOKIE_SECURE,
+            httpOnly: process.env.SESSION_COOKIE_HTTPONLY,
+            sameSite: process.env.SESSION_COOKIE_SAMESITE
+        }
+    },
+    api: {
+        rawg: process.env.RAWG_API
+    }
+};
 
 export default config;

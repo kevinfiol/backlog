@@ -87,7 +87,6 @@ export const removeItem = async function(req, res) {
 export const addSection = async function(req, res) {
     try {
         let { sectionname, listid } = req.body;
-        console.log(listid);
         typecheck({ string: sectionname, number: listid });
 
         const list = await ListService.getList({ listid });

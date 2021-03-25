@@ -64,8 +64,6 @@ export const reviews = async function(req, res) {
         let reviews = await UserService.getReviews(user.userid);
         const isAuth = req.session.username === user.username && req.session.userid === user.userid;
 
-        console.log(reviews);
-
         typecheck({ object: user, array: reviews, boolean: isAuth });
         res.setViewData({ user, reviews, isAuth });
         res.render('reviews.ejs', res.viewData);

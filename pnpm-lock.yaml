@@ -4,6 +4,7 @@ dependencies:
   '@polka/send': 1.0.0-next.7
   compression: 1.7.4
   cookie: 0.4.1
+  env-smart: 2.2.0
   etto: 1.6.4
   express-session: 1.17.1
   helmet: 4.2.0
@@ -304,6 +305,10 @@ packages:
     optional: true
     resolution:
       integrity: sha1-OoOpBOVDUyh4dMVkt1SThoSamMk=
+  /env-smart/2.2.0:
+    dev: false
+    resolution:
+      integrity: sha512-OUnSyYqW/rMri7P/4efKMujEftzr7vD4D5Pco+W+47gW8OEVKOaAt7zBpXkSSDkQ5iA90JKBeISwdkAQh4B2Qw==
   /esbuild/0.8.50:
     dev: true
     hasBin: true
@@ -1265,6 +1270,7 @@ specifiers:
   '@polka/send': 1.0.0-next.7
   compression: ^1.7.4
   cookie: ^0.4.1
+  env-smart: ^2.2.0
   esbuild: ^0.8.50
   etto: ^1.6.4
   express-session: ^1.17.1
