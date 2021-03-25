@@ -8,7 +8,4 @@ RUN pnpm install
 COPY . /opt/app
 RUN pnpm run client:build
 
-ENV PORT 80
-EXPOSE 80
-
 CMD ["pnpm", "run", "run"]
