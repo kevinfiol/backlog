@@ -1,6 +1,10 @@
 {
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=14.16.x",
+    "npm": ">=6.14.x"
+  },
   "scripts": {
     "run": "node scripts/run.js",
     "dev": "node scripts/watch.js",
