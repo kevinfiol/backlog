@@ -21,8 +21,9 @@ pnpm run client:build
 ## Run
 
 ```bash
-pnpm run run # :)
+pnpm run run
 ```
+🙂
 
 ## Dev
 
