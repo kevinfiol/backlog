@@ -13,20 +13,20 @@ Features:
 
 ## Build
 
-```
+```bash
 pnpm install
 pnpm run client:build
 ```
 
 ## Run
 
-```
+```bash
 pnpm run run # :)
 ```
 
 ## Dev
 
-```
+```bash
 pnpm run dev
 ...
 pnpm run client:dev
