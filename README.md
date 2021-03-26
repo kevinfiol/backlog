@@ -10,3 +10,24 @@ Features:
 * Sortable lists and sections
 * Multiple user registration
 * User reviews
+
+## Build
+
+```
+pnpm install
+pnpm run client:build
+```
+
+## Run
+
+```
+pnpm run run # :)
+```
+
+## Dev
+
+```
+pnpm run dev
+...
+pnpm run client:dev
+```
