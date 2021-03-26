@@ -1,6 +1,6 @@
 # backlog
 
-`backlog` is an small application to help manage video game backlogs. I created it to host locally and serve my own purposes.
+`backlog` is a small application to help manage video game backlogs. I created it to host locally and serve my own purposes.
 
 ![screenshot of backlog](https://raw.githubusercontent.com/kevinfiol/backlog/master/screenshot.png)
 
