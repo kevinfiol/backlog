@@ -9,3 +9,7 @@ docker-compose.yml
 
 # NPM dependencies
 node_modules
+
+# built clientside js
+src/static/app/list.js
+*.map
