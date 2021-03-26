@@ -23,7 +23,6 @@ pnpm run client:build
 ```bash
 pnpm run run
 ```
-🙂
 
 ## Dev
 
