@@ -27,6 +27,6 @@ pnpm run run
 ## Dev
 
 ```bash
-pnpm run watch
-pnpm run client:watch
+pnpm run dev
+pnpm run client:dev
 ```
