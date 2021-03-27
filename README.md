@@ -30,3 +30,18 @@ pnpm run run
 pnpm run dev
 pnpm run client:dev
 ```
+
+## Deploy w/ Docker
+```bash
+# install dependencies
+pnpm install
+
+# create *.db
+pnpm run migrate
+
+# from project directory
+docker build -t kevinfiol/backlog .
+
+# run on specified ports `8080:80` where `80` must be defined in .env file
+docker run -p 8080:80 kevinfiol/backlog
+```
