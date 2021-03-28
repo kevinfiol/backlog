@@ -31,7 +31,7 @@ pnpm run dev
 pnpm run client:dev
 ```
 
-## Deploy w/ Docker
+## Deploy (w/ Docker)
 ```bash
 # install dependencies
 pnpm install
